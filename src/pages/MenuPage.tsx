@@ -3,7 +3,7 @@ import type { MenuItem } from '../types'
 import { CATEGORY_LABELS, CATEGORY_ORDER } from '../types'
 import { getMenuItems, getGlobalSettings } from '../lib/firestore'
 import MenuItemRow from '../components/menu/MenuItemRow'
-import CategoryNav from '../components/menu/CategoryNav'
+import ShopHighlights from '../components/menu/ShopHighlights'
 import NoticeBanner from '../components/NoticeBanner'
 import OrderForm from '../components/OrderForm'
 
@@ -50,7 +50,7 @@ export default function MenuPage() {
         </div>
         {/* 捲動提示 */}
         <a
-          href="#cat-nav"
+          href="#highlights"
           aria-label="向下捲動"
           className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[var(--color-on-deep)] opacity-60 hover:opacity-100 transition-opacity animate-bounce text-xl"
         >
@@ -58,13 +58,10 @@ export default function MenuPage() {
         </a>
       </div>
 
-      {/* 分類磚：對應參考站的帶圖分類磚列 */}
-      <div id="cat-nav" className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[var(--color-bg-primary)] scroll-mt-16">
+      {/* 本店特色：對應參考站的四格 highlight 磚，固定內容不隨菜單變動 */}
+      <div id="highlights" className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[var(--color-bg-primary)] scroll-mt-16">
         <div className="max-w-4xl mx-auto px-4 py-6 sm:py-10">
-          <CategoryNav counts={CATEGORY_ORDER.reduce((acc, cat) => {
-            acc[cat] = grouped[cat]?.length ?? 0
-            return acc
-          }, {} as Record<string, number>)} />
+          <ShopHighlights />
         </div>
       </div>
 
