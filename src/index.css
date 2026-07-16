@@ -1,29 +1,29 @@
 /*
  * ═══════════════════════════════════════════════════════
- * THEME CUSTOMIZATION — Edit the variables below to apply
- * your restaurant's color scheme.
+ * THEME CUSTOMIZATION — 木葉茗茶坊 台式茶莊配色
  * ═══════════════════════════════════════════════════════
  */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #2d1e12;
-  --color-bg-card: #3e2a1b;
-  --color-bg-card-hover: #4a3422;
-  --color-border-primary: #5d4028;
-  --color-border-gold: #8b6b4a;
-  --color-gold-primary: #f4e38e;
-  --color-gold-light: #fff5bc;
-  --color-text-primary: #e8d5b5;
-  --color-text-muted: #a68b6d;
-  /* 新增暖色光暈 */
-  --shadow-glow-warm: 0 0 15px rgba(244, 227, 142, 0.15);
+  --color-bg-primary: #f5f0e6;
+  --color-bg-card: #ffffff;
+  --color-bg-card-hover: #eee7d6;
+  --color-border-primary: #d8cdb4;
+  --color-border-gold: #7a8c6f;
+  --color-gold-primary: #3f5c3f;
+  --color-gold-light: #5c7a52;
+  --color-text-primary: #3a3226;
+  --color-text-muted: #8a7f66;
+  /* 茶葉綠光暈 */
+  --shadow-glow-warm: 0 0 15px rgba(63, 92, 63, 0.12);
   /* 極致平滑呼吸燈：2.5秒單程，來回共5秒，交替進行 */
   --animate-moon-pulse: moon-pulse 2.5s ease-in-out infinite alternate;
-  --color-available: #81c784;
-  --color-soldout: #ef9a9a;
-  --font-serif: "Cinzel", "Noto Serif TC", serif;
+  --color-available: #3f7a4a;
+  --color-soldout: #b5453f;
+  --font-serif: "Noto Serif TC", serif;
+  --font-sans: "Noto Sans TC", sans-serif;
 }
 
 @keyframes moon-pulse {
@@ -40,6 +40,7 @@
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
+  font-family: var(--font-sans);
   font-size: 1.05rem;
 }
 
