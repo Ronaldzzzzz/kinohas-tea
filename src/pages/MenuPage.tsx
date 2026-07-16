@@ -31,15 +31,17 @@ export default function MenuPage() {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 pb-12">
-      {/* Banner */}
-      <div className="border border-[var(--color-border-gold)] rounded p-4 sm:p-6 text-center bg-gradient-to-r from-[var(--color-bg-card)] to-[var(--color-bg-card-hover)] shadow-[var(--shadow-glow-warm)] banner-shimmer">
-        <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold tracking-widest text-shimmer mb-2">✦ 木葉茗茶坊 ✦</h1>
-        <div className="mt-2 wave-divider" />
+      {/* Hero */}
+      <div className="border border-[var(--color-border-gold)] rounded p-8 sm:p-12 md:p-16 text-center bg-gradient-to-r from-[var(--color-bg-card)] to-[var(--color-bg-card-hover)] shadow-[var(--shadow-glow-warm)] banner-shimmer">
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-widest text-shimmer mb-3">✦ 木葉茗茶坊 ✦</h1>
+        <p className="font-serif text-sm sm:text-base tracking-widest text-[var(--color-text-muted)]">Kinnoha's Tea</p>
+        <div className="mt-4 wave-divider" />
       </div>
 
       {introText.trim() && (
         <div className="border border-[var(--color-border-gold)] rounded p-4 sm:p-6 bg-[var(--color-bg-card)]">
-          <p className="text-[#d4c090] text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
+          <h2 className="font-serif text-lg sm:text-xl text-[var(--color-gold-primary)] mb-2">關於茶坊</h2>
+          <p className="text-[var(--color-text-primary)] text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
             {introText}
           </p>
         </div>
