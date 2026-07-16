@@ -32,26 +32,34 @@ export default function MenuPage() {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 pb-12">
-      {/* Hero：滿版深茶綠形象區，對應參考站的滿版形象大圖 */}
-      <div className="relative left-1/2 right-1/2 -mx-[50vw] -mt-6 w-screen overflow-hidden bg-gradient-to-br from-[var(--color-deep-green)] to-[var(--color-deep-green-light)]">
+      {/* Hero：滿版滿高深茶綠形象區，導覽列透明疊於其上，營造進站沉浸感 */}
+      <div className="relative left-1/2 right-1/2 -mx-[50vw] -mt-20 sm:-mt-24 w-screen min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[var(--color-deep-green)] to-[var(--color-deep-green-light)]">
         <span
           aria-hidden="true"
-          className="pointer-events-none select-none absolute -right-8 -top-10 font-serif text-[14rem] sm:text-[20rem] leading-none text-[var(--color-on-deep)] opacity-[0.07]"
+          className="pointer-events-none select-none absolute -right-8 top-1/2 -translate-y-1/2 font-serif text-[18rem] sm:text-[28rem] leading-none text-[var(--color-on-deep)] opacity-[0.07]"
         >
           茶
         </span>
-        <div className="relative px-4 py-20 sm:py-28 md:py-36 text-center max-w-3xl mx-auto">
-          <p className="font-serif text-xs sm:text-sm tracking-[0.4em] text-[var(--color-on-deep)] opacity-70 mb-4">台式茶莊 · FF14 RP</p>
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold tracking-widest text-[var(--color-on-deep)] mb-3">木葉茗茶坊</h1>
-          <p className="text-xs sm:text-sm tracking-[0.35em] text-[var(--color-on-deep)] opacity-60 mb-8">KINNOHA'S TEA</p>
+        <div className="relative px-4 text-center max-w-3xl mx-auto">
+          <p className="font-serif text-xs sm:text-sm tracking-[0.4em] text-[var(--color-on-deep)] opacity-70 mb-6">台式茶莊 · FF14 RP</p>
+          <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest text-[var(--color-on-deep)] mb-4">木葉茗茶坊</h1>
+          <p className="text-xs sm:text-sm tracking-[0.35em] text-[var(--color-on-deep)] opacity-60 mb-10">KINNOHA'S TEA</p>
           <p className="text-sm sm:text-base text-[var(--color-on-deep)] opacity-80">
             一杯好茶，一段江湖故事
           </p>
         </div>
+        {/* 捲動提示 */}
+        <a
+          href="#cat-nav"
+          aria-label="向下捲動"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[var(--color-on-deep)] opacity-60 hover:opacity-100 transition-opacity animate-bounce text-xl"
+        >
+          ↓
+        </a>
       </div>
 
       {/* 分類磚：對應參考站的帶圖分類磚列 */}
-      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[var(--color-bg-primary)]">
+      <div id="cat-nav" className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[var(--color-bg-primary)] scroll-mt-16">
         <div className="max-w-4xl mx-auto px-4 py-6 sm:py-10">
           <CategoryNav counts={CATEGORY_ORDER.reduce((acc, cat) => {
             acc[cat] = grouped[cat]?.length ?? 0
