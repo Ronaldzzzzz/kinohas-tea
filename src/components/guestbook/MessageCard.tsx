@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Message } from '../../types'
 import { likeMessage } from '../../lib/firestore'
 import ReplyList from './ReplyList'
+import MaskedContent from './MaskedContent'
 
 const LS_KEY = (id: string) => `vote_${id}`
 
@@ -46,7 +47,11 @@ export default function MessageCard({ message, onDelete }: Props) {
       </div>
 
       {/* 內容 */}
-      <p className="text-[var(--color-text-primary)] text-sm sm:text-base leading-relaxed content-text">{message.content}</p>
+      {message.masked ? (
+        <MaskedContent content={message.content} maskNote={message.maskNote} />
+      ) : (
+        <p className="text-[var(--color-text-primary)] text-sm sm:text-base leading-relaxed content-text">{message.content}</p>
+      )}
 
       {/* 互動列 */}
       <div className="flex items-center gap-2 sm:gap-3 mt-3">

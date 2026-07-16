@@ -1,4 +1,5 @@
 import type { Reply } from '../../types'
+import MaskedContent from './MaskedContent'
 
 interface Props {
   replies: Reply[]
@@ -17,7 +18,11 @@ export default function ReplyList({ replies }: Props) {
           {!reply.isAnonymous && reply.serverName && (
             <span className="text-[var(--color-text-muted)] mr-2">@{reply.serverName}</span>
           )}
-          <span className="text-[var(--color-text-muted)]">{reply.content}</span>
+          {reply.masked ? (
+            <MaskedContent content={reply.content} maskNote={reply.maskNote} />
+          ) : (
+            <span className="text-[var(--color-text-muted)]">{reply.content}</span>
+          )}
         </div>
       ))}
     </div>
