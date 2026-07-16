@@ -23,7 +23,7 @@ export default function Navbar() {
       <div className="max-w-4xl mx-auto px-4 h-12 sm:h-14 flex items-center justify-between">
         <div className="flex flex-col justify-center">
           <span className="font-serif text-[var(--color-gold-primary)] text-sm sm:text-base md:text-xl tracking-wide sm:tracking-widest flex items-center gap-1 whitespace-nowrap">
-            餐廳名稱
+            木葉茗茶坊
           </span>
           {address && (
             <span className="hidden sm:block text-[11px] text-[#9a8a70] tracking-wide leading-tight mt-0.5">

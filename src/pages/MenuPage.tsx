@@ -33,7 +33,7 @@ export default function MenuPage() {
     <div className="flex flex-col gap-6 sm:gap-8 pb-12">
       {/* Banner */}
       <div className="border border-[var(--color-border-gold)] rounded p-4 sm:p-6 text-center bg-gradient-to-r from-[var(--color-bg-card)] to-[var(--color-bg-card-hover)] shadow-[var(--shadow-glow-warm)] banner-shimmer">
-        <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold tracking-widest text-shimmer mb-2">✦ 餐廳名稱 ✦</h1>
+        <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold tracking-widest text-shimmer mb-2">✦ 木葉茗茶坊 ✦</h1>
         <div className="mt-2 wave-divider" />
       </div>
 
