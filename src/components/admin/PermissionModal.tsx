@@ -12,9 +12,10 @@ const TAB_LABELS: Record<TabKey, string> = {
   orders:    '點餐管理',
   messages:  '留言管理',
   notice:    '文字設定',
+  popups:    '彈窗管理',
 }
 
-const TAB_KEYS: TabKey[] = ['menu', 'inventory', 'orders', 'messages', 'notice']
+const TAB_KEYS: TabKey[] = ['menu', 'inventory', 'orders', 'messages', 'notice', 'popups']
 
 interface Props {
   admin: AdminRecord

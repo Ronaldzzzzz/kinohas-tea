@@ -24,7 +24,7 @@ export async function hashPassword(password: string): Promise<string> {
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
 }
 
-const ALL_TAB_KEYS: TabKey[] = ['menu', 'inventory', 'orders', 'messages', 'notice']
+const ALL_TAB_KEYS: TabKey[] = ['menu', 'inventory', 'orders', 'messages', 'notice', 'popups']
 const OWNER_PERMISSIONS: StaffPermissions = Object.fromEntries(
   ALL_TAB_KEYS.map(k => [k, { write: true, delete: true }])
 ) as StaffPermissions

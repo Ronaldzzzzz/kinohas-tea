@@ -21,13 +21,19 @@ service cloud.firestore {
       allow read: if true;
       allow create: if true;
       allow update: if request.resource.data.diff(resource.data).affectedKeys()
-                       .hasOnly(['likes', 'dislikes']);
+                       .hasOnly(['likes', 'dislikes'])
+                    || (request.auth != null
+                        && request.resource.data.diff(resource.data).affectedKeys()
+                           .hasOnly(['masked', 'maskNote']));
       allow delete: if request.auth != null;
 
       // 回覆：公開可讀，任何人可新增，刪除需登入
       match /replies/{replyId} {
         allow read: if true;
         allow create: if true;
+        allow update: if request.auth != null
+                      && request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['masked', 'maskNote']);
         allow delete: if request.auth != null;
       }
     }
@@ -53,6 +59,12 @@ service cloud.firestore {
 
     // 全域設定（地址、冷卻時間、宣傳照）：公開可讀，需登入才能寫入
     match /settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 彈窗：公開可讀，需登入才能寫入
+    match /popups/{popupId} {
       allow read: if true;
       allow write: if request.auth != null;
     }

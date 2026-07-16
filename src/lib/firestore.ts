@@ -16,7 +16,7 @@ import {
   onSnapshot,
 } from 'firebase/firestore'
 import { db } from './firebase'
-import type { MenuItem, InventoryItem, Message, Reply, NoticeConfig, Order, GlobalSettings, PhotoUrl, StaffPermissions } from '../types'
+import type { MenuItem, InventoryItem, Message, Reply, NoticeConfig, Order, GlobalSettings, PhotoUrl, StaffPermissions, Popup } from '../types'
 import { DEFAULT_STAFF_PERMISSIONS } from '../types'
 
 // ─── Menu Items ────────────────────────────────────────────────
@@ -401,4 +401,39 @@ export async function getGlobalSettings(): Promise<GlobalSettings> {
 export async function updateGlobalSettings(data: Partial<GlobalSettings>): Promise<void> {
   await setDoc(doc(db, 'settings', 'global'), data, { merge: true })
   _settingsCache = null
+}
+
+// ─── Popups ─────────────────────────────────────────
+
+export async function getPopups(): Promise<Popup[]> {
+  const snap = await getDocs(query(collection(db, 'popups'), orderBy('order')))
+  return snap.docs.map(d => ({ id: d.id, ...d.data() } as Popup))
+}
+
+export async function getEnabledPopups(): Promise<Popup[]> {
+  const all = await getPopups()
+  return all.filter(p => p.enabled)
+}
+
+export async function addPopup(data: Omit<Popup, 'id' | 'createdAt'>): Promise<string> {
+  const ref = await addDoc(collection(db, 'popups'), { ...data, createdAt: serverTimestamp() })
+  return ref.id
+}
+
+export async function updatePopup(id: string, data: Partial<Omit<Popup, 'id'>>): Promise<void> {
+  await updateDoc(doc(db, 'popups', id), data)
+}
+
+export async function deletePopup(id: string): Promise<void> {
+  await deleteDoc(doc(db, 'popups', id))
+}
+
+// ─── 留言遮蔽 ─────────────────────────────────────────
+
+export async function setMessageMask(messageId: string, masked: boolean, maskNote?: string): Promise<void> {
+  await updateDoc(doc(db, 'messages', messageId), { masked, maskNote: maskNote ?? '' })
+}
+
+export async function setReplyMask(messageId: string, replyId: string, masked: boolean, maskNote?: string): Promise<void> {
+  await updateDoc(doc(db, 'messages', messageId, 'replies', replyId), { masked, maskNote: maskNote ?? '' })
 }

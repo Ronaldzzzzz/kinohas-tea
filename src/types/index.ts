@@ -56,6 +56,8 @@ export interface Reply {
   isAnonymous: boolean
   content: string
   timestamp: Timestamp
+  masked?: boolean
+  maskNote?: string
 }
 
 export interface Message {
@@ -68,11 +70,13 @@ export interface Message {
   likes: number
   dislikes: number
   replies?: Reply[]
+  masked?: boolean
+  maskNote?: string
 }
 
 // ─── Admin Permissions ─────────────────────────────────────────
 
-export type TabKey = 'menu' | 'inventory' | 'orders' | 'messages' | 'notice'
+export type TabKey = 'menu' | 'inventory' | 'orders' | 'messages' | 'notice' | 'popups'
 
 export interface TabPermission {
   write: boolean
@@ -87,6 +91,7 @@ export const DEFAULT_STAFF_PERMISSIONS: StaffPermissions = {
   orders:    { write: true,  delete: true  },
   messages:  { write: true,  delete: true  },
   notice:    { write: false, delete: false },
+  popups:    { write: false, delete: false },
 }
 
 export interface AdminSession {
@@ -138,4 +143,16 @@ export interface GlobalSettings {
   orderCooldownMinutes: number // 點餐冷卻分鐘數（預設 30）
   photoUrls: PhotoUrl[]       // 宣傳全身照（含可選裁切資料）
   realModeEnabled?: boolean   // true = 真實庫存連動模式
+}
+
+// 彈窗(進版廣告 / 可拖動視窗)
+export interface Popup {
+  id: string
+  type: 'entry' | 'floating'
+  imageUrl?: string
+  text?: string
+  linkUrl?: string
+  enabled: boolean
+  order: number
+  createdAt: Timestamp
 }
