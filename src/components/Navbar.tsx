@@ -71,10 +71,10 @@ export default function Navbar() {
           <NavLink to="/guestbook" className={linkClass}>
             留言板
           </NavLink>
-          <NavLink to="/admin" className={({ isActive }) =>
-            `ml-2 sm:ml-3 transition-colors text-xs ${
+          <NavLink to="/admin" aria-label="後台管理" className={({ isActive }) =>
+            `ml-1 sm:ml-2 p-2 text-lg sm:text-xl leading-none transition-colors ${
               overHero
-                ? 'text-[var(--color-on-deep)] opacity-50 hover:opacity-90'
+                ? 'text-[var(--color-on-deep)] opacity-60 hover:opacity-100'
                 : `text-[var(--color-text-muted)] hover:text-[var(--color-gold-light)] ${isActive ? 'text-[var(--color-gold-light)]' : ''}`
             }`
           }>
