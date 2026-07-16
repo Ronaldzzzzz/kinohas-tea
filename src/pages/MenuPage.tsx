@@ -43,7 +43,7 @@ export default function MenuPage() {
         <div className="relative px-4 text-center max-w-3xl mx-auto">
           <p className="font-serif text-xs sm:text-sm tracking-[0.4em] text-[var(--color-on-deep)] opacity-70 mb-6">台式茶莊 · FF14 RP</p>
           <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest text-[var(--color-on-deep)] mb-4">木葉茗茶坊</h1>
-          <p className="text-xs sm:text-sm tracking-[0.35em] text-[var(--color-on-deep)] opacity-60 mb-10">KINNOHA'S TEA</p>
+          <p className="text-xs sm:text-sm tracking-[0.35em] text-[var(--color-on-deep)] opacity-60 mb-10">KINOHA'S TEA</p>
           <p className="text-sm sm:text-base text-[var(--color-on-deep)] opacity-80">
             一杯好茶，一段江湖故事
           </p>

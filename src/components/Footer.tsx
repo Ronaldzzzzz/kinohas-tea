@@ -17,7 +17,7 @@ export default function Footer() {
         <div>
           <h4 className="font-serif text-base tracking-[0.25em] mb-3">木葉茗茶坊</h4>
           <p className="opacity-70 leading-relaxed text-xs tracking-wider">
-            KINNOHA'S TEA<br />
+            KINOHA'S TEA<br />
             台式茶莊 · FF14 RP
           </p>
         </div>
@@ -37,7 +37,7 @@ export default function Footer() {
       </div>
       <div className="border-t border-[var(--color-on-deep)]/10">
         <p className="max-w-4xl mx-auto px-4 py-4 text-center text-[11px] opacity-50 tracking-wider">
-          © 木葉茗茶坊 Kinnoha's Tea — Final Fantasy XIV Roleplay
+          © 木葉茗茶坊 Kinoha's Tea — Final Fantasy XIV Roleplay
         </p>
       </div>
     </footer>

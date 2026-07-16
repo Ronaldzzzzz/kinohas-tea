@@ -55,7 +55,7 @@ export default function Navbar() {
                 overHero ? 'text-[var(--color-on-deep)] opacity-60' : 'text-[var(--color-text-muted)]'
               }`}
             >
-              KINNOHA'S TEA
+              KINOHA'S TEA
             </span>
           </span>
           {address && !overHero && (
