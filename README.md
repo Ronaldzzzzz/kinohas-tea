@@ -1,176 +1,111 @@
-# 餐廳點餐系統模板
+# 木葉茗茶坊 Kinoha's Tea
 
-基於 React + Firebase 的通用餐廳點餐系統，包含前台菜單展示與後台管理功能。
+專為 FF14 模擬 RP 打造的台式茶莊互動網站。前台為一頁式茶莊形象頁與菜單點餐，後台提供完整店務管理。
+
+**正式站**：<https://ronaldzzzzz.github.io/kinohas-tea/>
 
 ## 功能
 
 **前台**
-- 菜單分類展示（附圖片、描述、價格）
-- 客人點餐表單（含冷卻計時器防止重複點餐）
-- 告示看板（可由後台設定）
-- 留言板（含回覆、按讚/倒讚功能）
+- 沉浸式滿版首屏、本店特色介紹、關於茶坊
+- 菜單卡片網格展示（圖片、描述、價格、供應狀態）
+- 客人點餐表單（含冷卻計時防重複下單）
+- 告示看板、留言板（回覆、按讚/倒讚）
 
-**後台（/admin）**
-- 密碼登入，支援多帳號與角色權限（Owner / Staff）
-- 菜品管理（新增、編輯、刪除、庫存開關）
-- 食材庫存管理
-- 訂單管理（進行中 / 歷史訂單）
-- 留言審核與刪除
-- 告示看板設定
-- 相片管理（支援裁切上傳）
-- 全域設定（餐廳地址、介紹文字、點餐冷卻時間等）
-- 管理員帳號管理（新增/刪除/設定細項權限）
-
-## 快速開始
-
-### 1. 安裝相依套件
-
-```bash
-npm install
-```
-
-### 2. 設定 Firebase
-
-1. 前往 [Firebase Console](https://console.firebase.google.com/) 建立新專案
-2. 啟用以下服務：
-   - Firestore Database
-   - Storage
-   - Authentication（啟用「匿名登入」）
-3. 複製 `.env.example` 為 `.env`，填入你的 Firebase 設定值
-
-```bash
-cp .env.example .env
-```
-
-### 3. 部署 Firebase 規則
-
-```bash
-firebase deploy --only firestore:rules,storage
-```
-
-### 4. 啟動開發伺服器
-
-```bash
-npm run dev
-```
-
-### 5. 新增第一個管理員
-
-前往 `http://localhost:5173/admin`，系統會提示輸入密碼。由於尚無帳號，請直接到 Firestore Console 的 `adminPasswords` 集合手動新增第一筆資料，或使用 Firebase Admin SDK 腳本初始化。
-
-## 本地開發（不需要真實 Firebase 專案）
-
-開發初期可使用 **Firebase Local Emulator Suite** 在本機完整模擬 Firestore、Auth、Storage，無需建立真實的 Firebase 專案，也無需填入真實的 API 金鑰。
-
-### 1. 安裝 Firebase CLI
-
-```bash
-npm install -g firebase-tools
-```
-
-> 本地模擬不需要 `firebase login`，跳過即可。
-
-### 2. 建立假的 `.env`
-
-複製 `.env.example` 為 `.env`，填入任意假值（模擬器不驗證金鑰）：
-
-```bash
-cp .env.example .env
-```
-
-```env
-VITE_FIREBASE_API_KEY=local-dev
-VITE_FIREBASE_AUTH_DOMAIN=local-dev
-VITE_FIREBASE_PROJECT_ID=demo-restaurant
-VITE_FIREBASE_STORAGE_BUCKET=demo-restaurant.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=000000000000
-VITE_FIREBASE_APP_ID=1:000000000000:web:000000000000
-```
-
-> `projectId` 建議以 `demo-` 開頭，Firebase CLI 會自動以純本地模式啟動，不會嘗試連接雲端。
-
-### 3. 啟動模擬器與開發伺服器
-
-開啟兩個終端分別執行：
-
-```bash
-# 終端 1：啟動 Firebase 模擬器
-firebase emulators:start --project demo-restaurant
-
-# 終端 2：啟動 Vite 開發伺服器
-npm run dev
-```
-
-`npm run dev` 時，`src/lib/firebase.ts` 會自動偵測開發環境並連接到本地模擬器，**部署時不需要修改任何程式碼**。
-
-### 4. 模擬器管理介面
-
-瀏覽器開啟 `http://localhost:4000`，可以：
-- 直接在 Firestore 新增/編輯資料（例如新增第一個管理員帳號至 `adminPasswords` 集合）
-- 查看 Storage 上傳的檔案
-- 管理 Auth 使用者
-
-### 模擬器 Port 對照
-
-| 服務 | Port |
-|------|------|
-| Firestore | 8080 |
-| Auth | 9099 |
-| Storage | 9199 |
-| 管理介面 UI | 4000 |
-
-### 切換至真實 Firebase
-
-準備好上線時，依照「快速開始」章節建立 Firebase 專案並填入真實的 `.env` 值，執行 `npm run build` 即可，不需改動任何程式碼。
-
----
-
-## 自訂主題
-
-### 顏色方案
-
-開啟 `src/index.css`，修改頂部的 CSS 變數：
-
-```css
---color-gold-primary: ...    /* 主色調 */
---color-bg-primary: ...      /* 背景色 */
-/* 其他變數參見檔案內說明 */
-```
-
-### 餐廳名稱
-
-- `src/components/Navbar.tsx` — 修改品牌名稱文字
-- `src/pages/MenuPage.tsx` — 修改 Banner 標題文字
-- `index.html` — 修改 `<title>` 標籤
-
-### 部署路徑
-
-若需部署到 GitHub Pages 的子路徑，修改 `vite.config.ts`：
-
-```ts
-base: '/your-repo-name/'
-```
+**後台（`/#/admin`）**
+- 密碼登入，多帳號與角色權限（Owner / Staff）
+- 菜品管理、食材庫存、訂單管理（進行中／歷史）
+- 留言審核、告示看板、相片管理（裁切上傳）
+- 全域設定（店址、介紹文字、點餐冷卻時間等）
+- 管理員帳號管理
 
 ## 技術架構
 
 | 層級 | 技術 |
 |------|------|
-| 前端框架 | React 19 + TypeScript |
-| 路由 | React Router 7 |
+| 前端 | React 19 + TypeScript + React Router 7（HashRouter） |
 | 樣式 | Tailwind CSS 4 |
-| 建置工具 | Vite |
-| 資料庫 | Firebase Firestore |
-| 檔案儲存 | Firebase Storage |
-| 認證 | Firebase Auth（匿名） |
+| 建置 | Vite |
+| 後端 | Firebase（Firestore / Storage / 匿名 Auth） |
+| 靜態託管 | GitHub Pages（GitHub Actions 自動部署） |
 
-## Firestore 集合結構
+## 本地開發
+
+不需要真實 Firebase 專案，全程走 Local Emulator：
+
+```bash
+npm install
+npm run dev        # 一鍵啟動 Firebase 模擬器(含 UI :4000) + Vite
+```
+
+- 前台：<http://localhost:5173>
+- 模擬器 UI：<http://localhost:4000>
+- `.env` 使用 demo 值，模擬器資料存於 `.emulator-seed-data/`，關閉時自動匯出保留
+- 模擬器需 JDK 21+，若系統 Java 過舊，script 會自動改用 Homebrew 的 `openjdk@21`
+- 只跑前端不開模擬器：`npm run dev:web`
+
+**開發用管理員帳號**：模擬器種子資料已內建，密碼 `admin123`。
+
+## 部署
+
+推上 `main` 即自動部署——GitHub Actions 會以 repo secrets 建置並發佈到 GitHub Pages。
+
+需要的 repo secrets（Settings → Secrets and variables → Actions）：
+
+```
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDER_ID
+VITE_FIREBASE_APP_ID
+VITE_FIREBASE_MEASUREMENT_ID
+```
+
+本機正式建置則讀取 gitignored 的 `.env.production`（欄位同上，參見 `.env.example`）。
+
+Firestore / Storage 安全規則更新後需手動發佈：
+
+```bash
+npx firebase-tools login   # 首次
+npm run deploy:rules
+```
+
+### 正式站新增管理員
+
+Firebase Console → Firestore → `adminPasswords` collection：
+
+- 文件 ID＝密碼的 SHA-256 hex：
+  ```bash
+  node -e "const c=require('crypto');console.log(c.createHash('sha256').update('你的密碼').digest('hex'))"
+  ```
+- 欄位：`role`＝`"owner"`（string）、`label`＝`"名字"`（string）
+
+## 常用指令
+
+| 指令 | 用途 |
+|------|------|
+| `npm run dev` | 模擬器 + Vite 開發環境 |
+| `npm run dev:web` | 只跑 Vite 前端 |
+| `npm run build` | 正式建置（TypeScript 檢查 + Vite build） |
+| `npm run lint` | ESLint |
+| `npm run test` | Vitest |
+| `npm run deploy:rules` | 發佈 Firestore / Storage 規則 |
+
+## Firestore 集合
 
 | 集合 | 用途 |
 |------|------|
-| `menuItems` | 菜品資料 |
+| `menuItems` | 菜品 |
 | `inventory` | 食材庫存 |
-| `orders` | 點餐訂單 |
-| `messages` | 留言板訊息 |
+| `orders` | 訂單 |
+| `messages` | 留言板 |
 | `notices` | 告示看板 |
 | `adminPasswords` | 管理員帳號（SHA-256 雜湊） |
-| `globalSettings` | 全域設定（地址、介紹文字等） |
+| `globalSettings` | 全域設定 |
+
+## 專案文件
+
+- 需求：`Instruction for Kinnoha's Tea 木葉茗茶坊.md`
+- 設計規格：`docs/superpowers/specs/`
+- 實作計畫：`docs/superpowers/plans/`
