@@ -1,4 +1,4 @@
-# Instruction for Kinnoha's Tea 木葉茗茶坊
+# Instruction for Kinoha's Tea 木葉茗茶坊
 
 這是一個專為 FF14 模擬 RP (Roleplay) 設計的台式茶莊菜單互動網站系統。請依照下面需求擬定計劃後開始分階段實作。
 

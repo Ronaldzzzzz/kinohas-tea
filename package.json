@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "npm run build && npx firebase-tools deploy --only hosting,firestore:rules,storage",
+    "deploy:rules": "npx firebase-tools deploy --only firestore:rules,storage",
     "test": "vitest run",
     "update-recipes": "node scripts/update_recipes.cjs",
     "update-data": "node scripts/build_master_data.cjs"
