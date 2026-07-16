@@ -66,8 +66,8 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
     async function loadMasterData() {
       try {
         const [itemsRes, recipesRes] = await Promise.all([
-          fetch('/data/master_items.json'),
-          fetch('/data/master_recipes.json')
+          fetch(`${import.meta.env.BASE_URL}data/master_items.json`),
+          fetch(`${import.meta.env.BASE_URL}data/master_recipes.json`)
         ])
         const [items, recipes] = await Promise.all([
           itemsRes.json(),

@@ -53,7 +53,7 @@ export default function InventoryManager({ canWrite, canDelete }: Props) {
       const [invData, menuData, recipesRes] = await Promise.all([
         getInventoryItems(),
         getMenuItems(),
-        fetch('/data/master_recipes.json').then(r => r.json())
+        fetch(`${import.meta.env.BASE_URL}data/master_recipes.json`).then(r => r.json())
       ])
       setItems(invData)
       setMenuItems(menuData)
