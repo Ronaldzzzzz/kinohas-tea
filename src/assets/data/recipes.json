@@ -1,0 +1,242 @@
+[
+  {
+    "id": 1,
+    "name_zh": "濃縮咖啡 (Espresso)",
+    "icon": "https://xivapi.com/i/021000/021101.png",
+    "ingredients": [
+      {
+        "id": 101,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name_zh": "拿鐵咖啡 (Coffee Latte)",
+    "icon": "https://xivapi.com/i/021000/021102.png",
+    "ingredients": [
+      {
+        "id": 101,
+        "amount": 1
+      },
+      {
+        "id": 102,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name_zh": "全月特調 (Full Moon Special)",
+    "icon": "https://xivapi.com/i/021000/021103.png",
+    "ingredients": [
+      {
+        "id": 101,
+        "amount": 1
+      },
+      {
+        "id": 103,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name_zh": "經典起司蛋糕 (Cheese Cake)",
+    "icon": "https://xivapi.com/i/021000/021104.png",
+    "ingredients": [
+      {
+        "id": 104,
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name_zh": "抹茶歐蕾 (Matcha Au Lait)",
+    "icon": "https://xivapi.com/i/021000/021105.png",
+    "ingredients": [
+      {
+        "id": 105,
+        "amount": 1
+      },
+      {
+        "id": 102,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name_zh": "熱巧克力 (Hot Chocolate)",
+    "icon": "https://xivapi.com/i/021000/021106.png",
+    "ingredients": [
+      {
+        "id": 106,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name_zh": "藍莓塔 (Blueberry Tart)",
+    "icon": "https://xivapi.com/i/021000/021107.png",
+    "ingredients": [
+      {
+        "id": 107,
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name_zh": "草莓大福 (Strawberry Daifuku)",
+    "icon": "https://xivapi.com/i/021000/021108.png",
+    "ingredients": [
+      {
+        "id": 108,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name_zh": "薄荷涼茶 (Mint Tea)",
+    "icon": "https://xivapi.com/i/021000/021109.png",
+    "ingredients": [
+      {
+        "id": 109,
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name_zh": "黑芝麻布丁 (Black Sesame Pudding)",
+    "icon": "https://xivapi.com/i/021000/021110.png",
+    "ingredients": [
+      {
+        "id": 110,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name_zh": "焦糖瑪奇朵 (Caramel Macchiato)",
+    "icon": "https://xivapi.com/i/021000/021111.png",
+    "ingredients": [
+      {
+        "id": 101,
+        "amount": 1
+      },
+      {
+        "id": 111,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name_zh": "法式吐司 (French Toast)",
+    "icon": "https://xivapi.com/i/021000/021112.png",
+    "ingredients": [
+      {
+        "id": 112,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name_zh": "提拉米蘇 (Tiramisu)",
+    "icon": "https://xivapi.com/i/021000/021113.png",
+    "ingredients": [
+      {
+        "id": 113,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name_zh": "水果三明治 (Fruit Sandwich)",
+    "icon": "https://xivapi.com/i/021000/021114.png",
+    "ingredients": [
+      {
+        "id": 114,
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name_zh": "肉桂捲 (Cinnamon Roll)",
+    "icon": "https://xivapi.com/i/021000/021115.png",
+    "ingredients": [
+      {
+        "id": 115,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "name_zh": "檸檬塔 (Lemon Tart)",
+    "icon": "https://xivapi.com/i/021000/021116.png",
+    "ingredients": [
+      {
+        "id": 116,
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "name_zh": "維也納咖啡 (Viennese Coffee)",
+    "icon": "https://xivapi.com/i/021000/021117.png",
+    "ingredients": [
+      {
+        "id": 101,
+        "amount": 1
+      },
+      {
+        "id": 117,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "name_zh": "紅豆湯圓 (Zenzai)",
+    "icon": "https://xivapi.com/i/021000/021118.png",
+    "ingredients": [
+      {
+        "id": 118,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "name_zh": "手沖單品咖啡 (Hand Drip Coffee)",
+    "icon": "https://xivapi.com/i/021000/021119.png",
+    "ingredients": [
+      {
+        "id": 119,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "name_zh": "全月舒眠茶 (Moonlight Herbal Tea)",
+    "icon": "https://xivapi.com/i/021000/021120.png",
+    "ingredients": [
+      {
+        "id": 120,
+        "amount": 3
+      }
+    ]
+  }
+]

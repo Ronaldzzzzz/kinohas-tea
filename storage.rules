@@ -1,0 +1,16 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // 宣傳照：匿名管理員可上傳，公開可讀
+    match /promotional-photos/{filename} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 其他路徑：預設拒絕
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

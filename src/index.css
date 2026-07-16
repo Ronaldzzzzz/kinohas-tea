@@ -1,0 +1,160 @@
+/*
+ * ═══════════════════════════════════════════════════════
+ * THEME CUSTOMIZATION — Edit the variables below to apply
+ * your restaurant's color scheme.
+ * ═══════════════════════════════════════════════════════
+ */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #2d1e12;
+  --color-bg-card: #3e2a1b;
+  --color-bg-card-hover: #4a3422;
+  --color-border-primary: #5d4028;
+  --color-border-gold: #8b6b4a;
+  --color-gold-primary: #f4e38e;
+  --color-gold-light: #fff5bc;
+  --color-text-primary: #e8d5b5;
+  --color-text-muted: #a68b6d;
+  /* 新增暖色光暈 */
+  --shadow-glow-warm: 0 0 15px rgba(244, 227, 142, 0.15);
+  /* 極致平滑呼吸燈：2.5秒單程，來回共5秒，交替進行 */
+  --animate-moon-pulse: moon-pulse 2.5s ease-in-out infinite alternate;
+  --color-available: #81c784;
+  --color-soldout: #ef9a9a;
+  --font-serif: "Cinzel", "Noto Serif TC", serif;
+}
+
+@keyframes moon-pulse {
+  from {
+    opacity: 0.6;
+    text-shadow: 0 0 2px rgba(244, 227, 142, 0.2);
+  }
+  to {
+    opacity: 1;
+    text-shadow: 0 0 15px rgba(244, 227, 142, 0.9);
+  }
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: 1.05rem;
+}
+
+.content-text {
+  /* 移除 font-size，避免覆蓋 Tailwind 類別 */
+  letter-spacing: 0.05em;
+}
+
+/* 後台管理文字放大 */
+.admin-content {
+  font-size: 1.1rem;
+}
+
+.admin-content input,
+.admin-content textarea,
+.admin-content select,
+.admin-content button {
+  font-size: 1rem;
+}
+
+/* 統一流光動畫：絕對同步邏輯 */
+.text-shimmer,
+.wave-divider,
+.banner-shimmer::before {
+  background-size: 300% 100% !important;
+  background-repeat: no-repeat !important;
+  /* 方向反轉：從 100% 回到 0% */
+  animation: sync-shimmer 8s linear infinite !important;
+}
+
+@keyframes sync-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0% 0; }
+}
+
+.text-shimmer {
+  display: block;
+  width: 100%;
+  letter-spacing: 0.1em;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-gold-primary) 0%,
+    var(--color-gold-primary) 33%,
+    #ffffff 50%,
+    var(--color-gold-primary) 67%,
+    var(--color-gold-primary) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.banner-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 標題外框的掃描光暈 */
+.banner-shimmer::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 33%,
+    rgba(244, 227, 142, 0.6) 50%,
+    transparent 67%,
+    transparent 100%
+  );
+  z-index: -1;
+  border-radius: inherit;
+  filter: blur(4px);
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.9); opacity: 0; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.3s ease-out forwards;
+}
+
+@utility wave-divider {
+  height: 3px; /* 稍微加粗 */
+  background-color: var(--color-border-gold);
+  opacity: 0.4;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 33%,
+    var(--color-gold-light) 50%,
+    transparent 67%,
+    transparent 100%
+  );
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #1a1510;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4a3820;
+    border-radius: 3px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #6a5030;
+  }
+}

@@ -1,0 +1,60 @@
+// firestore.rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 菜單品項：公開可讀，需登入才能寫入
+    match /menuItems/{itemId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 庫存：公開可讀，需登入才能寫入
+    match /inventory/{itemId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 留言：公開可讀
+    // 任何人可新增；likes/dislikes 欄位任何人可更新；刪除需登入
+    match /messages/{messageId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+                       .hasOnly(['likes', 'dislikes']);
+      allow delete: if request.auth != null;
+
+      // 回覆：公開可讀，任何人可新增，刪除需登入
+      match /replies/{replyId} {
+        allow read: if true;
+        allow create: if true;
+        allow delete: if request.auth != null;
+      }
+    }
+
+    // 注意事項：公開可讀，需登入才能寫入
+    match /notices/{noticeId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 管理員密碼：允許 get（用於驗證）
+    // 登入後允許 list 與 write
+    match /adminPasswords/{passwordHash} {
+      allow get: if true;
+      allow list, write: if request.auth != null;
+    }
+
+    // 點餐訂單：任何人可新增；讀取、更新、刪除需登入
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // 全域設定（地址、冷卻時間、宣傳照）：公開可讀，需登入才能寫入
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
