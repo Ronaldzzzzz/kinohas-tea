@@ -7,7 +7,7 @@ import AdminPage from './pages/AdminPage'
 export default function App() {
   return (
     <HashRouter>
-      <div className="min-h-screen relative">
+      <div className="min-h-screen relative overflow-x-hidden">
         {/* 最底層：背景色 */}
         <div className="fixed inset-0 bg-[var(--color-bg-primary)] z-[-2]" />
 
