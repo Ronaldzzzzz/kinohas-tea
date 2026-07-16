@@ -29,10 +29,10 @@ export default function PasswordGate({ onSuccess }: Props) {
     <div className="flex justify-center items-center min-h-[60vh]">
       <form
         onSubmit={handleSubmit}
-        className="bg-[#2a2015] border border-[#6a5030] rounded p-8 w-full max-w-sm flex flex-col gap-4"
+        className="bg-[var(--color-bg-card-hover)] border border-[var(--color-text-muted)] rounded p-8 w-full max-w-sm flex flex-col gap-4"
       >
-        <h2 className="font-serif text-[#d4af7a] text-center tracking-widest">⚙ 後台管理</h2>
-        <div className="h-px bg-[#4a3820]" />
+        <h2 className="font-serif text-[var(--color-gold-light)] text-center tracking-widest">⚙ 後台管理</h2>
+        <div className="h-px bg-[var(--color-border-gold)]" />
 
         <input
           type="password"
@@ -40,15 +40,15 @@ export default function PasswordGate({ onSuccess }: Props) {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="輸入管理密碼"
           autoComplete="current-password"
-          className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-2 text-sm text-[#d4c090] placeholder-[#6a5030] focus:outline-none focus:border-[#c9a55a]"
+          className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)]"
         />
 
-        {error && <p className="text-[#ef9a9a] text-xs">{error}</p>}
+        {error && <p className="text-[var(--color-danger-text)] text-xs">{error}</p>}
 
         <button
           type="submit"
           disabled={loading || !password}
-          className="bg-[#c9a55a] text-[#1a1510] text-sm font-semibold py-2 rounded hover:bg-[#d4af7a] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] text-sm font-semibold py-2 rounded hover:bg-[var(--color-gold-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {loading ? '驗證中…' : '進入後台'}
         </button>

@@ -52,7 +52,7 @@ export default function AdminPage() {
     return (
       <div>
         {logoutReason && (
-          <div className="mb-4 px-4 py-2 rounded bg-[#3a1e1e] border border-[#6a3030] text-[#ef9a9a] text-sm text-center">
+          <div className="mb-4 px-4 py-2 rounded bg-[var(--color-danger-bg)] border border-[var(--color-danger-border)] text-[var(--color-danger-text)] text-sm text-center">
             {logoutReason}
           </div>
         )}
@@ -86,7 +86,7 @@ export default function AdminPage() {
           <span className="text-[var(--color-text-muted)] text-xs capitalize">{session.role}: {session.label}</span>
           <button
             onClick={() => signOutAdmin().then(() => setSession(null))}
-            className="text-xs text-[#6a3030] hover:text-[#ef9a9a] transition-colors"
+            className="text-xs text-[var(--color-danger-border)] hover:text-[var(--color-danger-text)] transition-colors"
           >
             登出
           </button>

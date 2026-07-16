@@ -134,15 +134,15 @@ export default function CropTool({ imageUrl, initialCropData, onSave, onCancel, 
       <div
         className="flex flex-col gap-4 rounded-lg p-4"
         style={{
-          background: 'var(--color-bg-card, #1a1209)',
-          border: '1px solid var(--color-border-gold, #c9a55a)',
+          background: 'var(--color-bg-card, var(--color-bg-card-hover))',
+          border: '1px solid var(--color-border-gold, var(--color-gold-primary))',
           maxWidth: '95vw',
         }}
       >
         {/* 標題 */}
         <h2
           className="text-sm font-semibold tracking-wide"
-          style={{ color: 'var(--color-gold-primary, #c9a55a)' }}
+          style={{ color: 'var(--color-gold-primary, var(--color-gold-primary))' }}
         >
           設定顯示區域
         </h2>
@@ -174,7 +174,7 @@ export default function CropTool({ imageUrl, initialCropData, onSave, onCancel, 
               top: `${cropData.y}%`,
               width: `${cropData.width}%`,
               height: `${cropData.height}%`,
-              border: '2px solid #ef4444',
+              border: '2px solid var(--color-danger-text)',
               boxShadow: '0 0 0 9999px rgba(0,0,0,0.5)',
               cursor: 'move',
               boxSizing: 'border-box',
@@ -201,7 +201,7 @@ export default function CropTool({ imageUrl, initialCropData, onSave, onCancel, 
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <span
             className="text-xs font-mono"
-            style={{ color: 'var(--color-text-muted, #a0856a)' }}
+            style={{ color: 'var(--color-text-muted, var(--color-text-muted))' }}
           >
             x: {roundPct(cropData.x)}%, y: {roundPct(cropData.y)}%,{' '}
             w: {roundPct(cropData.width)}%{' '}
@@ -210,7 +210,7 @@ export default function CropTool({ imageUrl, initialCropData, onSave, onCancel, 
 
           <div className="flex flex-col items-end gap-2">
             {errorMessage && (
-              <p style={{ color: '#f87171', fontSize: '0.75rem', marginBottom: '8px' }}>
+              <p style={{ color: 'var(--color-danger-text)', fontSize: '0.75rem', marginBottom: '8px' }}>
                 {errorMessage}
               </p>
             )}
@@ -219,8 +219,8 @@ export default function CropTool({ imageUrl, initialCropData, onSave, onCancel, 
                 onClick={onCancel}
                 className="text-xs px-4 py-1.5 rounded border transition-colors"
                 style={{
-                  borderColor: 'var(--color-border-gold, #c9a55a)',
-                  color: 'var(--color-text-primary, #f5deb3)',
+                  borderColor: 'var(--color-border-gold, var(--color-gold-primary))',
+                  color: 'var(--color-text-primary, var(--color-text-primary))',
                   background: 'transparent',
                 }}
               >
@@ -230,8 +230,8 @@ export default function CropTool({ imageUrl, initialCropData, onSave, onCancel, 
                 onClick={() => onSave(cropData)}
                 disabled={isSaving}
                 style={{
-                  background: '#c9a55a',
-                  color: '#1a1209',
+                  background: 'var(--color-gold-primary)',
+                  color: 'var(--color-bg-card-hover)',
                   padding: '8px 20px',
                   borderRadius: '4px',
                   border: 'none',

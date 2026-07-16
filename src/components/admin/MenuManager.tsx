@@ -208,11 +208,11 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <span className="text-[#9a8a70] text-sm">{items.length} 個品項</span>
+        <span className="text-[var(--color-text-muted)] text-sm">{items.length} 個品項</span>
         {canWrite && (
           <button
             onClick={startNew}
-            className="bg-[#c9a55a] text-[#1a1510] text-sm font-semibold px-4 py-1.5 rounded hover:bg-[#d4af7a] transition-colors"
+            className="bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] text-sm font-semibold px-4 py-1.5 rounded hover:bg-[var(--color-gold-light)] transition-colors"
           >
             ＋ 新增品項
           </button>
@@ -220,52 +220,52 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
       </div>
 
       {showForm && canWrite && (
-        <form onSubmit={handleSave} className="bg-[#2a2015] border border-[#6a5030] rounded p-4 mb-6 flex flex-col gap-4">
-          <h3 className="text-[#c9a55a] text-sm font-semibold border-b border-[#6a5030] pb-2">
+        <form onSubmit={handleSave} className="bg-[var(--color-bg-card-hover)] border border-[var(--color-text-muted)] rounded p-4 mb-6 flex flex-col gap-4">
+          <h3 className="text-[var(--color-gold-primary)] text-sm font-semibold border-b border-[var(--color-text-muted)] pb-2">
             {editing ? '編輯品項' : '新增品項'}
           </h3>
 
           {!editing && (
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#9a8a70]">搜尋 FFXIV 資料庫匯入</label>
+              <label className="text-xs text-[var(--color-text-muted)]">搜尋 FFXIV 資料庫匯入</label>
               <ItemSearchBox onSelect={handleSelectItem} />
             </div>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#9a8a70]">原始名稱 *</label>
-              <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-1.5 text-sm text-[#d4c090] focus:outline-none focus:border-[#c9a55a]" />
+              <label className="text-xs text-[var(--color-text-muted)]">原始名稱 *</label>
+              <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)]" />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#c9a55a]">菜單別名 (Alias)</label>
-              <input value={form.alias} onChange={(e) => setForm({ ...form, alias: e.target.value })} placeholder="例如：錫蘭伯爵紅茶" className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-1.5 text-sm text-[#f4e38e] placeholder-[#6a5030] focus:outline-none focus:border-[#c9a55a]" />
+              <label className="text-xs text-[var(--color-gold-primary)]">菜單別名 (Alias)</label>
+              <input value={form.alias} onChange={(e) => setForm({ ...form, alias: e.target.value })} placeholder="例如：錫蘭伯爵紅茶" className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-gold-light)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)]" />
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-3">
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#9a8a70]">價格 (gil)</label>
-              <input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} required min={0} className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-1.5 text-sm text-[#d4c090] focus:outline-none focus:border-[#c9a55a]" />
+              <label className="text-xs text-[var(--color-text-muted)]">價格 (gil)</label>
+              <input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} required min={0} className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)]" />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#9a8a70]">庫存數量</label>
-              <input type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: Math.max(0, parseInt(e.target.value) || 0) })} min={0} disabled={form.unlimited} className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-1.5 text-sm text-[#d4c090] focus:outline-none focus:border-[#c9a55a] disabled:opacity-40" />
+              <label className="text-xs text-[var(--color-text-muted)]">庫存數量</label>
+              <input type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: Math.max(0, parseInt(e.target.value) || 0) })} min={0} disabled={form.unlimited} className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)] disabled:opacity-40" />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#9a8a70]">排序</label>
-              <input type="number" value={form.order} onChange={(e) => setForm({ ...form, order: Number(e.target.value) })} min={0} className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-1.5 text-sm text-[#d4c090] focus:outline-none focus:border-[#c9a55a]" />
+              <label className="text-xs text-[var(--color-text-muted)]">排序</label>
+              <input type="number" value={form.order} onChange={(e) => setForm({ ...form, order: Number(e.target.value) })} min={0} className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)]" />
             </div>
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-[#9a8a70]">描述</label>
-            <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-1.5 text-sm text-[#d4c090] focus:outline-none focus:border-[#c9a55a] resize-none" />
+            <label className="text-xs text-[var(--color-text-muted)]">描述</label>
+            <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)] resize-none" />
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-[#9a8a70]">分類</label>
-            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as MenuCategory })} className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-1.5 text-sm text-[#d4c090] focus:outline-none focus:border-[#c9a55a]">
+            <label className="text-xs text-[var(--color-text-muted)]">分類</label>
+            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as MenuCategory })} className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)]">
               {CATEGORY_ORDER.map((cat) => (
                 <option key={cat} value={cat}>{CATEGORY_LABELS[cat]}</option>
               ))}
@@ -274,10 +274,10 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
 
           {/* 配方樹狀勾選 */}
           {recipeTree && (
-            <div className="mt-2 border border-[#4a3820] rounded p-3 bg-[#1a1510]/50">
-              <label className="text-xs text-[#c9a55a] block mb-2 font-semibold">
+            <div className="mt-2 border border-[var(--color-border-gold)] rounded p-3 bg-[var(--color-bg-card)]/50">
+              <label className="text-xs text-[var(--color-gold-primary)] block mb-2 font-semibold">
                 勾選欲納入「食材管理」的素材：
-                <span className="text-[#6a5030] ml-2 font-normal">(已排除碎晶/水晶/簇晶)</span>
+                <span className="text-[var(--color-text-muted)] ml-2 font-normal">(已排除碎晶/水晶/簇晶)</span>
               </label>
               <div className="max-h-48 overflow-y-auto custom-scrollbar">
                 <RecipeTreeSelector 
@@ -291,18 +291,18 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
 
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center gap-4">
-              <label className="flex items-center gap-2 text-xs text-[#9a8a70] cursor-pointer">
-                <input type="checkbox" checked={form.available} onChange={(e) => setForm({ ...form, available: e.target.checked })} className="accent-[#c9a55a]" />
+              <label className="flex items-center gap-2 text-xs text-[var(--color-text-muted)] cursor-pointer">
+                <input type="checkbox" checked={form.available} onChange={(e) => setForm({ ...form, available: e.target.checked })} className="accent-[var(--color-gold-primary)]" />
                 供應中
               </label>
-              <label className="flex items-center gap-2 text-xs text-[#c9a55a] cursor-pointer">
-                <input type="checkbox" checked={form.unlimited} onChange={(e) => setForm({ ...form, unlimited: e.target.checked })} className="accent-[#c9a55a]" />
+              <label className="flex items-center gap-2 text-xs text-[var(--color-gold-primary)] cursor-pointer">
+                <input type="checkbox" checked={form.unlimited} onChange={(e) => setForm({ ...form, unlimited: e.target.checked })} className="accent-[var(--color-gold-primary)]" />
                 無限量
               </label>
             </div>
             <div className="flex gap-2">
-              <button type="button" onClick={() => setShowForm(false)} className="text-sm text-[#9a8a70] hover:text-[#d4c090] px-3 py-1.5">取消</button>
-              <button type="submit" disabled={saving} className="bg-[#c9a55a] text-[#1a1510] text-sm font-semibold px-5 py-1.5 rounded hover:bg-[#d4af7a] disabled:opacity-50 transition-colors">
+              <button type="button" onClick={() => setShowForm(false)} className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] px-3 py-1.5">取消</button>
+              <button type="submit" disabled={saving} className="bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] text-sm font-semibold px-5 py-1.5 rounded hover:bg-[var(--color-gold-light)] disabled:opacity-50 transition-colors">
                 {saving ? '儲存中…' : '儲存'}
               </button>
             </div>
@@ -312,16 +312,16 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
 
       {/* 品項列表 */}
       {loading ? (
-        <p className="text-[#9a8a70] text-sm">載入中…</p>
+        <p className="text-[var(--color-text-muted)] text-sm">載入中…</p>
       ) : (
         CATEGORY_ORDER.map((cat) =>
           grouped[cat].length > 0 ? (
             <div key={cat} className="mb-6">
-              <h4 className="text-[#c9a55a] text-xs tracking-widest mb-2 border-b border-[#4a3820] pb-1 uppercase">{CATEGORY_LABELS[cat]}</h4>
+              <h4 className="text-[var(--color-gold-primary)] text-xs tracking-widest mb-2 border-b border-[var(--color-border-gold)] pb-1 uppercase">{CATEGORY_LABELS[cat]}</h4>
               <div className="flex flex-col gap-2">
                 {grouped[cat].map((item) => (
-                  <div key={item.id} className="flex items-center gap-3 bg-[#2a2015] border border-[#4a3820] rounded p-2.5">
-                    <div className="w-10 h-10 rounded bg-[#3a2e18] flex-shrink-0 overflow-hidden">
+                  <div key={item.id} className="flex items-center gap-3 bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] rounded p-2.5">
+                    <div className="w-10 h-10 rounded bg-[var(--color-bg-card-hover)] flex-shrink-0 overflow-hidden">
                       <img 
                         src={item.imageUrl || `https://xivapi.com/i/066000/066313_hr1.png`} 
                         alt={item.name} 
@@ -330,11 +330,11 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-[#d4c090] text-lg font-bold truncate">
+                      <div className="text-[var(--color-text-primary)] text-lg font-bold truncate">
                         {item.alias ? (
-                          <span className="text-[#f4e38e]">
+                          <span className="text-[var(--color-gold-light)]">
                             {item.alias}
-                            <small className="text-[#6a5030] ml-2 font-normal opacity-70 text-sm">
+                            <small className="text-[var(--color-text-muted)] ml-2 font-normal opacity-70 text-sm">
                               ({item.name})
                             </small>
                           </span>
@@ -343,14 +343,14 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
                         )}
                       </div>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-[#c9a55a] text-sm font-medium">{item.price} gil</span>
+                        <span className="text-[var(--color-gold-primary)] text-sm font-medium">{item.price} gil</span>
                         {item.unlimited ? (
-                          <span className="text-xs px-1.5 py-0.5 rounded border text-[#c9a55a] border-[#6a5030]">∞ 無限量</span>
+                          <span className="text-xs px-1.5 py-0.5 rounded border text-[var(--color-gold-primary)] border-[var(--color-text-muted)]">∞ 無限量</span>
                         ) : (
                           <span className={`text-xs px-1.5 py-0.5 rounded border ${
                             (item.stock ?? 0) > 0
-                              ? 'text-[#81c784] border-[#3a5a3a]'
-                              : 'text-[#ef9a9a] border-[#6a3030]'
+                              ? 'text-[var(--color-success-text)] border-[var(--color-success-border)]'
+                              : 'text-[var(--color-danger-text)] border-[var(--color-danger-border)]'
                           }`}>
                             庫存 {item.stock ?? 0}
                           </span>
@@ -362,22 +362,22 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
                         <button
                           onClick={() => setCraftTarget(item)}
                           disabled={!masterData}
-                          className="text-sm text-[#c9a55a] border border-[#6a5030] hover:bg-[#2a2015] px-3 py-1 rounded transition-colors disabled:opacity-40"
+                          className="text-sm text-[var(--color-gold-primary)] border border-[var(--color-text-muted)] hover:bg-[var(--color-bg-card-hover)] px-3 py-1 rounded transition-colors disabled:opacity-40"
                         >
                           製作
                         </button>
                       )}
                       <button
                         onClick={() => handleToggle(item)}
-                        className={`text-sm px-3 py-1 rounded-md font-medium transition-colors ${item.available ? 'bg-[#1e3a1e] text-[#81c784] hover:bg-[#254a25]' : 'bg-[#3a1e1e] text-[#ef9a9a] hover:bg-[#4a2222]'}`}
+                        className={`text-sm px-3 py-1 rounded-md font-medium transition-colors ${item.available ? 'bg-[var(--color-success-bg)] text-[var(--color-success-text)] hover:bg-[var(--color-success-bg)]' : 'bg-[var(--color-danger-bg)] text-[var(--color-danger-text)] hover:bg-[var(--color-danger-bg)]'}`}
                       >
                         {item.available ? '供應中' : '已下架'}
                       </button>
                       {canWrite && (
-                        <button onClick={() => startEdit(item)} className="text-sm text-[#9a8a70] hover:text-[#d4c090] px-2 py-1 font-medium underline underline-offset-4">編輯</button>
+                        <button onClick={() => startEdit(item)} className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] px-2 py-1 font-medium underline underline-offset-4">編輯</button>
                       )}
                       {canDelete && (
-                        <button onClick={() => handleDelete(item.id)} className="text-sm text-[#6a3030] hover:text-[#ef9a9a] px-2 py-1 font-medium">刪除</button>
+                        <button onClick={() => handleDelete(item.id)} className="text-sm text-[var(--color-danger-border)] hover:text-[var(--color-danger-text)] px-2 py-1 font-medium">刪除</button>
                       )}
                     </div>
                   </div>

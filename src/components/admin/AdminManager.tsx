@@ -144,7 +144,7 @@ export default function AdminManager() {
                   <td className="px-4 py-3 text-right">
                     <button
                       onClick={(e) => { e.stopPropagation(); handleDeleteAdmin(admin.id) }}
-                      className="text-xs text-[#6a3030] hover:text-[#ef9a9a] transition-colors"
+                      className="text-xs text-[var(--color-danger-border)] hover:text-[var(--color-danger-text)] transition-colors"
                     >
                       刪除
                     </button>

@@ -26,7 +26,7 @@ export default function Navbar() {
             木葉茗茶坊
           </span>
           {address && (
-            <span className="hidden sm:block text-[11px] text-[#9a8a70] tracking-wide leading-tight mt-0.5">
+            <span className="hidden sm:block text-[11px] text-[var(--color-text-muted)] tracking-wide leading-tight mt-0.5">
               📍 {address}
             </span>
           )}
@@ -39,7 +39,7 @@ export default function Navbar() {
             留言板
           </NavLink>
           <NavLink to="/admin" className={({ isActive }) =>
-            `ml-2 sm:ml-3 text-[#6a5030] hover:text-[#9a8060] transition-colors text-xs ${isActive ? 'text-[#9a8060]' : ''}`
+            `ml-2 sm:ml-3 text-[var(--color-text-muted)] hover:text-[var(--color-gold-light)] transition-colors text-xs ${isActive ? 'text-[var(--color-gold-light)]' : ''}`
           }>
             ⚙
           </NavLink>

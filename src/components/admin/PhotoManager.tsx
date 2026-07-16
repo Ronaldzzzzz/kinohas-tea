@@ -155,8 +155,8 @@ export default function PhotoManager() {
                     onClick={() => setEditingIndex(index)}
                     className="text-xs rounded px-3 py-1 transition-colors"
                     style={{
-                      border: '1px solid #c9a55a',
-                      color: '#c9a55a',
+                      border: '1px solid var(--color-gold-primary)',
+                      color: 'var(--color-gold-primary)',
                       background: 'rgba(201,165,90,0.15)',
                     }}
                   >

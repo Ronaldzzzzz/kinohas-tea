@@ -66,13 +66,13 @@ export default function ItemSearchBox({ onSelect, placeholder = "搜尋 FFXIV �
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length >= 2 && setIsOpen(true)}
           placeholder={placeholder}
-          className="w-full bg-[#2d1e12] border border-[#8b6b4a] rounded px-4 py-2 text-[#e8d5b5] placeholder-[#a68b6d] focus:outline-none focus:border-[#f4e38e] transition-colors"
+          className="w-full bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-4 py-2 text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-light)] transition-colors"
         />
         <span className="absolute right-3 top-2.5 opacity-40">🔍</span>
       </div>
 
       {isOpen && results.length > 0 && (
-        <ul className="absolute z-[100] mt-1 w-full max-h-64 overflow-y-auto bg-[#3e2a1b] border border-[#8b6b4a] rounded shadow-2xl custom-scrollbar">
+        <ul className="absolute z-[100] mt-1 w-full max-h-64 overflow-y-auto bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] rounded shadow-2xl custom-scrollbar">
           {results.map(({ id, item }) => (
             <li
               key={id}
@@ -81,7 +81,7 @@ export default function ItemSearchBox({ onSelect, placeholder = "搜尋 FFXIV �
                 setQuery('');
                 setIsOpen(false);
               }}
-              className="flex items-center gap-3 px-4 py-2 hover:bg-[#4a3422] cursor-pointer border-b border-[#8b6b4a]/10 last:border-none"
+              className="flex items-center gap-3 px-4 py-2 hover:bg-[var(--color-bg-card-hover)] cursor-pointer border-b border-[var(--color-border-gold)]/10 last:border-none"
             >
               <img 
                 src={`https://xivapi.com${item.i}`} 
@@ -90,8 +90,8 @@ export default function ItemSearchBox({ onSelect, placeholder = "搜尋 FFXIV �
                 onError={(e) => (e.currentTarget.src = 'https://xivapi.com/i/066000/066313_hr1.png')}
               />
               <div className="flex-1 min-w-0">
-                <div className="text-[#f4e38e] text-sm font-medium truncate">{item.n}</div>
-                <div className="text-[#a68b6d] text-[10px]">ID: {id}</div>
+                <div className="text-[var(--color-gold-light)] text-sm font-medium truncate">{item.n}</div>
+                <div className="text-[var(--color-text-muted)] text-[10px]">ID: {id}</div>
               </div>
             </li>
           ))}

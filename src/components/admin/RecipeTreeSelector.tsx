@@ -31,7 +31,7 @@ export default function RecipeTreeSelector({ node, selectedIds, onToggle, level 
   return (
     <div className="flex flex-col gap-1">
       <div 
-        className="flex items-center gap-2 py-1 px-2 rounded hover:bg-[#3a2e18] transition-colors cursor-pointer group"
+        className="flex items-center gap-2 py-1 px-2 rounded hover:bg-[var(--color-bg-card-hover)] transition-colors cursor-pointer group"
         style={{ paddingLeft: `${level * 1.5 + 0.5}rem` }}
         onClick={(e) => {
           e.stopPropagation();
@@ -43,11 +43,11 @@ export default function RecipeTreeSelector({ node, selectedIds, onToggle, level 
             type="checkbox" 
             checked={isSelected} 
             onChange={() => {}} // Controlled by parent onClick
-            className="accent-[#c9a55a] w-3.5 h-3.5 cursor-pointer"
+            className="accent-[var(--color-gold-primary)] w-3.5 h-3.5 cursor-pointer"
           />
         </div>
-        <span className={`text-xs transition-colors ${isSelected ? 'text-[#d4c090]' : 'text-[#6a5030] group-hover:text-[#9a8a70]'}`}>
-          {node.name} <span className="text-[#9a8a70] ml-1 opacity-70">x{node.amount}</span>
+        <span className={`text-xs transition-colors ${isSelected ? 'text-[var(--color-text-primary)]' : 'text-[var(--color-text-muted)] group-hover:text-[var(--color-text-muted)]'}`}>
+          {node.name} <span className="text-[var(--color-text-muted)] ml-1 opacity-70">x{node.amount}</span>
         </span>
       </div>
       

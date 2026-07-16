@@ -15,8 +15,8 @@ export default function CategoryTabs({ active, onChange }: Props) {
           onClick={() => onChange(cat)}
           className={`px-4 py-1.5 text-sm rounded transition-colors ${
             active === cat
-              ? 'bg-[#c9a55a] text-[#1a1510] font-semibold'
-              : 'bg-[#2a2015] border border-[#4a3820] text-[#9a8a70] hover:text-[#d4c090]'
+              ? 'bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] font-semibold'
+              : 'bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'
           }`}
         >
           {CATEGORY_LABELS[cat]}

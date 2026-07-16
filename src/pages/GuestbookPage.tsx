@@ -31,9 +31,9 @@ export default function GuestbookPage() {
 
       <div className="flex flex-col gap-2 sm:gap-3">
         {loading ? (
-          <p className="text-[#9a8a70] text-sm text-center py-8">載入中…</p>
+          <p className="text-[var(--color-text-muted)] text-sm text-center py-8">載入中…</p>
         ) : messages.length === 0 ? (
-          <p className="text-[#9a8a70] text-sm text-center py-8">尚無留言，歡迎第一個留言！</p>
+          <p className="text-[var(--color-text-muted)] text-sm text-center py-8">尚無留言，歡迎第一個留言！</p>
         ) : (
           messages.map((msg) => <MessageCard key={msg.id} message={msg} />)
         )}

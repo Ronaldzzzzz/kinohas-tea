@@ -138,17 +138,17 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
     <div className="flex flex-col gap-4">
       {/* 標題列 */}
       <div className="flex items-center justify-between">
-        <h3 className="text-[#c9a55a] font-serif tracking-widest text-lg">點餐管理</h3>
+        <h3 className="text-[var(--color-gold-primary)] font-serif tracking-widest text-lg">點餐管理</h3>
         <button
           onClick={load}
-          className="text-sm text-[#9a8a70] hover:text-[#d4c090] transition-colors border border-[#4a3820] px-3 py-1 rounded"
+          className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors border border-[var(--color-border-gold)] px-3 py-1 rounded"
         >
           重新整理
         </button>
       </div>
 
       {error && (
-        <p className="text-[#ef9a9a] text-sm text-center py-2 border border-[#6a3030] rounded bg-[#2a1515] px-3">
+        <p className="text-[var(--color-danger-text)] text-sm text-center py-2 border border-[var(--color-danger-border)] rounded bg-[var(--color-danger-bg)] px-3">
           {error}
         </p>
       )}
@@ -161,8 +161,8 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
             onClick={() => { setTab(t); setHistoryPage(0); setSelectedHistoryIds(new Set()) }}
             className={`px-4 py-1.5 text-sm rounded transition-colors ${
               tab === t
-                ? 'bg-[#c9a55a] text-[#1a1510] font-semibold'
-                : 'bg-[#2a2015] border border-[#4a3820] text-[#9a8a70] hover:text-[#d4c090]'
+                ? 'bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] font-semibold'
+                : 'bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'
             }`}
           >
             {t === 'active'
@@ -173,11 +173,11 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
       </div>
 
       {loading ? (
-        <p className="text-[#9a8a70] text-sm text-center py-8">載入中…</p>
+        <p className="text-[var(--color-text-muted)] text-sm text-center py-8">載入中…</p>
       ) : tab === 'active' ? (
         /* ── 當前訂單 ── */
         activeOrders.length === 0 ? (
-          <p className="text-[#9a8a70] text-sm text-center py-8">目前無訂單</p>
+          <p className="text-[var(--color-text-muted)] text-sm text-center py-8">目前無訂單</p>
         ) : (
           <ul className="flex flex-col gap-3">
             {activeOrders.map(order => {
@@ -187,28 +187,28 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
                   key={order.id}
                   className={`border rounded p-4 flex flex-col gap-2 ${
                     isCompleted
-                      ? 'bg-[#1e2a1e] border-[#3a5a3a]'
-                      : 'bg-[#2a2015] border-[#4a3820]'
+                      ? 'bg-[var(--color-success-bg)] border-[var(--color-success-border)]'
+                      : 'bg-[var(--color-bg-card-hover)] border-[var(--color-border-gold)]'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex flex-col gap-0.5">
                       <div className="flex items-center gap-2">
-                        <span className="text-[#d4c090] text-base font-semibold">{order.customerName}</span>
+                        <span className="text-[var(--color-text-primary)] text-base font-semibold">{order.customerName}</span>
                         {isCompleted && (
-                          <span className="text-xs text-[#81c784] border border-[#3a5a3a] rounded px-1.5 py-0.5">
+                          <span className="text-xs text-[var(--color-success-text)] border border-[var(--color-success-border)] rounded px-1.5 py-0.5">
                             已完成
                           </span>
                         )}
                       </div>
-                      <span className="text-sm text-[#9a8a70]">{formatTime(order)}</span>
+                      <span className="text-sm text-[var(--color-text-muted)]">{formatTime(order)}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       {!isCompleted && canWrite && (
                         <button
                           onClick={() => handleComplete(order.id)}
                           disabled={completing === order.id}
-                          className="text-sm text-[#81c784] border border-[#3a5a3a] hover:bg-[#1e2a1e] px-3 py-1 rounded transition-colors disabled:opacity-50"
+                          className="text-sm text-[var(--color-success-text)] border border-[var(--color-success-border)] hover:bg-[var(--color-success-bg)] px-3 py-1 rounded transition-colors disabled:opacity-50"
                         >
                           {completing === order.id ? '處理中…' : '完成'}
                         </button>
@@ -217,23 +217,23 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
                         <button
                           onClick={() => handleDelete(order)}
                           disabled={deleting === order.id}
-                          className="text-sm text-[#6a3030] hover:text-[#ef9a9a] transition-colors border border-[#4a2020] hover:border-[#6a3030] px-3 py-1 rounded disabled:opacity-50"
+                          className="text-sm text-[var(--color-danger-border)] hover:text-[var(--color-danger-text)] transition-colors border border-[var(--color-danger-bg)] hover:border-[var(--color-danger-border)] px-3 py-1 rounded disabled:opacity-50"
                         >
                           {deleting === order.id ? '刪除中…' : '刪除'}
                         </button>
                       )}
                     </div>
                   </div>
-                  <ul className="flex flex-col gap-0.5 pl-2 border-l border-[#4a3820]">
+                  <ul className="flex flex-col gap-0.5 pl-2 border-l border-[var(--color-border-gold)]">
                     {order.items.map((item, idx) => (
-                      <li key={idx} className="text-sm text-[#a89060]">
+                      <li key={idx} className="text-sm text-[var(--color-text-muted)]">
                         ✦ {item.menuItemName}
-                        {item.quantity > 1 && <span className="text-[#9a8a70]"> × {item.quantity}</span>}
+                        {item.quantity > 1 && <span className="text-[var(--color-text-muted)]"> × {item.quantity}</span>}
                       </li>
                     ))}
                   </ul>
                   {order.note && (
-                    <p className="text-sm text-[#9a8a70] italic mt-0.5">備註：{order.note}</p>
+                    <p className="text-sm text-[var(--color-text-muted)] italic mt-0.5">備註：{order.note}</p>
                   )}
                 </li>
               )
@@ -244,18 +244,18 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
         /* ── 歷史訂單 ── */
         <div className="flex flex-col gap-3">
           {historicalOrders.length === 0 ? (
-            <p className="text-[#9a8a70] text-sm text-center py-8">無歷史訂單</p>
+            <p className="text-[var(--color-text-muted)] text-sm text-center py-8">無歷史訂單</p>
           ) : (
             <>
               {/* 批量操作列 */}
               <div className="flex items-center gap-3">
                 {canDelete && (
-                  <label className="flex items-center gap-2 text-sm text-[#9a8a70] cursor-pointer">
+                  <label className="flex items-center gap-2 text-sm text-[var(--color-text-muted)] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={selectedHistoryIds.size === pagedHistory.length && pagedHistory.length > 0}
                       onChange={toggleSelectAllHistory}
-                      className="accent-[#c9a55a]"
+                      className="accent-[var(--color-gold-primary)]"
                     />
                     全選本頁
                   </label>
@@ -264,7 +264,7 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
                   <button
                     onClick={handleBatchDeleteHistory}
                     disabled={batchDeleting}
-                    className="text-sm text-[#ef9a9a] border border-[#6a3030] hover:bg-[#2a1515] px-3 py-1 rounded transition-colors disabled:opacity-50"
+                    className="text-sm text-[var(--color-danger-text)] border border-[var(--color-danger-border)] hover:bg-[var(--color-danger-bg)] px-3 py-1 rounded transition-colors disabled:opacity-50"
                   >
                     {batchDeleting ? '刪除中…' : `刪除選取 (${selectedHistoryIds.size})`}
                   </button>
@@ -276,35 +276,35 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
                 {pagedHistory.map(order => (
                   <li
                     key={order.id}
-                    className="bg-[#1e1a10] border border-[#3a2c1a] rounded p-4 flex flex-col gap-2"
+                    className="bg-[var(--color-bg-card-hover)] border border-[var(--color-border-primary)] rounded p-4 flex flex-col gap-2"
                   >
                     <div className="flex items-start gap-3">
                       <input
                         type="checkbox"
                         checked={selectedHistoryIds.has(order.id)}
                         onChange={() => toggleHistorySelect(order.id)}
-                        className="accent-[#c9a55a] mt-1 flex-shrink-0"
+                        className="accent-[var(--color-gold-primary)] mt-1 flex-shrink-0"
                       />
                       <div className="flex-1 flex flex-col gap-0.5">
                         <div className="flex items-center gap-2">
-                          <span className="text-[#d4c090] text-base font-semibold">{order.customerName}</span>
+                          <span className="text-[var(--color-text-primary)] text-base font-semibold">{order.customerName}</span>
                           {order.status === 'completed' && (
-                            <span className="text-xs text-[#81c784] border border-[#3a5a3a] rounded px-1.5 py-0.5">
+                            <span className="text-xs text-[var(--color-success-text)] border border-[var(--color-success-border)] rounded px-1.5 py-0.5">
                               已完成
                             </span>
                           )}
                         </div>
-                        <span className="text-sm text-[#9a8a70]">{formatTime(order)}</span>
-                        <ul className="flex flex-col gap-0.5 pl-2 border-l border-[#3a2c1a] mt-1">
+                        <span className="text-sm text-[var(--color-text-muted)]">{formatTime(order)}</span>
+                        <ul className="flex flex-col gap-0.5 pl-2 border-l border-[var(--color-border-primary)] mt-1">
                           {order.items.map((item, idx) => (
-                            <li key={idx} className="text-sm text-[#7a6040]">
+                            <li key={idx} className="text-sm text-[var(--color-text-muted)]">
                               ✦ {item.menuItemName}
-                              {item.quantity > 1 && <span className="text-[#6a5030]"> × {item.quantity}</span>}
+                              {item.quantity > 1 && <span className="text-[var(--color-text-muted)]"> × {item.quantity}</span>}
                             </li>
                           ))}
                         </ul>
                         {order.note && (
-                          <p className="text-sm text-[#6a5030] italic mt-0.5">備註：{order.note}</p>
+                          <p className="text-sm text-[var(--color-text-muted)] italic mt-0.5">備註：{order.note}</p>
                         )}
                       </div>
                     </div>
@@ -318,17 +318,17 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
                   <button
                     onClick={() => { setHistoryPage(p => Math.max(0, p - 1)); setSelectedHistoryIds(new Set()) }}
                     disabled={historyPage === 0}
-                    className="text-sm text-[#9a8a70] hover:text-[#d4c090] disabled:opacity-40 px-2"
+                    className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] disabled:opacity-40 px-2"
                   >
                     ← 上頁
                   </button>
-                  <span className="text-sm text-[#9a8a70]">
+                  <span className="text-sm text-[var(--color-text-muted)]">
                     {historyPage + 1} / {totalHistoryPages}
                   </span>
                   <button
                     onClick={() => { setHistoryPage(p => Math.min(totalHistoryPages - 1, p + 1)); setSelectedHistoryIds(new Set()) }}
                     disabled={historyPage >= totalHistoryPages - 1}
-                    className="text-sm text-[#9a8a70] hover:text-[#d4c090] disabled:opacity-40 px-2"
+                    className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] disabled:opacity-40 px-2"
                   >
                     下頁 →
                   </button>

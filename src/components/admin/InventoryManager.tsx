@@ -193,43 +193,43 @@ export default function InventoryManager({ canWrite, canDelete }: Props) {
       <div key={node.id} className="flex flex-col">
         <div 
           onClick={() => handleToggleSelect(node.id)}
-          className={`flex items-center gap-3 bg-[#2a2015] border rounded p-3 hover:border-[#6a5030] transition-all cursor-pointer ${
-            isSelected ? 'border-[#c9a55a] shadow-[var(--shadow-glow-warm)]' : 'border-[#4a3820]'
+          className={`flex items-center gap-3 bg-[var(--color-bg-card-hover)] border rounded p-3 hover:border-[var(--color-text-muted)] transition-all cursor-pointer ${
+            isSelected ? 'border-[var(--color-gold-primary)] shadow-[var(--shadow-glow-warm)]' : 'border-[var(--color-border-gold)]'
           }`}
           style={{ marginLeft: `${level * 1.5}rem` }}
         >
-          {level > 0 && <span className="text-[#6a5030] opacity-50">└─</span>}
+          {level > 0 && <span className="text-[var(--color-text-muted)] opacity-50">└─</span>}
           {canDelete && (
             <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
-              <input type="checkbox" checked={isSelected} onChange={() => {}} className="accent-[#c9a55a] w-4 h-4" />
+              <input type="checkbox" checked={isSelected} onChange={() => {}} className="accent-[var(--color-gold-primary)] w-4 h-4" />
             </div>
           )}
-          <div className="w-8 h-8 rounded bg-black/20 flex-shrink-0 flex items-center justify-center overflow-hidden border border-[#4a3820]">
+          <div className="w-8 h-8 rounded bg-black/20 flex-shrink-0 flex items-center justify-center overflow-hidden border border-[var(--color-border-gold)]">
             {node.icon ? <img src={`https://xivapi.com${node.icon}`} alt="" className="w-full h-full object-contain" /> : <span className="text-lg">📦</span>}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-baseline gap-2">
-              <span className="text-[#d4c090] text-base font-bold truncate">{node.name}</span>
+              <span className="text-[var(--color-text-primary)] text-base font-bold truncate">{node.name}</span>
               {demand > 0 && (
-                <span className={`text-[10px] px-1.5 rounded-full border ${isUnderstocked ? 'text-[#ef9a9a] border-[#ef9a9a]/30 bg-[#ef9a9a]/10' : 'text-[#81c784] border-[#81c784]/30 bg-[#81c784]/10'}`}>
+                <span className={`text-[10px] px-1.5 rounded-full border ${isUnderstocked ? 'text-[var(--color-danger-text)] border-[var(--color-danger-text)]/30 bg-[var(--color-danger-text)]/10' : 'text-[var(--color-success-text)] border-[var(--color-success-text)]/30 bg-[var(--color-success-text)]/10'}`}>
                   需求: {demand}
                 </span>
               )}
             </div>
-            {node.note && <div className="text-[#6a5030] text-sm truncate mt-0.5 opacity-80">{node.note}</div>}
+            {node.note && <div className="text-[var(--color-text-muted)] text-sm truncate mt-0.5 opacity-80">{node.note}</div>}
           </div>
           <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => handleQuickStockUpdate(node, node.stock - 1)} className="w-6 h-6 flex items-center justify-center bg-[#3a2e18] text-[#c9a55a] rounded hover:bg-[#4a3820] transition-colors text-lg font-bold">-</button>
-            <input type="number" value={node.stock} onChange={(e) => handleQuickStockUpdate(node, parseInt(e.target.value) || 0)} className="w-20 bg-[#1a1510] border border-[#4a3820] rounded px-2 py-0.5 text-center text-sm text-[#f4e38e] focus:outline-none focus:border-[#c9a55a]" />
-            <button onClick={() => handleQuickStockUpdate(node, node.stock + 1)} className="w-6 h-6 flex items-center justify-center bg-[#3a2e18] text-[#c9a55a] rounded hover:bg-[#4a3820] transition-colors text-lg font-bold">+</button>
+            <button onClick={() => handleQuickStockUpdate(node, node.stock - 1)} className="w-6 h-6 flex items-center justify-center bg-[var(--color-bg-card-hover)] text-[var(--color-gold-primary)] rounded hover:bg-[var(--color-border-gold)] transition-colors text-lg font-bold">-</button>
+            <input type="number" value={node.stock} onChange={(e) => handleQuickStockUpdate(node, parseInt(e.target.value) || 0)} className="w-20 bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-2 py-0.5 text-center text-sm text-[var(--color-gold-light)] focus:outline-none focus:border-[var(--color-gold-primary)]" />
+            <button onClick={() => handleQuickStockUpdate(node, node.stock + 1)} className="w-6 h-6 flex items-center justify-center bg-[var(--color-bg-card-hover)] text-[var(--color-gold-primary)] rounded hover:bg-[var(--color-border-gold)] transition-colors text-lg font-bold">+</button>
           </div>
           {(canWrite || canDelete) && (
             <div className="flex gap-1 ml-2" onClick={(e) => e.stopPropagation()}>
               {canWrite && (
-                <button onClick={() => { setEditing(node); setForm({ name: node.name, stock: node.stock, note: node.note }); setShowForm(true); }} className="text-xs text-[#9a8a70] hover:text-[#d4c090] p-1">⚙</button>
+                <button onClick={() => { setEditing(node); setForm({ name: node.name, stock: node.stock, note: node.note }); setShowForm(true); }} className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] p-1">⚙</button>
               )}
               {canDelete && (
-                <button onClick={() => handleDelete(node.id)} className="text-xs text-[#6a3030] hover:text-[#ef9a9a] p-1">✕</button>
+                <button onClick={() => handleDelete(node.id)} className="text-xs text-[var(--color-danger-border)] hover:text-[var(--color-danger-text)] p-1">✕</button>
               )}
             </div>
           )}
@@ -266,44 +266,44 @@ export default function InventoryManager({ canWrite, canDelete }: Props) {
     <div>
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-4">
-          <span className="text-[#9a8a70] text-sm">{items.length} 樣食材</span>
-          <div className="flex bg-[#1a1510] border border-[#4a3820] rounded p-0.5">
-            <button onClick={() => setViewMode('tree')} className={`px-3 py-1 text-[10px] rounded transition-colors ${viewMode === 'tree' ? 'bg-[#c9a55a] text-[#1a1510] font-bold' : 'text-[#6a5030] hover:text-[#9a8a70]'}`}>樹狀</button>
-            <button onClick={() => setViewMode('list')} className={`px-3 py-1 text-[10px] rounded transition-colors ${viewMode === 'list' ? 'bg-[#c9a55a] text-[#1a1510] font-bold' : 'text-[#6a5030] hover:text-[#9a8a70]'}`}>清單</button>
+          <span className="text-[var(--color-text-muted)] text-sm">{items.length} 樣食材</span>
+          <div className="flex bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded p-0.5">
+            <button onClick={() => setViewMode('tree')} className={`px-3 py-1 text-[10px] rounded transition-colors ${viewMode === 'tree' ? 'bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] font-bold' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-muted)]'}`}>樹狀</button>
+            <button onClick={() => setViewMode('list')} className={`px-3 py-1 text-[10px] rounded transition-colors ${viewMode === 'list' ? 'bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] font-bold' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-muted)]'}`}>清單</button>
           </div>
           {canDelete && items.length > 0 && (
-            <button onClick={handleSelectAll} className="text-[#c9a55a] text-xs hover:underline">{selectedIds.size === items.length ? '取消全選' : '全選'}</button>
+            <button onClick={handleSelectAll} className="text-[var(--color-gold-primary)] text-xs hover:underline">{selectedIds.size === items.length ? '取消全選' : '全選'}</button>
           )}
           {canDelete && selectedIds.size > 0 && (
-            <button onClick={handleBulkDelete} disabled={saving} className="bg-[#3a1e1e] text-[#ef9a9a] text-xs px-3 py-1 rounded hover:bg-[#4a2222] transition-colors disabled:opacity-50">刪除選中 ({selectedIds.size})</button>
+            <button onClick={handleBulkDelete} disabled={saving} className="bg-[var(--color-danger-bg)] text-[var(--color-danger-text)] text-xs px-3 py-1 rounded hover:bg-[var(--color-danger-bg)] transition-colors disabled:opacity-50">刪除選中 ({selectedIds.size})</button>
           )}
         </div>
         {canWrite && (
-          <button onClick={() => { setEditing(null); setForm(EMPTY_FORM); setShowForm(true); }} className="bg-[#c9a55a] text-[#1a1510] text-sm font-semibold px-4 py-1.5 rounded hover:bg-[#d4af7a] transition-colors">＋ 手動新增食材</button>
+          <button onClick={() => { setEditing(null); setForm(EMPTY_FORM); setShowForm(true); }} className="bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] text-sm font-semibold px-4 py-1.5 rounded hover:bg-[var(--color-gold-light)] transition-colors">＋ 手動新增食材</button>
         )}
       </div>
 
       {showForm && canWrite && (
-        <form onSubmit={handleSave} className="bg-[#2a2015] border border-[#6a5030] rounded p-4 mb-6 flex flex-col gap-3">
-          <h3 className="text-[#c9a55a] text-sm font-semibold">{editing ? '編輯食材' : '新增食材'}</h3>
+        <form onSubmit={handleSave} className="bg-[var(--color-bg-card-hover)] border border-[var(--color-text-muted)] rounded p-4 mb-6 flex flex-col gap-3">
+          <h3 className="text-[var(--color-gold-primary)] text-sm font-semibold">{editing ? '編輯食材' : '新增食材'}</h3>
           <div className="flex flex-col gap-3">
-            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="食材名稱 *" required className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-1.5 text-sm text-[#d4c090] focus:outline-none focus:border-[#c9a55a]" />
-            <textarea value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} placeholder="備註 (如：用於製作 OO)" rows={2} className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-1.5 text-sm text-[#d4c090] focus:outline-none focus:border-[#c9a55a] resize-none" />
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="食材名稱 *" required className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)]" />
+            <textarea value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} placeholder="備註 (如：用於製作 OO)" rows={2} className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)] resize-none" />
           </div>
           <div className="flex gap-2 justify-end">
-            <button type="button" onClick={() => setShowForm(false)} className="text-sm text-[#9a8a70] hover:text-[#d4c090] px-3 py-1.5">取消</button>
-            <button type="submit" disabled={saving} className="bg-[#c9a55a] text-[#1a1510] text-sm font-semibold px-5 py-1.5 rounded hover:bg-[#d4af7a] disabled:opacity-50 transition-colors">{saving ? '儲存中…' : '儲存'}</button>
+            <button type="button" onClick={() => setShowForm(false)} className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] px-3 py-1.5">取消</button>
+            <button type="submit" disabled={saving} className="bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] text-sm font-semibold px-5 py-1.5 rounded hover:bg-[var(--color-gold-light)] disabled:opacity-50 transition-colors">{saving ? '儲存中…' : '儲存'}</button>
           </div>
         </form>
       )}
 
       {loading ? (
-        <p className="text-[#9a8a70] text-sm">載入中…</p>
+        <p className="text-[var(--color-text-muted)] text-sm">載入中…</p>
       ) : (
         <div className="grid gap-2">
           {displayItems.map(item => renderNode(item))}
           {displayItems.length === 0 && (
-            <p className="text-[#9a8a70] text-sm text-center py-8">目前無食材資料</p>
+            <p className="text-[var(--color-text-muted)] text-sm text-center py-8">目前無食材資料</p>
           )}
         </div>
       )}

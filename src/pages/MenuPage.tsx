@@ -52,9 +52,9 @@ export default function MenuPage() {
       {/* 品項清單 (分組顯示) */}
       <div className="flex flex-col gap-6 sm:gap-8 md:gap-10">
         {loading ? (
-          <p className="text-[#a68b6d] text-sm text-center py-8">載入中…</p>
+          <p className="text-[var(--color-text-muted)] text-sm text-center py-8">載入中…</p>
         ) : items.length === 0 ? (
-          <p className="text-[#a68b6d] text-sm text-center py-8">目前無菜單品項</p>
+          <p className="text-[var(--color-text-muted)] text-sm text-center py-8">目前無菜單品項</p>
         ) : (
           CATEGORY_ORDER.map(cat => (
             grouped[cat].length > 0 && (

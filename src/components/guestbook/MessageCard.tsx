@@ -36,17 +36,17 @@ export default function MessageCard({ message, onDelete }: Props) {
     <div className="bg-[var(--color-bg-card)] border border-[var(--color-border-primary)] rounded p-3 sm:p-4 transition-all hover:bg-[var(--color-bg-card-hover)] hover:shadow-[var(--shadow-glow-warm)]">
       {/* 作者資訊 */}
       <div className="flex items-baseline gap-2 mb-2">
-        <span className="text-[#c9a55a] font-semibold text-sm sm:text-base content-text">
+        <span className="text-[var(--color-gold-primary)] font-semibold text-sm sm:text-base content-text">
           {message.isAnonymous ? '匿名' : message.authorId}
         </span>
         {!message.isAnonymous && message.serverName && (
-          <span className="text-[#6a5030] text-xs sm:text-sm content-text">@{message.serverName}</span>
+          <span className="text-[var(--color-text-muted)] text-xs sm:text-sm content-text">@{message.serverName}</span>
         )}
-        <span className="text-[#6a5030] text-xs ml-auto">{dateStr}</span>
+        <span className="text-[var(--color-text-muted)] text-xs ml-auto">{dateStr}</span>
       </div>
 
       {/* 內容 */}
-      <p className="text-[#d4c090] text-sm sm:text-base leading-relaxed content-text">{message.content}</p>
+      <p className="text-[var(--color-text-primary)] text-sm sm:text-base leading-relaxed content-text">{message.content}</p>
 
       {/* 互動列 */}
       <div className="flex items-center gap-2 sm:gap-3 mt-3">
@@ -55,8 +55,8 @@ export default function MessageCard({ message, onDelete }: Props) {
           disabled={!!voted}
           className={`flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors ${
             voted === 'likes'
-              ? 'bg-[#1e3a1e] text-[#81c784]'
-              : 'text-[#9a8a70] hover:text-[#d4c090] disabled:cursor-not-allowed'
+              ? 'bg-[var(--color-success-bg)] text-[var(--color-success-text)]'
+              : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] disabled:cursor-not-allowed'
           }`}
         >
           👍 <span>{likes}</span>
@@ -66,8 +66,8 @@ export default function MessageCard({ message, onDelete }: Props) {
           disabled={!!voted}
           className={`flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors ${
             voted === 'dislikes'
-              ? 'bg-[#3a1e1e] text-[#ef9a9a]'
-              : 'text-[#9a8a70] hover:text-[#d4c090] disabled:cursor-not-allowed'
+              ? 'bg-[var(--color-danger-bg)] text-[var(--color-danger-text)]'
+              : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] disabled:cursor-not-allowed'
           }`}
         >
           👎 <span>{dislikes}</span>
@@ -76,7 +76,7 @@ export default function MessageCard({ message, onDelete }: Props) {
         {(message.replies?.length ?? 0) > 0 && (
           <button
             onClick={() => setShowReplies((v) => !v)}
-            className="text-xs text-[#6a5030] hover:text-[#9a8060] ml-1"
+            className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-gold-light)] ml-1"
           >
             {showReplies ? '收起' : `${message.replies!.length} 則回覆`}
           </button>
@@ -85,7 +85,7 @@ export default function MessageCard({ message, onDelete }: Props) {
         {onDelete && (
           <button
             onClick={() => onDelete(message.id)}
-            className="ml-auto text-xs text-[#6a3030] hover:text-[#ef9a9a]"
+            className="ml-auto text-xs text-[var(--color-danger-border)] hover:text-[var(--color-danger-text)]"
           >
             刪除
           </button>

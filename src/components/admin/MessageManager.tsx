@@ -29,14 +29,14 @@ export default function MessageManager({ canDelete }: Props) {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <span className="text-[#9a8a70] text-sm">{messages.length} 則留言</span>
-        <button onClick={load} className="text-xs text-[#9a8a70] hover:text-[#d4c090]">重新整理</button>
+        <span className="text-[var(--color-text-muted)] text-sm">{messages.length} 則留言</span>
+        <button onClick={load} className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]">重新整理</button>
       </div>
 
       {loading ? (
-        <p className="text-[#9a8a70] text-sm">載入中…</p>
+        <p className="text-[var(--color-text-muted)] text-sm">載入中…</p>
       ) : messages.length === 0 ? (
-        <p className="text-[#9a8a70] text-sm text-center py-8">尚無留言</p>
+        <p className="text-[var(--color-text-muted)] text-sm text-center py-8">尚無留言</p>
       ) : (
         <div className="flex flex-col gap-3">
           {messages.map((msg) => (

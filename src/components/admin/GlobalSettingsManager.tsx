@@ -63,11 +63,11 @@ export default function GlobalSettingsManager() {
             value={address}
             onChange={e => setAddress(e.target.value)}
             placeholder="例：台北市信義區"
-            className="bg-[#2d1e12] border border-[#8b6b4a] text-[#e8d5b5] rounded px-3 py-2 text-sm
-                       placeholder:text-[#6a5030] focus:outline-none focus:border-[var(--color-gold-primary)]
+            className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-2 text-sm
+                       placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)]
                        transition-colors"
           />
-          <p className="text-[#6a5030] text-[11px]">顯示於網站頁首導覽列。留空則不顯示。</p>
+          <p className="text-[var(--color-text-muted)] text-[11px]">顯示於網站頁首導覽列。留空則不顯示。</p>
         </div>
 
         {/* 點餐冷卻時間 */}
@@ -82,12 +82,12 @@ export default function GlobalSettingsManager() {
               max={60}
               value={cooldown}
               onChange={e => setCooldown(Math.max(0, parseInt(e.target.value) || 0))}
-              className="bg-[#2d1e12] border border-[#8b6b4a] text-[#e8d5b5] rounded px-3 py-2 text-sm w-28
+              className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-2 text-sm w-28
                          focus:outline-none focus:border-[var(--color-gold-primary)] transition-colors"
             />
             <span className="text-[var(--color-text-muted)] text-xs">分鐘（0 = 無冷卻）</span>
           </div>
-          <p className="text-[#6a5030] text-[11px]">同一客人在此時間內只能點一次餐。</p>
+          <p className="text-[var(--color-text-muted)] text-[11px]">同一客人在此時間內只能點一次餐。</p>
         </div>
 
         {/* 庫存模式開關 */}
@@ -100,7 +100,7 @@ export default function GlobalSettingsManager() {
               type="button"
               onClick={() => setRealModeEnabled(v => !v)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                realModeEnabled ? 'bg-[#c9a55a]' : 'bg-[#4a3820]'
+                realModeEnabled ? 'bg-[var(--color-gold-primary)]' : 'bg-[var(--color-border-gold)]'
               }`}
             >
               <span
@@ -113,7 +113,7 @@ export default function GlobalSettingsManager() {
               {realModeEnabled ? '真實模式（訂單自動扣菜品庫存）' : '簡易模式（不連動庫存）'}
             </span>
           </div>
-          <p className="text-[#6a5030] text-[11px]">
+          <p className="text-[var(--color-text-muted)] text-[11px]">
             真實模式啟用時，客人下單會扣除菜品庫存；刪除未完成訂單會退還庫存。
           </p>
         </div>

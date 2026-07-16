@@ -72,7 +72,7 @@ export default function NoticeManager({ canWrite }: Props) {
             readOnly={!canWrite}
             placeholder={"歡迎光臨！\n今日特餐：…"}
             className="bg-[var(--color-bg-primary)] border border-[var(--color-border-primary)] rounded px-3 py-2 text-sm
-                       text-[var(--color-text-primary)] placeholder-[#6a5030] focus:outline-none
+                       text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:outline-none
                        focus:border-[var(--color-gold-primary)] resize-y leading-relaxed transition-colors"
           />
         </div>
@@ -116,7 +116,7 @@ export default function NoticeManager({ canWrite }: Props) {
             rows={5}
             readOnly={!canWrite}
             className="bg-[var(--color-bg-primary)] border border-[var(--color-border-primary)] rounded px-3 py-2 text-sm
-                       text-[var(--color-text-primary)] placeholder-[#6a5030] focus:outline-none
+                       text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:outline-none
                        focus:border-[var(--color-gold-primary)] resize-none transition-colors"
           />
         </div>

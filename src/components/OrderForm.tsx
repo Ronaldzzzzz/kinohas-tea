@@ -101,33 +101,33 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
   return (
     <section className="mt-6 sm:mt-10">
       <div className="flex items-center gap-3 mb-4">
-        <h2 className="text-[#c9a55a] font-serif text-xl sm:text-2xl tracking-widest">✦ 點餐</h2>
-        <div className="flex-1 h-px bg-[#4a3820] opacity-60" />
+        <h2 className="text-[var(--color-gold-primary)] font-serif text-xl sm:text-2xl tracking-widest">✦ 點餐</h2>
+        <div className="flex-1 h-px bg-[var(--color-border-gold)] opacity-60" />
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-[#2a2015] border border-[#4a3820] rounded p-3 sm:p-5 flex flex-col gap-3 sm:gap-4"
+        className="bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] rounded p-3 sm:p-5 flex flex-col gap-3 sm:gap-4"
       >
         {/* 客人名稱 */}
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-[#9a8a70] tracking-wide">角色 ID（必填）</label>
+          <label className="text-xs text-[var(--color-text-muted)] tracking-wide">角色 ID（必填）</label>
           <input
             value={customerName}
             onChange={e => setCustomerName(e.target.value)}
             placeholder="輸入你的角色 ID…"
             required
-            className="bg-[#1a1510] border border-[#4a3820] rounded px-3 py-1.5 text-sm text-[#d4c090] placeholder-[#6a5030] focus:outline-none focus:border-[#c9a55a]"
+            className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)]"
           />
         </div>
 
         {/* 菜單勾選 */}
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-[#9a8a70] tracking-wide">選擇品項（至少一項）</label>
+          <label className="text-xs text-[var(--color-text-muted)] tracking-wide">選擇品項（至少一項）</label>
           {loadingSettings ? (
-            <p className="text-[#9a8a70] text-sm py-2">載入設定中…</p>
+            <p className="text-[var(--color-text-muted)] text-sm py-2">載入設定中…</p>
           ) : menuItems.length === 0 ? (
-            <p className="text-[#9a8a70] text-sm py-2">目前無可點餐品項</p>
+            <p className="text-[var(--color-text-muted)] text-sm py-2">目前無可點餐品項</p>
           ) : (
             <div className="flex flex-col gap-1.5 max-h-64 overflow-y-auto pr-1">
               {menuItems.map(item => {
@@ -137,10 +137,10 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
                     key={item.id}
                     className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${
                       outOfStock
-                        ? 'bg-[#1e1810] border border-[#3a2c1a] opacity-50 cursor-not-allowed'
+                        ? 'bg-[var(--color-bg-card-hover)] border border-[var(--color-border-primary)] opacity-50 cursor-not-allowed'
                         : selected.has(item.id)
-                          ? 'bg-[#3a2c10] border border-[#c9a55a] cursor-pointer'
-                          : 'bg-[#1e1810] border border-[#3a2c1a] hover:border-[#6a5030] cursor-pointer'
+                          ? 'bg-[var(--color-bg-card-hover)] border border-[var(--color-gold-primary)] cursor-pointer'
+                          : 'bg-[var(--color-bg-card-hover)] border border-[var(--color-border-primary)] hover:border-[var(--color-text-muted)] cursor-pointer'
                     }`}
                   >
                     <input
@@ -148,17 +148,17 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
                       checked={selected.has(item.id)}
                       onChange={() => !outOfStock && toggleItem(item.id)}
                       disabled={outOfStock}
-                      className="accent-[#c9a55a]"
+                      className="accent-[var(--color-gold-primary)]"
                     />
-                    <span className={`flex-1 text-sm ${outOfStock ? 'text-[#6a5030]' : 'text-[#d4c090]'}`}>
+                    <span className={`flex-1 text-sm ${outOfStock ? 'text-[var(--color-text-muted)]' : 'text-[var(--color-text-primary)]'}`}>
                       {item.alias || item.name}
                     </span>
                     {outOfStock ? (
-                      <span className="text-xs text-[#ef9a9a] border border-[#6a3030] rounded px-1.5 py-0.5">
+                      <span className="text-xs text-[var(--color-danger-text)] border border-[var(--color-danger-border)] rounded px-1.5 py-0.5">
                         缺貨
                       </span>
                     ) : (
-                      <span className="text-xs text-[#9a8a70]">{item.price} gil</span>
+                      <span className="text-xs text-[var(--color-text-muted)]">{item.price} gil</span>
                     )}
                   </label>
                 )
@@ -169,19 +169,19 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
 
         {/* 錯誤提示 */}
         {submitError && (
-          <p className="text-[#ef9a9a] text-sm text-center mt-2">{submitError}</p>
+          <p className="text-[var(--color-danger-text)] text-sm text-center mt-2">{submitError}</p>
         )}
 
         {/* 成功提示 */}
         {success && (
-          <p className="text-[#7bc47a] text-sm text-center py-1">
+          <p className="text-[var(--color-success-text)] text-sm text-center py-1">
             ✓ 點餐成功！感謝光顧 ✦
           </p>
         )}
 
         {/* 冷卻提示 */}
         {inCooldown && (
-          <p className="text-[#c9855a] text-xs text-center">
+          <p className="text-[var(--color-gold-primary)] text-xs text-center">
             冷卻中，請稍候再送出下一筆訂單。
           </p>
         )}
@@ -190,7 +190,7 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
         <button
           type="submit"
           disabled={submitting || inCooldown || !customerName.trim() || selected.size === 0}
-          className="self-end bg-[#c9a55a] text-[#1a1510] text-sm font-semibold px-6 py-1.5 rounded hover:bg-[#d4af7a] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="self-end bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] text-sm font-semibold px-6 py-1.5 rounded hover:bg-[var(--color-gold-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {submitting
             ? '送出中…'
