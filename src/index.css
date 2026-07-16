@@ -56,7 +56,6 @@ body {
 }
 
 /* 統一流光動畫：絕對同步邏輯 */
-.text-shimmer,
 .wave-divider,
 .banner-shimmer::before {
   background-size: 300% 100% !important;
@@ -68,24 +67,6 @@ body {
 @keyframes sync-shimmer {
   0% { background-position: 100% 0; }
   100% { background-position: 0% 0; }
-}
-
-.text-shimmer {
-  display: block;
-  width: 100%;
-  letter-spacing: 0.1em;
-  background-image: linear-gradient(
-    90deg,
-    var(--color-gold-primary) 0%,
-    var(--color-gold-primary) 33%,
-    #ffffff 50%,
-    var(--color-gold-primary) 67%,
-    var(--color-gold-primary) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
-  -webkit-text-fill-color: transparent !important;
 }
 
 .banner-shimmer {

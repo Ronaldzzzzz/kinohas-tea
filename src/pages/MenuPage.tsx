@@ -42,7 +42,7 @@ export default function MenuPage() {
         </span>
         <div className="relative px-4 py-16 sm:py-24 md:py-32 text-center max-w-3xl mx-auto">
           <p className="font-serif text-xs sm:text-sm tracking-[0.4em] text-[var(--color-text-muted)] mb-4">台式茶莊 · FF14 RP</p>
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold tracking-widest text-shimmer mb-4">✦ 木葉茗茶坊 ✦</h1>
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold tracking-widest text-[var(--color-gold-primary)] mb-4">✦ 木葉茗茶坊 ✦</h1>
           <p className="font-serif text-sm sm:text-base tracking-widest text-[var(--color-text-muted)] mb-6">Kinnoha's Tea</p>
           <div className="mx-auto max-w-xs wave-divider" />
           <p className="mt-6 text-sm sm:text-base text-[var(--color-text-primary)] opacity-80">
