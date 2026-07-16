@@ -53,7 +53,7 @@ export default function InventoryManager({ canWrite, canDelete }: Props) {
       const [invData, menuData, recipesRes] = await Promise.all([
         getInventoryItems(),
         getMenuItems(),
-        fetch('/Full-Moon-Bistro-pages/data/master_recipes.json').then(r => r.json())
+        fetch('/data/master_recipes.json').then(r => r.json())
       ])
       setItems(invData)
       setMenuItems(menuData)
