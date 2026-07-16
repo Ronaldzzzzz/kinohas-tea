@@ -54,3 +54,11 @@
 2. `firebase emulators:start --project demo-kinohastea` + `npm run dev` 皆可正常啟動,無編譯錯誤。
 3. 本機瀏覽器手動走過: 首頁菜單展示與點餐送出、留言板張貼與按讚回覆、`/admin` 登入後的菜品/庫存/訂單/留言審核/告示看板/相片管理/全域設定/管理員帳號管理,功能與 Template 原版一致。
 4. 目視確認品牌名稱、配色、字體、Hero 區塊已套用,與 Full Moon Bistro 原版有明顯視覺區隔。
+
+## Stage 1 完成狀態(2026-07-16)
+
+Task 1-7(專案複製、後台舊路徑 bug 修正、Firebase Local Emulator 設定、品牌文字、favicon、配色字體、Hero 區塊)皆已實作並個別通過 code review。
+
+Task 8 自動化/API 層驗證已完成: `npm run build` 每個 Task 後皆通過、首頁 `<title>` 正確、favicon 與 `/data/master_items.json`、`/data/master_recipes.json` 可正常存取(驗證 Task 2 修正生效)、Firestore Emulator 內已種入管理員帳號(密碼 `admin123`,SHA-256 hash 對應 `adminPasswords` collection)且可被 app 的登入邏輯正確查到、Vite dev log 無 runtime error。
+
+因本環境瀏覽器 automation 未連線,驗收方式第 3、4 項(點餐送出、留言板互動、`/admin` 各面板操作、視覺配色確認)改為使用者於本機手動走查,結果另行回報處理。
