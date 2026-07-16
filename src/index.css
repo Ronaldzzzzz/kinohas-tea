@@ -7,15 +7,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #f5f0e6;
+  --color-bg-primary: #fbfaf7;
   --color-bg-card: #ffffff;
-  --color-bg-card-hover: #eee7d6;
-  --color-border-primary: #d8cdb4;
+  --color-bg-card-hover: #f4f1ea;
+  --color-border-primary: #e8e4da;
   --color-border-gold: #7a8c6f;
   --color-gold-primary: #3f5c3f;
   --color-gold-light: #5c7a52;
   --color-text-primary: #3a3226;
   --color-text-muted: #8a7f66;
+  /* 深茶綠：形象區塊底色(取代照片式滿版大圖) */
+  --color-deep-green: #2f4a34;
+  --color-deep-green-light: #3d5c44;
+  --color-on-deep: #f2ead8;
   /* 茶葉綠光暈 */
   --shadow-glow-warm: 0 0 15px rgba(63, 92, 63, 0.12);
   --color-available: #3f7a4a;
@@ -55,46 +59,6 @@ body {
   font-size: 1rem;
 }
 
-/* 統一流光動畫：絕對同步邏輯 */
-.wave-divider,
-.banner-shimmer::before {
-  background-size: 300% 100% !important;
-  background-repeat: no-repeat !important;
-  /* 方向反轉：從 100% 回到 0% */
-  animation: sync-shimmer 8s linear infinite !important;
-}
-
-@keyframes sync-shimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: 0% 0; }
-}
-
-.banner-shimmer {
-  position: relative;
-  overflow: hidden;
-}
-
-/* 標題外框的掃描光暈 */
-.banner-shimmer::before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    transparent 33%,
-    rgba(63, 92, 63, 0.6) 50%,
-    transparent 67%,
-    transparent 100%
-  );
-  z-index: -1;
-  border-radius: inherit;
-  filter: blur(4px);
-}
-
 @keyframes bounce-in {
   0% { transform: scale(0.9); opacity: 0; }
   50% { transform: scale(1.05); opacity: 1; }
@@ -103,20 +67,6 @@ body {
 
 .animate-bounce-in {
   animation: bounce-in 0.3s ease-out forwards;
-}
-
-@utility wave-divider {
-  height: 3px; /* 稍微加粗 */
-  background-color: var(--color-border-gold);
-  opacity: 0.4;
-  background-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    transparent 33%,
-    var(--color-gold-light) 50%,
-    transparent 67%,
-    transparent 100%
-  );
 }
 
 @layer utilities {

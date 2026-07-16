@@ -13,26 +13,35 @@ interface Props {
   counts: Record<string, number>
 }
 
+/**
+ * 分類磚列：對應參考站(松山茗茶)首頁的帶圖分類磚。
+ * 無商品攝影可用，改以深茶綠色塊+大型圖示模擬圖磚，label 壓在磚上。
+ */
 export default function CategoryNav({ counts }: Props) {
+  const visible = CATEGORY_ORDER.filter((cat) => (counts[cat] ?? 0) > 0)
+  if (visible.length === 0) return null
+
+  const colClass =
+    visible.length === 1 ? 'sm:grid-cols-1' :
+    visible.length === 2 ? 'sm:grid-cols-2' :
+    visible.length === 3 ? 'sm:grid-cols-3' :
+    'sm:grid-cols-4'
+
   return (
-    <nav className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
-      {CATEGORY_ORDER.map((cat) => {
-        const count = counts[cat] ?? 0
-        if (count === 0) return null
-        return (
-          <a
-            key={cat}
-            href={`#cat-${cat}`}
-            className="flex flex-col items-center gap-1 rounded p-2 sm:p-3 bg-[var(--color-bg-card-hover)] border border-[var(--color-border-primary)] hover:border-[var(--color-border-gold)] hover:shadow-[var(--shadow-glow-warm)] transition-all"
-          >
-            <span className="text-xl sm:text-2xl">{CATEGORY_ICONS[cat]}</span>
-            <span className="font-serif text-xs sm:text-sm text-[var(--color-text-primary)] tracking-wide">
-              {CATEGORY_LABELS[cat]}
-            </span>
-            <span className="text-[10px] text-[var(--color-text-muted)]">{count} 項</span>
-          </a>
-        )
-      })}
+    <nav className={`grid gap-3 sm:gap-4 grid-cols-2 ${colClass}`}>
+      {visible.map((cat) => (
+        <a
+          key={cat}
+          href={`#cat-${cat}`}
+          className="group relative flex flex-col items-center justify-center aspect-[4/3] rounded overflow-hidden bg-gradient-to-br from-[var(--color-deep-green)] to-[var(--color-deep-green-light)] transition-transform hover:scale-[1.02] hover:shadow-lg"
+        >
+          <span className="text-4xl sm:text-5xl mb-2 transition-transform group-hover:scale-110">{CATEGORY_ICONS[cat]}</span>
+          <span className="font-serif text-sm sm:text-base text-[var(--color-on-deep)] tracking-[0.25em]">
+            {CATEGORY_LABELS[cat]}
+          </span>
+          <span className="text-[10px] text-[var(--color-on-deep)] opacity-50 mt-1">{counts[cat]} 項</span>
+        </a>
+      ))}
     </nav>
   )
 }

@@ -20,9 +20,9 @@ export default function GuestbookPage() {
 
   return (
     <div className="flex flex-col gap-4 sm:gap-6">
-      <div className="text-center p-4 sm:p-6 border border-[var(--color-border-gold)] rounded bg-gradient-to-r from-[var(--color-bg-card)] to-[var(--color-bg-card-hover)] shadow-[var(--shadow-glow-warm)] banner-shimmer">
-        <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold tracking-[0.3em] text-[var(--color-gold-primary)]">✦ 留言板 ✦</h2>
-        <div className="mt-2 wave-divider" />
+      <div className="text-center py-6 sm:py-8">
+        <h2 className="font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.3em] text-[var(--color-text-primary)]">留言板</h2>
+        <div className="mx-auto mt-3 h-px w-10 bg-[var(--color-gold-primary)]" />
       </div>
 
       <NoticeBanner />
