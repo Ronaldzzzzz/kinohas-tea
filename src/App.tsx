@@ -4,6 +4,7 @@ import Footer from './components/Footer'
 import MenuPage from './pages/MenuPage'
 import GuestbookPage from './pages/GuestbookPage'
 import AdminPage from './pages/AdminPage'
+import PopupLayer from './components/popups/PopupLayer'
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           </Routes>
         </main>
         <Footer />
+        <PopupLayer />
       </div>
     </HashRouter>
   )
