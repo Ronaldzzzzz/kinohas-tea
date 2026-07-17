@@ -5,6 +5,7 @@ import { getMenuItems, getGlobalSettings } from '../lib/firestore'
 import MenuItemRow from '../components/menu/MenuItemRow'
 import ShopHighlights from '../components/menu/ShopHighlights'
 import HeroCarousel from '../components/menu/HeroCarousel'
+import MarqueeBar from '../components/menu/MarqueeBar'
 import NoticeBanner from '../components/NoticeBanner'
 import OrderForm from '../components/OrderForm'
 
@@ -14,6 +15,7 @@ export default function MenuPage() {
   const [realModeEnabled, setRealModeEnabled] = useState(false)
   const [introText, setIntroText] = useState('')
   const [heroPhotos, setHeroPhotos] = useState<PhotoUrl[]>([])
+  const [marqueeText, setMarqueeText] = useState('')
 
   useEffect(() => {
     getMenuItems()
@@ -24,6 +26,7 @@ export default function MenuPage() {
         setRealModeEnabled(settings.realModeEnabled ?? false)
         setIntroText(settings.introText ?? '')
         setHeroPhotos(settings.photoUrls ?? [])
+        setMarqueeText(settings.marqueeText ?? '')
       })
       .catch(() => {})
   }, [])
@@ -62,6 +65,8 @@ export default function MenuPage() {
           ↓
         </a>
       </div>
+
+      <MarqueeBar text={marqueeText} />
 
       {/* 本店特色：對應參考站的四格 highlight 磚，固定內容不隨菜單變動 */}
       <div id="highlights" className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[var(--color-bg-primary)] scroll-mt-16">
