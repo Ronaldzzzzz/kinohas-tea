@@ -9,12 +9,12 @@ export default function MaskedContent({ content, maskNote }: Props) {
     <div className="relative overflow-hidden rounded-sm">
       <p
         aria-hidden="true"
-        className="text-sm sm:text-base leading-relaxed text-[var(--color-text-primary)] blur-sm select-none opacity-50 break-all"
+        className="text-sm sm:text-base leading-relaxed text-[var(--color-text-primary)] blur select-none opacity-50 break-all"
       >
         {content}
       </p>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-xs sm:text-sm text-[var(--color-text-primary)] tracking-wider text-center px-2">
+      <div className="absolute inset-0 flex items-center">
+        <span className="text-xs sm:text-sm text-[var(--color-text-primary)] tracking-wider text-left px-2">
           ▓ 此留言已被店家遮蔽{maskNote ? `：${maskNote}` : ''}
         </span>
       </div>

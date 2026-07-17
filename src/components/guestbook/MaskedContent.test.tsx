@@ -7,7 +7,7 @@ describe('MaskedContent', () => {
     render(<MaskedContent content="祕密內容" />)
     expect(screen.getByText(/▓ 此留言已被店家遮蔽/)).toBeInTheDocument()
     const masked = screen.getByText('祕密內容')
-    expect(masked).toHaveClass('blur-sm')
+    expect(masked).toHaveClass('blur')
     expect(masked).toHaveClass('select-none')
   })
   it('有附註時直接接在提示後,不帶「店家註」前綴', () => {
