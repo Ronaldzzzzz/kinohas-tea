@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getGlobalSettings } from '../lib/firestore'
+import HitCounter from './HitCounter'
 
 export default function Footer() {
   const [address, setAddress] = useState<string>('')
@@ -34,6 +35,9 @@ export default function Footer() {
             {address ? <>📍 {address}</> : '營業資訊請見告示看板'}
           </p>
         </div>
+      </div>
+      <div className="border-t border-[var(--color-on-deep)]/10">
+        <HitCounter />
       </div>
       <div className="border-t border-[var(--color-on-deep)]/10">
         <p className="max-w-4xl mx-auto px-4 py-4 text-center text-[11px] opacity-50 tracking-wider">
