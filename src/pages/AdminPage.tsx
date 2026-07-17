@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { onAuthChange, getAdminSession, signOutAdmin } from '../lib/auth'
-import { getGlobalSettings, subscribeAdminAccount } from '../lib/firestore'
+import { getGlobalSettings, getMenuItems, subscribeAdminAccount } from '../lib/firestore'
 import { canWrite, canDelete } from '../lib/permissions'
-import type { AdminSession } from '../types'
+import type { AdminSession, MenuItem } from '../types'
 import PasswordGate from '../components/admin/PasswordGate'
 import MenuManager from '../components/admin/MenuManager'
 import InventoryManager from '../components/admin/InventoryManager'
@@ -20,11 +20,20 @@ export default function AdminPage() {
   const [tab, setTab] = useState<AdminTab>('menu')
   const [realModeEnabled, setRealModeEnabled] = useState(false)
   const [logoutReason, setLogoutReason] = useState<string | null>(null)
+  const [stockPreview, setStockPreview] = useState<MenuItem[]>([])
   const hasLoaded = useRef(false)
 
   useEffect(() => {
     getGlobalSettings().then(s => setRealModeEnabled(s.realModeEnabled ?? false)).catch(() => {})
   }, [])
+
+  // 菜品庫存快速預覽：切換分頁時刷新(菜品/訂單/製作操作後回來能看到最新數字)
+  useEffect(() => {
+    if (!session) return
+    getMenuItems()
+      .then(items => setStockPreview(items.filter(i => !i.unlimited)))
+      .catch(() => {})
+  }, [session, tab])
 
   useEffect(() => {
     const unsub = onAuthChange((user) => {
@@ -82,9 +91,33 @@ export default function AdminPage() {
   return (
     <div className="admin-content">
       {/* 後台頂部 */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="font-serif text-[var(--color-gold-primary)] tracking-widest">⚙ 後台管理</h2>
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between mb-6 gap-4">
+        <h2 className="font-serif text-[var(--color-gold-primary)] tracking-widest whitespace-nowrap">⚙ 後台管理</h2>
+        {/* 菜品庫存快速預覽 */}
+        {stockPreview.length > 0 && (
+          <div className="flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto custom-scrollbar py-1">
+            {stockPreview.map(item => {
+              const stock = item.stock ?? 0
+              return (
+                <span
+                  key={item.id}
+                  title={`${item.name} 庫存 ${stock}`}
+                  className="flex-shrink-0 inline-flex items-center gap-1 text-xs bg-[var(--color-bg-card)] border border-[var(--color-border-primary)] rounded-full pl-2 pr-1 py-0.5"
+                >
+                  <span className="text-[var(--color-text-muted)] max-w-24 truncate">{item.alias || item.name}</span>
+                  <span className={`font-semibold px-1.5 rounded-full ${
+                    stock > 0
+                      ? 'bg-[var(--color-success-bg)] text-[var(--color-success-text)]'
+                      : 'bg-[var(--color-danger-bg)] text-[var(--color-danger-text)]'
+                  }`}>
+                    {stock}
+                  </span>
+                </span>
+              )
+            })}
+          </div>
+        )}
+        <div className="flex items-center gap-3 flex-shrink-0">
           <span className="text-[var(--color-text-muted)] text-xs capitalize">{session.role}: {session.label}</span>
           <button
             onClick={() => signOutAdmin().then(() => setSession(null))}
