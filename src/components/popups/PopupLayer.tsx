@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { getEnabledPopups } from '../../lib/firestore'
+import { getEnabledPopups, getGlobalSettings } from '../../lib/firestore'
 import type { Popup } from '../../types'
-import EntryPopup from './EntryPopup'
+import EntryPopupGroup from './EntryPopupGroup'
 import FloatingWindow from './FloatingWindow'
 import SidebarBanners from './SidebarBanners'
 
@@ -15,22 +15,33 @@ function randomPos(): { x: number; y: number } {
   return { x: Math.max(8, x), y: Math.max(8, y) }
 }
 
+/** 從陣列隨機取樣 n 筆(不重複)，n >= 陣列長度時回傳整份洗牌結果 */
+function sample<T>(arr: T[], n: number): T[] {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5)
+  return shuffled.slice(0, Math.min(n, arr.length))
+}
+
 export default function PopupLayer() {
   const { pathname } = useLocation()
   const [popups, setPopups] = useState<Popup[]>([])
-  const [entryOpen, setEntryOpen] = useState(true)
+  const [entryPopupCount, setEntryPopupCount] = useState(1)
   const [closed, setClosed] = useState<Set<string>>(new Set())
   const [zOrder, setZOrder] = useState<string[]>([])
 
   useEffect(() => {
     getEnabledPopups().then(setPopups).catch(() => {})
+    getGlobalSettings().then(s => setEntryPopupCount(s.entryPopupCount ?? 1)).catch(() => {})
   }, [])
 
-  const entry = useMemo(() => {
-    const candidates = popups.filter(p => p.type === 'entry')
-    if (candidates.length === 0) return null
-    return candidates[Math.floor(Math.random() * candidates.length)]
-  }, [popups])
+  const entryCandidates = useMemo(() => popups.filter(p => p.type === 'entry'), [popups])
+
+  // entryPopupCount: -1=全部隨機不重疊；0=不顯示；1-6=固定排列(取樣至多該數量，不足則用實際數量的排列)
+  const entryPopups = useMemo(() => {
+    if (entryPopupCount === 0 || entryCandidates.length === 0) return []
+    if (entryPopupCount === -1) return entryCandidates
+    return sample(entryCandidates, entryPopupCount)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entryCandidates.map(p => p.id).join(','), entryPopupCount])
 
   const floats = useMemo(() => {
     const all = popups.filter(p => p.type === 'floating')
@@ -45,7 +56,7 @@ export default function PopupLayer() {
   return (
     <>
       <SidebarBanners banners={banners} />
-      {entry && entryOpen && <EntryPopup popup={entry} onClose={() => setEntryOpen(false)} />}
+      <EntryPopupGroup popups={entryPopups} randomMode={entryPopupCount === -1} />
       {floats.filter(f => !closed.has(f.popup.id)).map(f => (
         <FloatingWindow
           key={f.popup.id}

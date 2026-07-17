@@ -146,6 +146,7 @@ export interface GlobalSettings {
   photoUrls: PhotoUrl[]       // 宣傳全身照（含可選裁切資料）
   realModeEnabled?: boolean   // true = 真實庫存連動模式
   marqueeText?: string         // 首頁跑馬燈文字，留空則不顯示
+  entryPopupCount?: number     // 進版彈窗同時顯示數量：-1=全部隨機不重疊，0=不顯示，1-6=固定排列，預設 1
 }
 
 // 彈窗(進版廣告 / 可拖動視窗)

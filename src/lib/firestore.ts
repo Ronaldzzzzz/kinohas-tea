@@ -412,6 +412,7 @@ function mapSettingsData(data: Record<string, unknown> | undefined): GlobalSetti
       .map(entry => typeof entry === 'string' ? { url: entry } : entry),
     realModeEnabled: (data?.realModeEnabled as boolean) ?? false,
     marqueeText: (data?.marqueeText as string) ?? '',
+    entryPopupCount: (data?.entryPopupCount as number) ?? 1,
   }
 }
 
