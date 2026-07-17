@@ -39,8 +39,9 @@ export default function Footer() {
       <div className="border-t border-[var(--color-on-deep)]/10">
         <HitCounter />
       </div>
+      {/* pb-12：預留底部跑馬燈(fixed bottom-0)高度，避免版權列被蓋住 */}
       <div className="border-t border-[var(--color-on-deep)]/10">
-        <p className="max-w-4xl mx-auto px-4 py-4 text-center text-[11px] opacity-50 tracking-wider">
+        <p className="max-w-4xl mx-auto px-4 pt-4 pb-12 text-center text-[11px] opacity-50 tracking-wider">
           © 木葉茗茶坊 Kinoha's Tea — Final Fantasy XIV Roleplay
         </p>
       </div>

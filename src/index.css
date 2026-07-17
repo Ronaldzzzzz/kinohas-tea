@@ -69,13 +69,14 @@ body {
   animation: bounce-in 0.3s ease-out forwards;
 }
 
+/* 從螢幕右外側滑入、滑到左外側消失，用 100vw/100% 混合單位確保無論文字長短都會完整橫越可視範圍 */
 @keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from { transform: translateX(100vw); }
+  to { transform: translateX(-100%); }
 }
 
 .marquee-track {
-  animation: marquee-scroll 20s linear infinite;
+  animation: marquee-scroll 10s linear infinite;
 }
 
 @layer utilities {
