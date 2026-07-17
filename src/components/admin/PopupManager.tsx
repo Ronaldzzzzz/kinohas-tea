@@ -13,6 +13,7 @@ interface Props {
 const TYPE_LABELS: Record<Popup['type'], string> = {
   entry: '進版彈窗',
   floating: '拖動視窗',
+  banner: '側欄廣告',
 }
 
 export default function PopupManager({ canWrite, canDelete }: Props) {
@@ -26,6 +27,7 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
   const [text, setText] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
   const [file, setFile] = useState<File | null>(null)
+  const [position, setPosition] = useState<'left' | 'right'>('left')
 
   async function load() {
     try {
@@ -53,6 +55,7 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
       }
       await addPopup({
         type,
+        ...(type === 'banner' ? { position } : {}),
         ...(imageUrl ? { imageUrl } : {}),
         ...(text.trim() ? { text: text.trim() } : {}),
         ...(linkUrl.trim() ? { linkUrl: linkUrl.trim() } : {}),
@@ -90,7 +93,15 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
               className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)]">
               <option value="entry">進版彈窗</option>
               <option value="floating">拖動視窗</option>
+              <option value="banner">側欄廣告</option>
             </select>
+            {type === 'banner' && (
+              <select value={position} onChange={e => setPosition(e.target.value as 'left' | 'right')}
+                className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)]">
+                <option value="left">左側</option>
+                <option value="right">右側</option>
+              </select>
+            )}
             <label className="cursor-pointer bg-[var(--color-gold-primary)] text-[var(--color-bg-primary)] text-sm font-semibold px-4 py-1.5 rounded hover:bg-[var(--color-gold-light)] transition-colors max-w-52 truncate inline-block">
               {file ? `已選擇: ${file.name}` : '選擇圖片'}
               <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] ?? null)}
@@ -116,7 +127,9 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
           <li key={p.id} className="flex items-center gap-4 bg-[var(--color-bg-card)] border border-[var(--color-border-primary)] rounded p-3">
             {p.imageUrl && <img src={p.imageUrl} alt="" className="w-16 h-16 object-cover rounded" />}
             <div className="flex-1 min-w-0">
-              <span className="text-xs px-1.5 py-0.5 rounded bg-[var(--color-bg-card-hover)] text-[var(--color-text-muted)]">{TYPE_LABELS[p.type]}</span>
+              <span className="text-xs px-1.5 py-0.5 rounded bg-[var(--color-bg-card-hover)] text-[var(--color-text-muted)]">
+                {TYPE_LABELS[p.type]}{p.type === 'banner' && p.position ? `(${p.position === 'left' ? '左' : '右'})` : ''}
+              </span>
               {p.text && <p className="text-sm text-[var(--color-text-primary)] truncate mt-1">{p.text}</p>}
               {p.linkUrl && <p className="text-xs text-[var(--color-text-muted)] truncate">{p.linkUrl}</p>}
             </div>

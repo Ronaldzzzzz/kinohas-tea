@@ -68,5 +68,11 @@ service cloud.firestore {
       allow read: if true;
       allow write: if request.auth != null;
     }
+
+    // 訪客計數器：單一文件，公開讀寫(僅允許遞增，前端用 transaction 保證)
+    match /siteStats/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
   }
 }

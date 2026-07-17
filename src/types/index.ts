@@ -145,12 +145,14 @@ export interface GlobalSettings {
   orderCooldownMinutes: number // 點餐冷卻分鐘數（預設 30）
   photoUrls: PhotoUrl[]       // 宣傳全身照（含可選裁切資料）
   realModeEnabled?: boolean   // true = 真實庫存連動模式
+  marqueeText?: string         // 首頁跑馬燈文字，留空則不顯示
 }
 
 // 彈窗(進版廣告 / 可拖動視窗)
 export interface Popup {
   id: string
-  type: 'entry' | 'floating'
+  type: 'entry' | 'floating' | 'banner'
+  position?: 'left' | 'right'   // type === 'banner' 時使用
   imageUrl?: string
   text?: string
   linkUrl?: string

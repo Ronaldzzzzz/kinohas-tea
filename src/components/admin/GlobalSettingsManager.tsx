@@ -7,6 +7,7 @@ export default function GlobalSettingsManager() {
   const [address, setAddress] = useState('')
   const [cooldown, setCooldown] = useState(30)
   const [realModeEnabled, setRealModeEnabled] = useState(false)
+  const [marqueeText, setMarqueeText] = useState('')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -19,6 +20,7 @@ export default function GlobalSettingsManager() {
         setAddress(s.address ?? '')
         setCooldown(s.orderCooldownMinutes ?? 30)
         setRealModeEnabled(s.realModeEnabled ?? false)
+        setMarqueeText(s.marqueeText ?? '')
         setHasLoadedSettings(true)
       })
       .catch(() => setError('載入設定失敗'))
@@ -31,7 +33,7 @@ export default function GlobalSettingsManager() {
     setError(null)
     setSaved(false)
     try {
-      await updateGlobalSettings({ address, orderCooldownMinutes: cooldown, realModeEnabled })
+      await updateGlobalSettings({ address, orderCooldownMinutes: cooldown, realModeEnabled, marqueeText })
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
     } catch {
@@ -116,6 +118,23 @@ export default function GlobalSettingsManager() {
           <p className="text-[var(--color-text-muted)] text-[11px]">
             真實模式啟用時，客人下單會扣除菜品庫存；刪除未完成訂單會退還庫存。
           </p>
+        </div>
+
+        {/* 跑馬燈文字 */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[var(--color-text-muted)] text-xs tracking-wide">
+            首頁跑馬燈文字
+          </label>
+          <input
+            type="text"
+            value={marqueeText}
+            onChange={e => setMarqueeText(e.target.value)}
+            placeholder="例：本週特調上市！內用低消 100 元"
+            className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-2 text-sm
+                       placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)]
+                       transition-colors"
+          />
+          <p className="text-[var(--color-text-muted)] text-[11px]">顯示於首頁 Hero 下方的跑馬燈。留空則不顯示。</p>
         </div>
 
         {/* 儲存按鈕 */}
