@@ -403,29 +403,40 @@ export async function deleteOrder(id: string): Promise<void> {
 
 let _settingsCache: GlobalSettings | null = null
 
+function mapSettingsData(data: Record<string, unknown> | undefined): GlobalSettings {
+  return {
+    address: (data?.address as string) ?? '',
+    introText: (data?.introText as string) ?? '',
+    orderCooldownMinutes: (data?.orderCooldownMinutes as number) ?? 30,
+    photoUrls: ((data?.photoUrls ?? []) as (string | PhotoUrl)[])
+      .map(entry => typeof entry === 'string' ? { url: entry } : entry),
+    realModeEnabled: (data?.realModeEnabled as boolean) ?? false,
+    marqueeText: (data?.marqueeText as string) ?? '',
+  }
+}
+
 export async function getGlobalSettings(): Promise<GlobalSettings> {
   if (_settingsCache) return _settingsCache
   const docSnap = await getDoc(doc(db, 'settings', 'global'))
-  if (!docSnap.exists()) {
-    _settingsCache = { address: '', introText: '', orderCooldownMinutes: 30, photoUrls: [], realModeEnabled: false }
-    return _settingsCache
-  }
-  const data = docSnap.data()
-  _settingsCache = {
-    address: data?.address ?? '',
-    introText: data?.introText ?? '',
-    orderCooldownMinutes: data?.orderCooldownMinutes ?? 30,
-    photoUrls: ((data?.photoUrls ?? []) as (string | PhotoUrl)[])
-      .map(entry => typeof entry === 'string' ? { url: entry } : entry),
-    realModeEnabled: data?.realModeEnabled ?? false,
-    marqueeText: data?.marqueeText ?? '',
-  }
+  _settingsCache = mapSettingsData(docSnap.exists() ? docSnap.data() : undefined)
   return _settingsCache
 }
 
 export async function updateGlobalSettings(data: Partial<GlobalSettings>): Promise<void> {
   await setDoc(doc(db, 'settings', 'global'), data, { merge: true })
   _settingsCache = null
+}
+
+/**
+ * 即時訂閱全域設定；用於長駐不隨路由重掛載的元件(Navbar/Footer)，
+ * 讓後台儲存後不需整頁重整就能反映最新值(一次性 getGlobalSettings 在這類元件上只會讀到掛載當下的舊值)。
+ */
+export function subscribeGlobalSettings(onChange: (settings: GlobalSettings) => void): () => void {
+  return onSnapshot(doc(db, 'settings', 'global'), (docSnap) => {
+    const settings = mapSettingsData(docSnap.exists() ? docSnap.data() : undefined)
+    _settingsCache = settings
+    onChange(settings)
+  })
 }
 
 // ─── Popups ─────────────────────────────────────────

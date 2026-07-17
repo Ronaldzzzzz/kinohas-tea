@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getGlobalSettings } from '../lib/firestore'
+import { subscribeGlobalSettings } from '../lib/firestore'
 import HitCounter from './HitCounter'
 
 export default function Footer() {
   const [address, setAddress] = useState<string>('')
 
   useEffect(() => {
-    getGlobalSettings()
-      .then(s => setAddress(s.address ?? ''))
-      .catch(() => {/* 靜默失敗，不顯示地址 */})
+    // 即時訂閱：Footer 掛在 App 根層不隨路由重掛載，一次性讀取會讀到後台儲存前的舊值
+    return subscribeGlobalSettings(s => setAddress(s.address ?? ''))
   }, [])
 
   return (
@@ -19,7 +18,7 @@ export default function Footer() {
           <h4 className="font-serif text-base tracking-[0.25em] mb-3">木葉茗茶坊</h4>
           <p className="opacity-70 leading-relaxed text-xs tracking-wider">
             KINOHA'S TEA<br />
-            台式茶莊 · FF14 RP
+            台式茶莊 · FF14
           </p>
         </div>
         <div>
@@ -42,7 +41,7 @@ export default function Footer() {
       {/* pb-12：預留底部跑馬燈(fixed bottom-0)高度，避免版權列被蓋住 */}
       <div className="border-t border-[var(--color-on-deep)]/10">
         <p className="max-w-4xl mx-auto px-4 pt-4 pb-12 text-center text-[11px] opacity-50 tracking-wider">
-          © 木葉茗茶坊 Kinoha's Tea — Final Fantasy XIV Roleplay
+          © 木葉茗茶坊 Kinoha's Tea — Final Fantasy XIV
         </p>
       </div>
     </footer>

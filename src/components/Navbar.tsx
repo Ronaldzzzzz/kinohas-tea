@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { getGlobalSettings } from '../lib/firestore'
+import { subscribeGlobalSettings } from '../lib/firestore'
 
 export default function Navbar() {
   const [address, setAddress] = useState<string>('')
@@ -8,9 +8,8 @@ export default function Navbar() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    getGlobalSettings()
-      .then(s => setAddress(s.address ?? ''))
-      .catch(() => {/* 靜默失敗，不顯示地址 */})
+    // 即時訂閱：Navbar 掛在 App 根層不隨路由重掛載，一次性讀取會讀到後台儲存前的舊值
+    return subscribeGlobalSettings(s => setAddress(s.address ?? ''))
   }, [])
 
   useEffect(() => {
