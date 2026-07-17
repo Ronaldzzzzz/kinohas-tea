@@ -87,3 +87,7 @@ Firestore rules: 公開可讀(前台要顯示)、寫入需 `request.auth != null
 3. 前台: 進站必彈 entry(僅 X 可關)、floating 隨機散落可拖曳可關閉、手機寬度最多 2 個 floating。
 4. 留言遮蔽: 後台遮蔽+註解 → 前台黑條+標籤+店家註即時呈現;解除後恢復。
 5. `/admin` 路由不出現任何彈窗。
+
+## Stage 2 完成狀態(2026-07-17)
+
+7 個 Task 全數完成並個別通過 review(T5/T6 因平台服務中斷改由 controller 直接審查/實作,證據見 .superpowers/sdd/progress.md)。自動化驗證: 測試 5/5、build 綠、安全規則行為經模擬器 REST 探測確認(未登入寫 popups 403、未登入解除遮蔽 403、未登入按讚 200、公開讀 popups 200)。互動走查由使用者本機執行後手動 push 部署上線。後續修正依使用者回饋進行。
