@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import { storage } from '../../lib/firebase'
-import { getPopups, addPopup, updatePopup, deletePopup } from '../../lib/firestore'
+import { getPopups, addPopup, updatePopup, deletePopup, getGlobalSettings, updateGlobalSettings } from '../../lib/firestore'
 import { compressImage } from '../../utils/imageCompress'
 import type { Popup } from '../../types'
 
@@ -29,6 +29,11 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
   const [file, setFile] = useState<File | null>(null)
   const [position, setPosition] = useState<'left' | 'right'>('left')
 
+  // 進版彈窗同時顯示數量設定
+  const [entryPopupCount, setEntryPopupCount] = useState(1)
+  const [countSaving, setCountSaving] = useState(false)
+  const [countSaved, setCountSaved] = useState(false)
+
   async function load() {
     try {
       setPopups(await getPopups())
@@ -36,7 +41,21 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
       setLoading(false)
     }
   }
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    load()
+    getGlobalSettings().then(s => setEntryPopupCount(s.entryPopupCount ?? 1)).catch(() => {})
+  }, [])
+
+  async function handleSaveCount() {
+    setCountSaving(true)
+    try {
+      await updateGlobalSettings({ entryPopupCount })
+      setCountSaved(true)
+      setTimeout(() => setCountSaved(false), 2000)
+    } finally {
+      setCountSaving(false)
+    }
+  }
 
   async function handleAdd() {
     if (!file && !text.trim()) {
@@ -92,6 +111,32 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
 
   return (
     <div className="flex flex-col gap-6">
+      {canWrite && (
+        <div className="bg-[var(--color-bg-card)] border border-[var(--color-border-primary)] rounded p-4 flex flex-col gap-2">
+          <h3 className="font-serif text-[var(--color-gold-primary)]">進版彈窗同時顯示數量</h3>
+          <div className="flex items-center gap-3">
+            <input
+              type="number"
+              min={-1}
+              max={6}
+              value={entryPopupCount}
+              onChange={e => setEntryPopupCount(Math.max(-1, Math.min(6, parseInt(e.target.value) || 0)))}
+              className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-1.5 text-sm w-24
+                         focus:outline-none focus:border-[var(--color-gold-primary)] transition-colors"
+            />
+            <span className="text-[var(--color-text-muted)] text-xs">-1 ~ 6</span>
+            <button onClick={handleSaveCount} disabled={countSaving}
+              className="text-sm px-4 py-1.5 rounded border border-[var(--color-gold-primary)] text-[var(--color-gold-primary)] hover:bg-[var(--color-gold-primary)] hover:text-[var(--color-bg-primary)] disabled:opacity-50 transition-colors">
+              {countSaving ? '儲存中…' : '儲存'}
+            </button>
+            {countSaved && <span className="text-[var(--color-success-text)] text-xs">✓ 已儲存</span>}
+          </div>
+          <p className="text-[var(--color-text-muted)] text-[11px]">
+            -1 = 全部進版彈窗同時顯示(隨機不重疊)；0 = 不顯示；1-6 = 固定排列,實際啟用數少於此值時改用實際數量的排列。
+          </p>
+        </div>
+      )}
+
       {canWrite && (
         <div className="bg-[var(--color-bg-card)] border border-[var(--color-border-primary)] rounded p-4 flex flex-col gap-3">
           <h3 className="font-serif text-[var(--color-gold-primary)]">新增彈窗</h3>

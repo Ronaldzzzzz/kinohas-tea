@@ -8,7 +8,6 @@ export default function GlobalSettingsManager() {
   const [cooldown, setCooldown] = useState(30)
   const [realModeEnabled, setRealModeEnabled] = useState(false)
   const [marqueeText, setMarqueeText] = useState('')
-  const [entryPopupCount, setEntryPopupCount] = useState(1)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -22,7 +21,6 @@ export default function GlobalSettingsManager() {
         setCooldown(s.orderCooldownMinutes ?? 30)
         setRealModeEnabled(s.realModeEnabled ?? false)
         setMarqueeText(s.marqueeText ?? '')
-        setEntryPopupCount(s.entryPopupCount ?? 1)
         setHasLoadedSettings(true)
       })
       .catch(() => setError('載入設定失敗'))
@@ -35,7 +33,7 @@ export default function GlobalSettingsManager() {
     setError(null)
     setSaved(false)
     try {
-      await updateGlobalSettings({ address, orderCooldownMinutes: cooldown, realModeEnabled, marqueeText, entryPopupCount })
+      await updateGlobalSettings({ address, orderCooldownMinutes: cooldown, realModeEnabled, marqueeText })
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
     } catch {
@@ -137,28 +135,6 @@ export default function GlobalSettingsManager() {
                        transition-colors"
           />
           <p className="text-[var(--color-text-muted)] text-[11px]">顯示於首頁 Hero 下方的跑馬燈。留空則不顯示。</p>
-        </div>
-
-        {/* 進版彈窗同時顯示數量 */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-[var(--color-text-muted)] text-xs tracking-wide">
-            進版彈窗同時顯示數量
-          </label>
-          <div className="flex items-center gap-3">
-            <input
-              type="number"
-              min={-1}
-              max={6}
-              value={entryPopupCount}
-              onChange={e => setEntryPopupCount(Math.max(-1, Math.min(6, parseInt(e.target.value) || 0)))}
-              className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-2 text-sm w-28
-                         focus:outline-none focus:border-[var(--color-gold-primary)] transition-colors"
-            />
-            <span className="text-[var(--color-text-muted)] text-xs">-1 ~ 6</span>
-          </div>
-          <p className="text-[var(--color-text-muted)] text-[11px]">
-            -1 = 全部進版彈窗同時顯示(隨機不重疊)；0 = 不顯示；1-6 = 固定排列，實際啟用數少於此值時改用實際數量的排列。
-          </p>
         </div>
 
         {/* 儲存按鈕 */}
