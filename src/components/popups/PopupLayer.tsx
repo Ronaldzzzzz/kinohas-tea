@@ -4,6 +4,7 @@ import { getEnabledPopups } from '../../lib/firestore'
 import type { Popup } from '../../types'
 import EntryPopup from './EntryPopup'
 import FloatingWindow from './FloatingWindow'
+import SidebarBanners from './SidebarBanners'
 
 /** 隨機位置：避開畫面中央(30%-70%)區域，不擋 Hero 主文案 */
 function randomPos(): { x: number; y: number } {
@@ -37,10 +38,13 @@ export default function PopupLayer() {
     return all.slice(0, limit).map(p => ({ popup: p, initial: randomPos() }))
   }, [popups])
 
+  const banners = useMemo(() => popups.filter(p => p.type === 'banner' && p.imageUrl), [popups])
+
   if (pathname.startsWith('/admin')) return null
 
   return (
     <>
+      <SidebarBanners banners={banners} />
       {entry && entryOpen && <EntryPopup popup={entry} onClose={() => setEntryOpen(false)} />}
       {floats.filter(f => !closed.has(f.popup.id)).map(f => (
         <FloatingWindow
