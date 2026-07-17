@@ -10,15 +10,18 @@ export default function HitCounter() {
   useEffect(() => {
     const alreadyCounted = sessionStorage.getItem(SESSION_KEY)
     if (alreadyCounted) {
-      setCount(Number(alreadyCounted))
+      if (alreadyCounted !== 'pending') setCount(Number(alreadyCounted))
       return
     }
+    sessionStorage.setItem(SESSION_KEY, 'pending')
     incrementHitCounter()
       .then(next => {
         sessionStorage.setItem(SESSION_KEY, String(next))
         setCount(next)
       })
-      .catch(() => {})
+      .catch(() => {
+        sessionStorage.removeItem(SESSION_KEY)
+      })
   }, [])
 
   if (count === null) return null
