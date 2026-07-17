@@ -418,6 +418,7 @@ export async function getGlobalSettings(): Promise<GlobalSettings> {
     photoUrls: ((data?.photoUrls ?? []) as (string | PhotoUrl)[])
       .map(entry => typeof entry === 'string' ? { url: entry } : entry),
     realModeEnabled: data?.realModeEnabled ?? false,
+    marqueeText: data?.marqueeText ?? '',
   }
   return _settingsCache
 }
