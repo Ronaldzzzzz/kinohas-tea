@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { storage } from '../../lib/firebase'
 import { getGlobalSettings, updateGlobalSettings } from '../../lib/firestore'
+import { compressImage } from '../../utils/imageCompress'
 import type { CropData, PhotoUrl } from '../../types'
 import CropTool from './CropTool'
 
@@ -36,9 +37,9 @@ export default function PhotoManager() {
     setUploading(true)
     setError(null)
     try {
-      const ext = file.name.split('.').pop() ?? 'jpg'
-      const storageRef = ref(storage, `promotional-photos/${Date.now()}.${ext}`)
-      await uploadBytes(storageRef, file)
+      const blob = await compressImage(file)
+      const storageRef = ref(storage, `promotional-photos/${Date.now()}.webp`)
+      await uploadBytes(storageRef, blob, { contentType: 'image/webp' })
       const url = await getDownloadURL(storageRef)
       const newEntry: PhotoUrl = { url }
       const newUrls = [...photoUrls, newEntry]
