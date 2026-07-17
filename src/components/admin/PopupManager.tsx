@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import { storage } from '../../lib/firebase'
 import { getPopups, addPopup, updatePopup, deletePopup } from '../../lib/firestore'
 import { compressImage } from '../../utils/imageCompress'
@@ -76,8 +76,15 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
     await load()
   }
 
-  async function handleDelete(id: string) {
-    await deletePopup(id)
+  async function handleDelete(popup: Popup) {
+    await deletePopup(popup.id)
+    if (popup.imageUrl) {
+      try {
+        await deleteObject(ref(storage, popup.imageUrl))
+      } catch {
+        /* 檔案可能已不存在，忽略 */
+      }
+    }
     await load()
   }
 
@@ -140,7 +147,7 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
               </button>
             )}
             {canDelete && (
-              <button onClick={() => handleDelete(p.id)}
+              <button onClick={() => handleDelete(p)}
                 className="text-xs text-[var(--color-danger-border)] hover:text-[var(--color-danger-text)] p-1">✕</button>
             )}
           </li>

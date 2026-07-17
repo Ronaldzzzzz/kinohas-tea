@@ -1,6 +1,6 @@
 // src/components/admin/PhotoManager.tsx
 import { useEffect, useRef, useState } from 'react'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import { storage } from '../../lib/firebase'
 import { getGlobalSettings, updateGlobalSettings } from '../../lib/firestore'
 import { compressImage } from '../../utils/imageCompress'
@@ -73,11 +73,17 @@ export default function PhotoManager() {
   }
 
   async function handleDelete(urlToRemove: string) {
-    if (!confirm('確定要移除此宣傳照？（Storage 中的檔案不會被刪除）')) return
+    if (!confirm('確定要移除此宣傳照？')) return
     const newUrls = photoUrls.filter(u => u.url !== urlToRemove)
     try {
       await updateGlobalSettings({ photoUrls: newUrls })
       setPhotoUrls(newUrls)
+      // 從 Storage 一併刪除實體檔案；找不到檔案(已被手動刪除等)不視為錯誤
+      try {
+        await deleteObject(ref(storage, urlToRemove))
+      } catch {
+        /* 檔案可能已不存在，忽略 */
+      }
     } catch {
       setError('刪除失敗，請重試')
     }
