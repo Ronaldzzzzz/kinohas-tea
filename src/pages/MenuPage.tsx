@@ -1,9 +1,10 @@
 import { useEffect, useState, useMemo } from 'react'
-import type { MenuItem } from '../types'
+import type { MenuItem, PhotoUrl } from '../types'
 import { CATEGORY_LABELS, CATEGORY_ORDER } from '../types'
 import { getMenuItems, getGlobalSettings } from '../lib/firestore'
 import MenuItemRow from '../components/menu/MenuItemRow'
 import ShopHighlights from '../components/menu/ShopHighlights'
+import HeroCarousel from '../components/menu/HeroCarousel'
 import NoticeBanner from '../components/NoticeBanner'
 import OrderForm from '../components/OrderForm'
 
@@ -12,6 +13,7 @@ export default function MenuPage() {
   const [loading, setLoading] = useState(true)
   const [realModeEnabled, setRealModeEnabled] = useState(false)
   const [introText, setIntroText] = useState('')
+  const [heroPhotos, setHeroPhotos] = useState<PhotoUrl[]>([])
 
   useEffect(() => {
     getMenuItems()
@@ -21,6 +23,7 @@ export default function MenuPage() {
       .then(settings => {
         setRealModeEnabled(settings.realModeEnabled ?? false)
         setIntroText(settings.introText ?? '')
+        setHeroPhotos(settings.photoUrls ?? [])
       })
       .catch(() => {})
   }, [])
@@ -34,13 +37,15 @@ export default function MenuPage() {
     <div className="flex flex-col gap-6 sm:gap-8 pb-12">
       {/* Hero：滿版滿高深茶綠形象區，導覽列透明疊於其上，營造進站沉浸感 */}
       <div className="relative left-1/2 right-1/2 -mx-[50vw] -mt-20 sm:-mt-24 w-screen min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[var(--color-deep-green)] to-[var(--color-deep-green-light)]">
+        {/* 系統設定的宣傳照輪播；無照片時 fallback 為上方純色漸層 */}
+        <HeroCarousel photos={heroPhotos} />
         <span
           aria-hidden="true"
-          className="pointer-events-none select-none absolute -right-8 top-1/2 -translate-y-1/2 font-serif text-[18rem] sm:text-[28rem] leading-none text-[var(--color-on-deep)] opacity-[0.07]"
+          className="pointer-events-none select-none absolute z-10 -right-8 top-1/2 -translate-y-1/2 font-serif text-[18rem] sm:text-[28rem] leading-none text-[var(--color-on-deep)] opacity-[0.07]"
         >
           茶
         </span>
-        <div className="relative px-4 text-center max-w-3xl mx-auto">
+        <div className="relative z-10 px-4 text-center max-w-3xl mx-auto">
           <p className="font-serif text-xs sm:text-sm tracking-[0.4em] text-[var(--color-on-deep)] opacity-70 mb-6">台式茶莊 · FF14 RP</p>
           <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest text-[var(--color-on-deep)] mb-4">木葉茗茶坊</h1>
           <p className="text-xs sm:text-sm tracking-[0.35em] text-[var(--color-on-deep)] opacity-60 mb-10">KINOHA'S TEA</p>
@@ -52,7 +57,7 @@ export default function MenuPage() {
         <a
           href="#highlights"
           aria-label="向下捲動"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[var(--color-on-deep)] opacity-60 hover:opacity-100 transition-opacity animate-bounce text-xl"
+          className="absolute z-10 bottom-8 left-1/2 -translate-x-1/2 text-[var(--color-on-deep)] opacity-60 hover:opacity-100 transition-opacity animate-bounce text-xl"
         >
           ↓
         </a>

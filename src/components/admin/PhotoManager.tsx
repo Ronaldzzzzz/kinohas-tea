@@ -90,7 +90,7 @@ export default function PhotoManager() {
           上傳宣傳照
         </h3>
         <p className="text-[var(--color-text-muted)] text-xs">
-          照片將顯示於首頁左側（最多顯示 3 張）。
+          照片將以輪播方式顯示於首頁主視覺 Hero 背景。
         </p>
         <div className="flex items-center gap-3">
           <label

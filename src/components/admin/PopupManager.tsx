@@ -91,8 +91,11 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
               <option value="entry">進版彈窗</option>
               <option value="floating">拖動視窗</option>
             </select>
-            <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] ?? null)}
-              className="text-sm text-[var(--color-text-muted)]" />
+            <label className="cursor-pointer bg-[var(--color-gold-primary)] text-[var(--color-bg-primary)] text-sm font-semibold px-4 py-1.5 rounded hover:bg-[var(--color-gold-light)] transition-colors max-w-52 truncate inline-block">
+              {file ? `已選擇: ${file.name}` : '選擇圖片'}
+              <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] ?? null)}
+                className="hidden" />
+            </label>
           </div>
           <textarea value={text} onChange={e => setText(e.target.value)} placeholder="文字內容(拖動視窗用；選填)"
             rows={2}

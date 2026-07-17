@@ -3,9 +3,11 @@ import MaskedContent from './MaskedContent'
 
 interface Props {
   replies: Reply[]
+  /** 後台檢視：忽略遮蔽狀態，一律顯示原文，供管理員審核 */
+  adminView?: boolean
 }
 
-export default function ReplyList({ replies }: Props) {
+export default function ReplyList({ replies, adminView = false }: Props) {
   if (replies.length === 0) return null
 
   return (
@@ -18,7 +20,10 @@ export default function ReplyList({ replies }: Props) {
           {!reply.isAnonymous && reply.serverName && (
             <span className="text-[var(--color-text-muted)] mr-2">@{reply.serverName}</span>
           )}
-          {reply.masked ? (
+          {reply.masked && adminView && (
+            <span className="text-[var(--color-danger-text)] mr-2">▓ 已遮蔽</span>
+          )}
+          {reply.masked && !adminView ? (
             <MaskedContent content={reply.content} maskNote={reply.maskNote} />
           ) : (
             <span className="text-[var(--color-text-muted)]">{reply.content}</span>

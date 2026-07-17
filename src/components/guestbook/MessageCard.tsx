@@ -9,9 +9,11 @@ const LS_KEY = (id: string) => `vote_${id}`
 interface Props {
   message: Message
   onDelete?: (id: string) => void
+  /** 後台檢視：忽略遮蔽狀態，一律顯示原文，供管理員審核 */
+  adminView?: boolean
 }
 
-export default function MessageCard({ message, onDelete }: Props) {
+export default function MessageCard({ message, onDelete, adminView = false }: Props) {
   const [likes, setLikes] = useState(message.likes)
   const [dislikes, setDislikes] = useState(message.dislikes)
   const [voted, setVoted] = useState<'likes' | 'dislikes' | null>(
@@ -43,11 +45,14 @@ export default function MessageCard({ message, onDelete }: Props) {
         {!message.isAnonymous && message.serverName && (
           <span className="text-[var(--color-text-muted)] text-xs sm:text-sm content-text">@{message.serverName}</span>
         )}
+        {message.masked && adminView && (
+          <span className="text-xs text-[var(--color-danger-text)]">▓ 已遮蔽</span>
+        )}
         <span className="text-[var(--color-text-muted)] text-xs ml-auto">{dateStr}</span>
       </div>
 
-      {/* 內容 */}
-      {message.masked ? (
+      {/* 內容：後台一律顯示原文供審核 */}
+      {message.masked && !adminView ? (
         <MaskedContent content={message.content} maskNote={message.maskNote} />
       ) : (
         <p className="text-[var(--color-text-primary)] text-sm sm:text-base leading-relaxed content-text">{message.content}</p>
@@ -97,7 +102,7 @@ export default function MessageCard({ message, onDelete }: Props) {
         )}
       </div>
 
-      {showReplies && <ReplyList replies={message.replies ?? []} />}
+      {showReplies && <ReplyList replies={message.replies ?? []} adminView={adminView} />}
     </div>
   )
 }
