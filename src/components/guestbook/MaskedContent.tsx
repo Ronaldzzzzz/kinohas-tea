@@ -3,17 +3,21 @@ interface Props {
   maskNote?: string
 }
 
-/** 遮蔽呈現：黑條化原文(保留長度)+標籤+店家註解 */
+/** 遮蔽呈現：原文模糊化，正中間覆蓋遮蔽提示(含選填店家附註) */
 export default function MaskedContent({ content, maskNote }: Props) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs text-[var(--color-text-muted)] tracking-wider">▓ 此留言已被店家遮蔽</span>
-      <p aria-hidden="true" className="text-sm sm:text-base leading-relaxed bg-black text-black select-none rounded-sm w-fit max-w-full break-all">
+    <div className="relative overflow-hidden rounded-sm">
+      <p
+        aria-hidden="true"
+        className="text-sm sm:text-base leading-relaxed text-[var(--color-text-primary)] blur-sm select-none opacity-50 break-all"
+      >
         {content}
       </p>
-      {maskNote && (
-        <span className="text-xs text-[var(--color-gold-primary)]">店家註: {maskNote}</span>
-      )}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="text-xs sm:text-sm text-[var(--color-text-primary)] tracking-wider text-center px-2">
+          ▓ 此留言已被店家遮蔽{maskNote ? `：${maskNote}` : ''}
+        </span>
+      </div>
     </div>
   )
 }

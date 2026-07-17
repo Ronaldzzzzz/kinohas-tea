@@ -56,6 +56,17 @@ async function syncInventoryFromIngredients(itemName: string, ingredients: MenuI
   let hasOps = false
   const processedIds = new Set<number>() // 追蹤此批次已處理的 ID
 
+  // 讀取主資料以解析食材真實名稱與 icon 路徑
+  let masterItems: Record<string, { n: string; i?: string }> = {}
+  try {
+    const res = await fetch(`${import.meta.env.BASE_URL}data/master_items.json`)
+    if (res.ok) {
+      masterItems = await res.json()
+    }
+  } catch (error) {
+    console.error('Failed to load master_items.json in sync logic:', error)
+  }
+
   for (const ing of ingredients) {
     if (processedIds.has(ing.id)) continue
     processedIds.add(ing.id)
@@ -65,14 +76,19 @@ async function syncInventoryFromIngredients(itemName: string, ingredients: MenuI
       (item) => item.recipeIngredientId === ing.id || item.name === `食材 #${ing.id}`
     )
 
+    const masterData = masterItems[ing.id.toString()]
+    const realName = masterData ? masterData.n : `食材 #${ing.id}`
+    const iconPath = masterData ? masterData.i : undefined
+
     if (!existingItem) {
       const newRef = doc(collection(db, 'inventory'))
       const newItemData: Omit<InventoryItem, 'id'> = {
-        name: `食材 #${ing.id}`,
+        name: realName,
         stock: 0,
         note: `${itemName}`,
         recipeIngredientId: ing.id,
       }
+      if (iconPath) newItemData.icon = iconPath
 
       batch.set(newRef, newItemData)
       hasOps = true
@@ -80,6 +96,14 @@ async function syncInventoryFromIngredients(itemName: string, ingredients: MenuI
       const updates: Partial<Omit<InventoryItem, 'id'>> = {}
       let needsUpdate = false
 
+      if (existingItem.name === `食材 #${ing.id}` && masterData) {
+        updates.name = realName
+        needsUpdate = true
+      }
+      if (!existingItem.icon && iconPath) {
+        updates.icon = iconPath
+        needsUpdate = true
+      }
       if (existingItem.recipeIngredientId !== ing.id) {
         updates.recipeIngredientId = ing.id
         needsUpdate = true
