@@ -326,8 +326,8 @@ export async function addOrder(data: Omit<Order, 'id' | 'timestamp'>): Promise<s
   return ref.id
 }
 
-export async function completeOrder(id: string): Promise<void> {
-  await updateDoc(doc(db, 'orders', id), { status: 'completed' })
+export async function completeOrder(id: string, completedBy?: string): Promise<void> {
+  await updateDoc(doc(db, 'orders', id), { status: 'completed', completedBy: completedBy ?? '' })
 }
 
 export async function addOrderWithStockDeduction(

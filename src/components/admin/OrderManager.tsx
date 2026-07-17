@@ -14,7 +14,7 @@ interface Props {
 
 const HISTORY_PAGE_SIZE = 10
 
-export default function OrderManager({ session: _session, realModeEnabled, canWrite, canDelete }: Props) {
+export default function OrderManager({ session, realModeEnabled, canWrite, canDelete }: Props) {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState<string | null>(null)
@@ -45,8 +45,8 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
   async function handleComplete(id: string) {
     setCompleting(id)
     try {
-      await completeOrder(id)
-      setOrders(prev => prev.map(o => o.id === id ? { ...o, status: 'completed' as const } : o))
+      await completeOrder(id, session.label)
+      setOrders(prev => prev.map(o => o.id === id ? { ...o, status: 'completed' as const, completedBy: session.label } : o))
     } catch (err) {
       console.error('完成訂單失敗:', err)
       showToast('操作失敗，請稍後再試。', 'error')
@@ -197,7 +197,7 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
                         <span className="text-[var(--color-text-primary)] text-base font-semibold">{order.customerName}</span>
                         {isCompleted && (
                           <span className="text-xs text-[var(--color-success-text)] border border-[var(--color-success-border)] rounded px-1.5 py-0.5">
-                            已完成
+                            已完成{order.completedBy ? ` · ${order.completedBy}` : ''}
                           </span>
                         )}
                       </div>
@@ -290,7 +290,7 @@ export default function OrderManager({ session: _session, realModeEnabled, canWr
                           <span className="text-[var(--color-text-primary)] text-base font-semibold">{order.customerName}</span>
                           {order.status === 'completed' && (
                             <span className="text-xs text-[var(--color-success-text)] border border-[var(--color-success-border)] rounded px-1.5 py-0.5">
-                              已完成
+                              已完成{order.completedBy ? ` · ${order.completedBy}` : ''}
                             </span>
                           )}
                         </div>

@@ -117,6 +117,8 @@ export interface Order {
   timestamp: Timestamp
   note?: string
   status?: 'pending' | 'completed'
+  completedBy?: string        // 完成此訂單的管理員標籤
+
 }
 
 /**
