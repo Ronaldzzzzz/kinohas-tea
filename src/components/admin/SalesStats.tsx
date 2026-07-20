@@ -20,8 +20,10 @@ function startOfWeek(now: Date): number {
   return d.getTime()
 }
 
-function startOfMonth(now: Date): number {
-  return new Date(now.getFullYear(), now.getMonth(), 1).getTime()
+function startOfDay(now: Date): number {
+  const d = new Date(now)
+  d.setHours(0, 0, 0, 0)
+  return d.getTime()
 }
 
 function formatMD(ms: number): string {
@@ -32,7 +34,9 @@ function formatMD(ms: number): string {
 /** 標題容易只差一兩個字被看錯，附上實際日期區間讓使用者一眼確認 */
 function dateRangeLabel(sinceMs: number, untilMs: number): string {
   const end = untilMs === Infinity ? new Date() : new Date(untilMs - 1)
-  return `${formatMD(sinceMs)} - ${formatMD(end.getTime())}`
+  const start = formatMD(sinceMs)
+  const endLabel = formatMD(end.getTime())
+  return start === endLabel ? start : `${start} - ${endLabel}`
 }
 
 function rankTopItems(orders: Order[], sinceMs: number, untilMs: number): Ranked[] {
@@ -56,7 +60,7 @@ interface RankListProps {
   title: string
   items: Ranked[]
   range: string
-  /** 本週/本月 = 當期(金色強調)；上週/上月 = 已結束區間(灰色) */
+  /** 本日/本週 = 當期(金色強調)；前日/前週 = 已結束區間(灰色) */
   isCurrent: boolean
 }
 
@@ -101,17 +105,17 @@ export default function SalesStats() {
 
   const periods = useMemo(() => {
     const now = new Date()
+    const dayStart = startOfDay(now)
+    const lastDayStart = dayStart - 24 * 60 * 60 * 1000
+
     const weekStart = startOfWeek(now)
     const lastWeekStart = weekStart - 7 * 24 * 60 * 60 * 1000
 
-    const monthStart = startOfMonth(now)
-    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime()
-
     return [
+      { key: 'today', title: '本日熱銷', isCurrent: true, since: dayStart, until: Infinity },
+      { key: 'lastDay', title: '前日熱銷', isCurrent: false, since: lastDayStart, until: dayStart },
       { key: 'thisWeek', title: '本週熱銷', isCurrent: true, since: weekStart, until: Infinity },
-      { key: 'lastWeek', title: '上週熱銷', isCurrent: false, since: lastWeekStart, until: weekStart },
-      { key: 'thisMonth', title: '本月熱銷', isCurrent: true, since: monthStart, until: Infinity },
-      { key: 'lastMonth', title: '上個月熱銷', isCurrent: false, since: lastMonthStart, until: monthStart },
+      { key: 'lastWeek', title: '前週熱銷', isCurrent: false, since: lastWeekStart, until: weekStart },
     ].map(p => ({
       ...p,
       items: rankTopItems(orders, p.since, p.until),
