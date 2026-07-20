@@ -26,7 +26,9 @@ interface Props {
 
 export default function PermissionModal({ admin, onClose, onSaved }: Props) {
   const [perms, setPerms] = useState<StaffPermissions>(
-    admin.role === 'staff' ? (admin.permissions ?? DEFAULT_STAFF_PERMISSIONS) : DEFAULT_STAFF_PERMISSIONS
+    admin.role === 'staff'
+      ? { ...DEFAULT_STAFF_PERMISSIONS, ...admin.permissions }
+      : DEFAULT_STAFF_PERMISSIONS
   )
   const [saving, setSaving] = useState(false)
   const { toast, showToast } = useToast()

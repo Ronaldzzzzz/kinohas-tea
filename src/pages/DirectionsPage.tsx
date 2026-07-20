@@ -13,6 +13,7 @@ export default function DirectionsPage() {
         setContent(directions)
         setAddress(settings.address ?? '')
       })
+      .catch(err => console.error('載入交通指引失敗:', err))
       .finally(() => setLoading(false))
   }, [])
 

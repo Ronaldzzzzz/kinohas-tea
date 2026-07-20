@@ -7,7 +7,7 @@ export default function StoryPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getStoryContent().then(setContent).finally(() => setLoading(false))
+    getStoryContent().then(setContent).catch(err => console.error('載入本店歷史失敗:', err)).finally(() => setLoading(false))
   }, [])
 
   return (
