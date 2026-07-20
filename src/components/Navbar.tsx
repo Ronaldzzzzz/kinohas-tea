@@ -72,6 +72,12 @@ export default function Navbar() {
           <NavLink to="/" className={linkClass} end>
             首頁
           </NavLink>
+          <NavLink to="/story" className={linkClass}>
+            本店歷史
+          </NavLink>
+          <NavLink to="/directions" className={linkClass}>
+            交通指引
+          </NavLink>
           <NavLink to="/guestbook" className={linkClass}>
             留言板
           </NavLink>

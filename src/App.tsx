@@ -2,6 +2,8 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import MenuPage from './pages/MenuPage'
+import StoryPage from './pages/StoryPage'
+import DirectionsPage from './pages/DirectionsPage'
 import GuestbookPage from './pages/GuestbookPage'
 import AdminPage from './pages/AdminPage'
 import PopupLayer from './components/popups/PopupLayer'
@@ -19,6 +21,8 @@ export default function App() {
         <main className="relative z-10 max-w-4xl mx-auto px-4 pt-20 sm:pt-24 pb-6 w-full flex-1">
           <Routes>
             <Route path="/" element={<MenuPage />} />
+            <Route path="/story" element={<StoryPage />} />
+            <Route path="/directions" element={<DirectionsPage />} />
             <Route path="/guestbook" element={<GuestbookPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
