@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { subscribeGlobalSettings } from '../lib/firestore'
 
 export default function Navbar() {
@@ -42,7 +42,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-5xl mx-auto px-4 h-14 sm:h-16 flex items-center justify-between">
-        <div className="flex flex-col justify-center">
+        <Link to="/" className="flex flex-col justify-center">
           <span
             className={`font-serif font-bold text-base sm:text-lg md:text-xl tracking-widest whitespace-nowrap transition-colors ${
               overHero ? 'text-[var(--color-on-deep)]' : 'text-[var(--color-gold-primary)]'
@@ -67,7 +67,7 @@ export default function Navbar() {
             <span className={`w-1.5 h-1.5 rounded-full ${businessOpen ? 'bg-green-500' : 'bg-red-500'} ${businessOpen ? 'animate-pulse' : ''}`} />
             {businessOpen ? '營業中' : '休息中'}
           </span>
-        </div>
+        </Link>
         <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
           <NavLink to="/" className={linkClass} end>
             首頁
