@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import { storage } from '../../lib/firebase'
+import { deleteField } from 'firebase/firestore'
 import { getPopups, addPopup, updatePopup, deletePopup, getGlobalSettings, updateGlobalSettings } from '../../lib/firestore'
 import { compressImage } from '../../utils/imageCompress'
 import type { Popup } from '../../types'
@@ -19,6 +20,7 @@ const TYPE_LABELS: Record<Popup['type'], string> = {
 }
 
 interface EditForm {
+  type: Popup['type']
   text: string
   linkUrl: string
   position: 'left' | 'right'
@@ -26,7 +28,7 @@ interface EditForm {
 }
 
 function toEditForm(p: Popup): EditForm {
-  return { text: p.text ?? '', linkUrl: p.linkUrl ?? '', position: p.position ?? 'left', file: null }
+  return { type: p.type, text: p.text ?? '', linkUrl: p.linkUrl ?? '', position: p.position ?? 'left', file: null }
 }
 
 export default function PopupManager({ canWrite, canDelete }: Props) {
@@ -44,12 +46,13 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
 
   // 進版彈窗同時顯示數量設定
   const [entryPopupCount, setEntryPopupCount] = useState(1)
+  const [entryPopupCountInput, setEntryPopupCountInput] = useState('1')
   const [countSaving, setCountSaving] = useState(false)
   const [countSaved, setCountSaved] = useState(false)
 
   // 編輯現有彈窗
   const [editingId, setEditingId] = useState<string | null>(null)
-  const [editForm, setEditForm] = useState<EditForm>({ text: '', linkUrl: '', position: 'left', file: null })
+  const [editForm, setEditForm] = useState<EditForm>({ type: 'entry', text: '', linkUrl: '', position: 'left', file: null })
   const [editSaving, setEditSaving] = useState(false)
   const [editError, setEditError] = useState('')
 
@@ -62,7 +65,11 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
   }
   useEffect(() => {
     load()
-    getGlobalSettings().then(s => setEntryPopupCount(s.entryPopupCount ?? 1)).catch(() => {})
+    getGlobalSettings().then(s => {
+      const v = s.entryPopupCount ?? 1
+      setEntryPopupCount(v)
+      setEntryPopupCountInput(String(v))
+    }).catch(() => {})
   }, [])
 
   async function handleSaveCount() {
@@ -161,7 +168,8 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
         }
       }
       await updatePopup(popup.id, {
-        ...(popup.type === 'banner' ? { position: editForm.position } : {}),
+        type: editForm.type,
+        position: editForm.type === 'banner' ? editForm.position : deleteField(),
         text: editForm.text.trim(),
         linkUrl: editForm.linkUrl.trim(),
         ...(imageUrl ? { imageUrl } : {}),
@@ -189,8 +197,16 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
               type="number"
               min={-1}
               max={6}
-              value={entryPopupCount}
-              onChange={e => setEntryPopupCount(Math.max(-1, Math.min(6, parseInt(e.target.value) || 0)))}
+              value={entryPopupCountInput}
+              onChange={e => {
+                const raw = e.target.value
+                setEntryPopupCountInput(raw)
+                if (raw === '' || raw === '-') return // 允許輸入到一半（空字串或負號）
+                const parsed = parseInt(raw)
+                if (Number.isNaN(parsed)) return
+                setEntryPopupCount(Math.max(-1, Math.min(6, parsed)))
+              }}
+              onBlur={() => setEntryPopupCountInput(String(entryPopupCount))}
               className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-1.5 text-sm w-24
                          focus:outline-none focus:border-[var(--color-gold-primary)] transition-colors"
             />
@@ -255,7 +271,13 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
               <li key={p.id} className="bg-[var(--color-bg-card)] border border-[var(--color-border-primary)] rounded p-3">
                 {editingId === p.id ? (
                   <div className="flex flex-col gap-2">
-                    {p.type === 'banner' && (
+                    <select value={editForm.type} onChange={e => setEditForm(f => ({ ...f, type: e.target.value as Popup['type'] }))}
+                      className="self-start bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)]">
+                      <option value="entry">進版彈窗</option>
+                      <option value="floating">拖動視窗</option>
+                      <option value="banner">側欄廣告</option>
+                    </select>
+                    {editForm.type === 'banner' && (
                       <select value={editForm.position} onChange={e => setEditForm(f => ({ ...f, position: e.target.value as 'left' | 'right' }))}
                         className="self-start bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)]">
                         <option value="left">左側</option>

@@ -11,13 +11,14 @@ interface Props {
 
 /** Shopee 式進版彈窗盒子：不可點外部關閉，僅右上角小 X 可關 */
 export default function EntryPopupBox({ popup, onClose, anchor, pixelPos }: Props) {
+  // 版心寬高扣掉關閉鍵外溢的空間(w-6 位移 -8px，外露約 16px)，避免窄螢幕上關閉鍵被邊界吃掉
   const inner = (
     <>
       {popup.imageUrl && (
-        <img src={popup.imageUrl} alt="活動彈窗" className="max-w-[85vw] max-h-[70vh] sm:max-w-xs rounded shadow-2xl" draggable={false} />
+        <img src={popup.imageUrl} alt="活動彈窗" className="block max-w-[calc(100vw-2.5rem)] max-h-[calc(100dvh-2.5rem)] sm:max-w-xs rounded shadow-2xl" draggable={false} />
       )}
       {popup.text && (
-        <p className="bg-[var(--color-bg-card)] text-[var(--color-text-primary)] text-sm p-4 rounded max-w-[85vw] sm:max-w-xs text-center">{popup.text}</p>
+        <p className="bg-[var(--color-bg-card)] text-[var(--color-text-primary)] text-sm p-4 rounded max-w-[calc(100vw-2.5rem)] max-h-[calc(100dvh-2.5rem)] overflow-y-auto sm:max-w-xs text-center">{popup.text}</p>
       )}
     </>
   )

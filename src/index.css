@@ -59,10 +59,12 @@ body {
   font-size: 1rem;
 }
 
+/* translate(-50%,-50%) 需與 EntryPopupBox 的置中定位疊加，否則動畫的 transform 會整個覆蓋掉置中位移，
+   讓框以左上角(而非中心)對齊錨點，視覺上偏移到右下方 */
 @keyframes bounce-in {
-  0% { transform: scale(0.9); opacity: 0; }
-  50% { transform: scale(1.05); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+  50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
 .animate-bounce-in {

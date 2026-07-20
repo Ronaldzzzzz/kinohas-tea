@@ -158,17 +158,6 @@ export default function PhotoManager() {
                   >
                     移除
                   </button>
-                  <button
-                    onClick={() => setEditingIndex(index)}
-                    className="text-xs rounded px-3 py-1 transition-colors"
-                    style={{
-                      border: '1px solid var(--color-gold-primary)',
-                      color: 'var(--color-gold-primary)',
-                      background: 'rgba(201,165,90,0.15)',
-                    }}
-                  >
-                    裁剪
-                  </button>
                 </div>
                 <div className="px-2 py-1 text-[10px] text-[var(--color-text-muted)] truncate">
                   照片 {index + 1}

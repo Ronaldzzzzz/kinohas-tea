@@ -3,13 +3,13 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { subscribeGlobalSettings } from '../lib/firestore'
 
 export default function Navbar() {
-  const [address, setAddress] = useState<string>('')
+  const [businessOpen, setBusinessOpen] = useState(true)
   const [scrolled, setScrolled] = useState(false)
   const { pathname } = useLocation()
 
   useEffect(() => {
     // 即時訂閱：Navbar 掛在 App 根層不隨路由重掛載，一次性讀取會讀到後台儲存前的舊值
-    return subscribeGlobalSettings(s => setAddress(s.address ?? ''))
+    return subscribeGlobalSettings(s => setBusinessOpen(s.businessOpen ?? true))
   }, [])
 
   useEffect(() => {
@@ -57,11 +57,16 @@ export default function Navbar() {
               KINOHA'S TEA
             </span>
           </span>
-          {address && !overHero && (
-            <span className="hidden md:block text-[11px] text-[var(--color-text-muted)] tracking-wide leading-tight">
-              📍 {address}
-            </span>
-          )}
+          <span
+            className={`hidden sm:inline-flex items-center gap-1.5 self-start mt-0.5 px-2 py-0.5 rounded-full text-[11px] font-bold tracking-wide leading-tight border ${
+              businessOpen
+                ? 'text-green-500 border-green-500/40 bg-green-500/10'
+                : 'text-red-500 border-red-500/40 bg-red-500/10'
+            }`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${businessOpen ? 'bg-green-500' : 'bg-red-500'} ${businessOpen ? 'animate-pulse' : ''}`} />
+            {businessOpen ? '營業中' : '休息中'}
+          </span>
         </div>
         <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
           <NavLink to="/" className={linkClass} end>

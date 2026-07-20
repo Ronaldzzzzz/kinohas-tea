@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Message } from '../../types'
-import { likeMessage } from '../../lib/firestore'
+import { voteMessage } from '../../lib/firestore'
 import ReplyList from './ReplyList'
 import MaskedContent from './MaskedContent'
 
@@ -22,12 +22,19 @@ export default function MessageCard({ message, onDelete, adminView = false }: Pr
   const [showReplies, setShowReplies] = useState(false)
 
   async function handleVote(type: 'likes' | 'dislikes') {
-    if (voted) return
-    await likeMessage(message.id, type)
-    if (type === 'likes') setLikes((v) => v + 1)
-    else setDislikes((v) => v + 1)
-    setVoted(type)
-    localStorage.setItem(LS_KEY(message.id), type)
+    const prev = voted
+    const next = prev === type ? null : type // 再次點擊同一個 = 取消
+
+    await voteMessage(message.id, next, prev)
+
+    if (prev === 'likes') setLikes((v) => v - 1)
+    if (prev === 'dislikes') setDislikes((v) => v - 1)
+    if (next === 'likes') setLikes((v) => v + 1)
+    if (next === 'dislikes') setDislikes((v) => v + 1)
+
+    setVoted(next)
+    if (next) localStorage.setItem(LS_KEY(message.id), next)
+    else localStorage.removeItem(LS_KEY(message.id))
   }
 
   const date = message.timestamp?.toDate?.()
@@ -62,22 +69,20 @@ export default function MessageCard({ message, onDelete, adminView = false }: Pr
       <div className="flex items-center gap-2 sm:gap-3 mt-3">
         <button
           onClick={() => handleVote('likes')}
-          disabled={!!voted}
           className={`flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors ${
             voted === 'likes'
               ? 'bg-[var(--color-success-bg)] text-[var(--color-success-text)]'
-              : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] disabled:cursor-not-allowed'
+              : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'
           }`}
         >
           👍 <span>{likes}</span>
         </button>
         <button
           onClick={() => handleVote('dislikes')}
-          disabled={!!voted}
           className={`flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors ${
             voted === 'dislikes'
               ? 'bg-[var(--color-danger-bg)] text-[var(--color-danger-text)]'
-              : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] disabled:cursor-not-allowed'
+              : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'
           }`}
         >
           👎 <span>{dislikes}</span>

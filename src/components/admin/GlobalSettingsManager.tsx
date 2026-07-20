@@ -8,6 +8,7 @@ export default function GlobalSettingsManager() {
   const [cooldown, setCooldown] = useState(30)
   const [realModeEnabled, setRealModeEnabled] = useState(false)
   const [marqueeText, setMarqueeText] = useState('')
+  const [businessOpen, setBusinessOpen] = useState(true)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -21,6 +22,7 @@ export default function GlobalSettingsManager() {
         setCooldown(s.orderCooldownMinutes ?? 30)
         setRealModeEnabled(s.realModeEnabled ?? false)
         setMarqueeText(s.marqueeText ?? '')
+        setBusinessOpen(s.businessOpen ?? true)
         setHasLoadedSettings(true)
       })
       .catch(() => setError('載入設定失敗'))
@@ -33,7 +35,7 @@ export default function GlobalSettingsManager() {
     setError(null)
     setSaved(false)
     try {
-      await updateGlobalSettings({ address, orderCooldownMinutes: cooldown, realModeEnabled, marqueeText })
+      await updateGlobalSettings({ address, orderCooldownMinutes: cooldown, realModeEnabled, marqueeText, businessOpen })
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
     } catch {
@@ -69,7 +71,33 @@ export default function GlobalSettingsManager() {
                        placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)]
                        transition-colors"
           />
-          <p className="text-[var(--color-text-muted)] text-[11px]">顯示於網站頁首導覽列。留空則不顯示。</p>
+          <p className="text-[var(--color-text-muted)] text-[11px]">顯示於網站頁尾。留空則不顯示。</p>
+        </div>
+
+        {/* 營業狀態 */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[var(--color-text-muted)] text-xs tracking-wide">
+            營業狀態
+          </label>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setBusinessOpen(v => !v)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                businessOpen ? 'bg-green-500' : 'bg-red-500'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  businessOpen ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+            <span className={`text-xs font-semibold ${businessOpen ? 'text-green-500' : 'text-red-500'}`}>
+              {businessOpen ? '● 營業中' : '● 休息中'}
+            </span>
+          </div>
+          <p className="text-[var(--color-text-muted)] text-[11px]">顯示於網站頁首導覽列 Logo 下方，取代原本的地址顯示。</p>
         </div>
 
         {/* 點餐冷卻時間 */}

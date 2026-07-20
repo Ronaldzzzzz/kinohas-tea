@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { getEnabledPopups, getGlobalSettings } from '../../lib/firestore'
+import { getEnabledPopups, subscribeGlobalSettings } from '../../lib/firestore'
 import type { Popup } from '../../types'
 import EntryPopupGroup from './EntryPopupGroup'
 import FloatingWindow from './FloatingWindow'
@@ -30,7 +30,7 @@ export default function PopupLayer() {
 
   useEffect(() => {
     getEnabledPopups().then(setPopups).catch(() => {})
-    getGlobalSettings().then(s => setEntryPopupCount(s.entryPopupCount ?? 1)).catch(() => {})
+    return subscribeGlobalSettings(s => setEntryPopupCount(s.entryPopupCount ?? 1))
   }, [])
 
   const entryCandidates = useMemo(() => popups.filter(p => p.type === 'entry'), [popups])

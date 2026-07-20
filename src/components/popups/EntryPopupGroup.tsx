@@ -18,10 +18,25 @@ export default function EntryPopupGroup({ popups, randomMode }: Props) {
   const [randomBoxById, setRandomBoxById] = useState<Record<string, Box>>({})
   const [fixedAnchorById, setFixedAnchorById] = useState<Record<string, Anchor>>({})
 
+  // 手機版螢幕太窄，無法容納 20%/80% 這類多欄錨點(會跑版把關閉鍵擠出畫面)：
+  // 一律置中堆疊，不論數量、不論隨機/固定模式
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 640)
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 640)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  const effectiveRandomMode = randomMode && !isMobile
+
   // 位置只依「原始清單」配置一次；關閉個別彈窗(closed 變化)不重新排版，其餘彈窗維持原位
   useEffect(() => {
     if (popups.length === 0) return
-    if (randomMode) {
+    if (isMobile) {
+      const map: Record<string, Anchor> = {}
+      popups.forEach((p) => { map[p.id] = { xPct: 50, yPct: 50 } })
+      setFixedAnchorById(map)
+    } else if (effectiveRandomMode) {
       const boxes = getRandomNonOverlapping(popups.length, { width: window.innerWidth, height: window.innerHeight }, BOX_SIZE)
       const map: Record<string, Box> = {}
       popups.forEach((p, i) => { map[p.id] = boxes[i] })
@@ -33,7 +48,7 @@ export default function EntryPopupGroup({ popups, randomMode }: Props) {
       setFixedAnchorById(map)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [randomMode, popups.map(p => p.id).join(',')])
+  }, [isMobile, effectiveRandomMode, popups.map(p => p.id).join(',')])
 
   const visible = popups.filter(p => !closed.has(p.id))
   if (visible.length === 0) return null
@@ -45,8 +60,8 @@ export default function EntryPopupGroup({ popups, randomMode }: Props) {
           key={popup.id}
           popup={popup}
           onClose={() => setClosed(s => new Set(s).add(popup.id))}
-          anchor={!randomMode ? fixedAnchorById[popup.id] : undefined}
-          pixelPos={randomMode ? randomBoxById[popup.id] : undefined}
+          anchor={!effectiveRandomMode ? fixedAnchorById[popup.id] : undefined}
+          pixelPos={effectiveRandomMode ? randomBoxById[popup.id] : undefined}
         />
       ))}
     </div>

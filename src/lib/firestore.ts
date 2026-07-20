@@ -14,6 +14,8 @@ import {
   writeBatch,
   runTransaction,
   onSnapshot,
+  deleteField,
+  type UpdateData,
 } from 'firebase/firestore'
 import { db } from './firebase'
 import type { MenuItem, InventoryItem, Message, Reply, NoticeConfig, Order, GlobalSettings, PhotoUrl, StaffPermissions, Popup } from '../types'
@@ -226,6 +228,22 @@ export async function likeMessage(
   })
 }
 
+/**
+ * 更新投票狀態：可取消（newType 為 null）或切換（likes <-> dislikes）
+ * oldType 為使用者先前的投票，需一併扣回
+ */
+export async function voteMessage(
+  messageId: string,
+  newType: 'likes' | 'dislikes' | null,
+  oldType: 'likes' | 'dislikes' | null
+): Promise<void> {
+  if (newType === oldType) return
+  const updates: Record<string, ReturnType<typeof increment>> = {}
+  if (oldType) updates[oldType] = increment(-1)
+  if (newType) updates[newType] = increment(1)
+  await updateDoc(doc(db, 'messages', messageId), updates)
+}
+
 export async function deleteMessage(messageId: string): Promise<void> {
   // 先刪除子集合 replies，再刪除主文件
   const repliesSnap = await getDocs(
@@ -315,6 +333,19 @@ export async function getOrders(): Promise<Order[]> {
   const q = query(collection(db, 'orders'), orderBy('timestamp', 'desc'))
   const snap = await getDocs(q)
   return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Order))
+}
+
+/** 即時訂閱訂單列表；後台點餐管理用，避免管理員需手動重新整理才能看到新訂單 */
+export function subscribeOrders(
+  onChange: (orders: Order[]) => void,
+  onError?: (err: Error) => void
+): () => void {
+  const q = query(collection(db, 'orders'), orderBy('timestamp', 'desc'))
+  return onSnapshot(
+    q,
+    (snap) => onChange(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Order))),
+    onError
+  )
 }
 
 export async function addOrder(data: Omit<Order, 'id' | 'timestamp'>): Promise<string> {
@@ -413,6 +444,7 @@ function mapSettingsData(data: Record<string, unknown> | undefined): GlobalSetti
     realModeEnabled: (data?.realModeEnabled as boolean) ?? false,
     marqueeText: (data?.marqueeText as string) ?? '',
     entryPopupCount: (data?.entryPopupCount as number) ?? 1,
+    businessOpen: (data?.businessOpen as boolean) ?? true,
   }
 }
 
@@ -457,7 +489,7 @@ export async function addPopup(data: Omit<Popup, 'id' | 'createdAt'>): Promise<s
   return ref.id
 }
 
-export async function updatePopup(id: string, data: Partial<Omit<Popup, 'id'>>): Promise<void> {
+export async function updatePopup(id: string, data: UpdateData<Omit<Popup, 'id'>>): Promise<void> {
   await updateDoc(doc(db, 'popups', id), data)
 }
 

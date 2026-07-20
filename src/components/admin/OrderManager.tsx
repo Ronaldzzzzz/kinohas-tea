@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { Order, AdminSession } from '../../types'
-import { getOrders, deleteOrder, completeOrder, deleteOrderAndRestoreStock } from '../../lib/firestore'
+import { subscribeOrders, deleteOrder, completeOrder, deleteOrderAndRestoreStock } from '../../lib/firestore'
 import { ACTIVE_ORDER_WINDOW_MS } from '../../lib/constants'
 import { useToast } from '../../hooks/useToast'
 import Toast from '../Toast'
@@ -25,22 +25,54 @@ export default function OrderManager({ session, realModeEnabled, canWrite, canDe
   const [selectedHistoryIds, setSelectedHistoryIds] = useState<Set<string>>(new Set())
   const [batchDeleting, setBatchDeleting] = useState(false)
   const { toast, showToast } = useToast()
+  const knownIds = useRef<Set<string> | null>(null) // null = 尚未收到第一批資料，用來略過初次載入的提示音
 
-  async function load() {
-    setLoading(true)
-    setError(null)
+  function playNewOrderPing() {
     try {
-      const data = await getOrders()
-      setOrders(data)
-    } catch (err) {
-      console.error('載入訂單失敗:', err)
-      setError('載入訂單失敗，請重新整理。')
-    } finally {
-      setLoading(false)
+      const ctx = new AudioContext()
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.frequency.value = 880
+      gain.gain.setValueAtTime(0.15, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4)
+      osc.start()
+      osc.stop(ctx.currentTime + 0.4)
+      osc.onended = () => ctx.close()
+    } catch {
+      /* 瀏覽器不支援或被阻擋，忽略即可 */
     }
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    setLoading(true)
+    setError(null)
+    const unsubscribe = subscribeOrders(
+      (data) => {
+        setOrders(data)
+        setLoading(false)
+
+        if (knownIds.current !== null) {
+          const newPending = data.filter(
+            o => (o.status ?? 'pending') === 'pending' && !knownIds.current!.has(o.id)
+          )
+          if (newPending.length > 0) {
+            showToast(`收到 ${newPending.length} 筆新訂單！`, 'success')
+            playNewOrderPing()
+          }
+        }
+        knownIds.current = new Set(data.map(o => o.id))
+      },
+      (err) => {
+        console.error('訂閱訂單失敗:', err)
+        setError('即時更新中斷，請重新整理頁面。')
+        setLoading(false)
+      }
+    )
+    return unsubscribe
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   async function handleComplete(id: string) {
     setCompleting(id)
@@ -139,12 +171,10 @@ export default function OrderManager({ session, realModeEnabled, canWrite, canDe
       {/* 標題列 */}
       <div className="flex items-center justify-between">
         <h3 className="text-[var(--color-gold-primary)] font-serif tracking-widest text-lg">點餐管理</h3>
-        <button
-          onClick={load}
-          className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors border border-[var(--color-border-gold)] px-3 py-1 rounded"
-        >
-          重新整理
-        </button>
+        <span className="text-xs text-[var(--color-success-text)] flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-success-text)] animate-pulse" />
+          即時更新中
+        </span>
       </div>
 
       {error && (

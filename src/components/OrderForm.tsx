@@ -12,7 +12,7 @@ interface OrderFormProps {
 export default function OrderForm({ menuItems }: OrderFormProps) {
   const [cooldownMinutes, setCooldownMinutes] = useState(30)
   const [customerName, setCustomerName] = useState('')
-  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [selected, setSelected] = useState<Map<string, number>>(new Map())
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -55,11 +55,27 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
     return () => clearInterval(timer)
   }, [remainingMs, cooldownMinutes, calcRemaining])
 
+  // 單一品項可購買上限：優先受庫存限制（開啟真實模式且非無限量時），再受管理員設定的最大購買數量限制
+  function maxQtyFor(item: MenuItem): number {
+    const limits: number[] = []
+    if (item.maxOrderQty && item.maxOrderQty > 0) limits.push(item.maxOrderQty)
+    if (realModeEnabled && !item.unlimited) limits.push(item.stock ?? 0)
+    return limits.length > 0 ? Math.max(1, Math.min(...limits)) : 99
+  }
+
   function toggleItem(id: string) {
     setSelected(prev => {
-      const next = new Set(prev)
+      const next = new Map(prev)
       if (next.has(id)) next.delete(id)
-      else next.add(id)
+      else next.set(id, 1)
+      return next
+    })
+  }
+
+  function setQuantity(item: MenuItem, qty: number) {
+    setSelected(prev => {
+      const next = new Map(prev)
+      next.set(item.id, Math.max(1, Math.min(maxQtyFor(item), qty || 1)))
       return next
     })
   }
@@ -72,9 +88,9 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
     setSubmitError(null)
     setSubmitting(true)
     try {
-      const items = Array.from(selected).map(id => {
+      const items = Array.from(selected.entries()).map(([id, quantity]) => {
         const item = menuItems.find(m => m.id === id)!
-        return { menuItemId: id, menuItemName: item.name, quantity: 1 }
+        return { menuItemId: id, menuItemName: item.name, quantity }
       })
       const orderData = { customerName: customerName.trim(), items }
       if (realModeEnabled) {
@@ -84,7 +100,7 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
       }
       localStorage.setItem(LS_KEY, Date.now().toString())
       setCustomerName('')
-      setSelected(new Set())
+      setSelected(new Map())
       setSuccess(true)
       setRemainingMs(cooldownMinutes * 60 * 1000)
       setTimeout(() => setSuccess(false), 4000)
@@ -153,6 +169,17 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
                     <span className={`flex-1 text-sm ${outOfStock ? 'text-[var(--color-text-muted)]' : 'text-[var(--color-text-primary)]'}`}>
                       {item.alias || item.name}
                     </span>
+                    {selected.has(item.id) && !outOfStock && (
+                      <input
+                        type="number"
+                        min={1}
+                        max={maxQtyFor(item)}
+                        value={selected.get(item.id)}
+                        onClick={e => e.preventDefault()}
+                        onChange={e => setQuantity(item, parseInt(e.target.value))}
+                        className="w-14 bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-2 py-0.5 text-xs text-[var(--color-text-primary)] text-center focus:outline-none focus:border-[var(--color-gold-primary)]"
+                      />
+                    )}
                     {outOfStock ? (
                       <span className="text-xs text-[var(--color-danger-text)] border border-[var(--color-danger-border)] rounded px-1.5 py-0.5">
                         缺貨

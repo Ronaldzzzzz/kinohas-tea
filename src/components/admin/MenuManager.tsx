@@ -8,6 +8,7 @@ import {
 } from '../../lib/firestore'
 import type { MenuItem, MenuCategory, InventoryItem } from '../../types'
 import { CATEGORY_LABELS, CATEGORY_ORDER } from '../../types'
+import SalesStats from './SalesStats'
 import ItemSearchBox from './ItemSearchBox'
 import RecipeTreeSelector from './RecipeTreeSelector'
 import CraftModal from './CraftModal'
@@ -24,6 +25,7 @@ const EMPTY_FORM = {
   available: true,
   unlimited: false,
   stock: 0,
+  maxOrderQty: 0,
   order: 0,
   recipeId: undefined as number | undefined,
   ingredients: [] as MenuItem['ingredients'],
@@ -93,6 +95,7 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
       available: item.available,
       unlimited: item.unlimited ?? false,
       stock: item.stock ?? 0,
+      maxOrderQty: item.maxOrderQty ?? 0,
       order: item.order,
       recipeId: item.recipeId || undefined,
       ingredients: item.ingredients || []
@@ -207,6 +210,8 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
 
   return (
     <div>
+      <SalesStats />
+
       <div className="flex justify-between items-center mb-4">
         <span className="text-[var(--color-text-muted)] text-sm">{items.length} 個品項</span>
         {canWrite && (
@@ -243,7 +248,7 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="flex flex-col gap-1">
               <label className="text-xs text-[var(--color-text-muted)]">價格 (gil)</label>
               <input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} required min={0} className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)]" />
@@ -251,6 +256,10 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
             <div className="flex flex-col gap-1">
               <label className="text-xs text-[var(--color-text-muted)]">庫存數量</label>
               <input type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: Math.max(0, parseInt(e.target.value) || 0) })} min={0} disabled={form.unlimited} className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)] disabled:opacity-40" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-[var(--color-text-muted)]">單次最大購買數量</label>
+              <input type="number" value={form.maxOrderQty} onChange={(e) => setForm({ ...form, maxOrderQty: Math.max(0, parseInt(e.target.value) || 0) })} min={0} placeholder="0 = 不限制" className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)]" />
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-xs text-[var(--color-text-muted)]">排序</label>

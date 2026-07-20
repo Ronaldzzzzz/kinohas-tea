@@ -24,6 +24,7 @@ export interface MenuItem {
   unlimited?: boolean
   order: number
   stock?: number
+  maxOrderQty?: number   // 單次點餐最大購買數量；未設定或 0 = 不限制
   recipeId?: number
   ingredients?: RecipeIngredient[]
 }
@@ -147,6 +148,7 @@ export interface GlobalSettings {
   realModeEnabled?: boolean   // true = 真實庫存連動模式
   marqueeText?: string         // 首頁跑馬燈文字，留空則不顯示
   entryPopupCount?: number     // 進版彈窗同時顯示數量：-1=全部隨機不重疊，0=不顯示，1-6=固定排列，預設 1
+  businessOpen?: boolean       // 營業狀態：true=營業中，false=休息中（顯示於 Navbar，取代原地址顯示），預設 true
 }
 
 // 彈窗(進版廣告 / 可拖動視窗)

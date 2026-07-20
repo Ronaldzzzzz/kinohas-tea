@@ -3,10 +3,17 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // 菜單品項：公開可讀，需登入才能寫入
+    // 菜單品項：公開可讀，新增/刪除需登入
+    // 更新：登入者可任意修改；未登入僅允許「扣減庫存」(真實模式點餐用)，
+    // 且只能改動 stock 欄位、只能減少不能增加，防止竄改其他欄位或回填庫存
     match /menuItems/{itemId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create, delete: if request.auth != null;
+      allow update: if request.auth != null
+                    || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock'])
+                        && request.resource.data.stock is number
+                        && request.resource.data.stock >= 0
+                        && request.resource.data.stock < resource.data.stock);
     }
 
     // 庫存：公開可讀，需登入才能寫入
