@@ -79,9 +79,9 @@ export default function AdminPage() {
     { key: 'messages', label: '留言管理' },
     { key: 'notice', label: '文字設定' },
     { key: 'popups', label: '彈窗管理' },
-    { key: 'pages', label: '頁面內容' },
     { key: 'settings', label: '系統設定', ownerOnly: true },
     { key: 'admins', label: '帳號管理', ownerOnly: true },
+    { key: 'pages', label: '頁面內容' },
   ]
 
   const visibleTabs = tabs.filter(t => {

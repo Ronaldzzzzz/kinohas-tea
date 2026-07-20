@@ -14,6 +14,18 @@ service firebase.storage {
       allow write: if request.auth != null;
     }
 
+    // 本店歷史照片：登入可上傳，公開可讀
+    match /story-images/{filename} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 交通指引地圖圖片：登入可上傳，公開可讀
+    match /directions-images/{filename} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
     // 其他路徑：預設拒絕
     match /{allPaths=**} {
       allow read, write: if false;
