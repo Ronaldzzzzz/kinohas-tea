@@ -18,7 +18,7 @@ import {
   type UpdateData,
 } from 'firebase/firestore'
 import { db } from './firebase'
-import type { MenuItem, InventoryItem, Message, Reply, NoticeConfig, Order, GlobalSettings, PhotoUrl, StaffPermissions, Popup } from '../types'
+import type { MenuItem, InventoryItem, Message, Reply, NoticeConfig, Order, GlobalSettings, PhotoUrl, StaffPermissions, Popup, StoryContent, StorySection, DirectionsContent } from '../types'
 import { DEFAULT_STAFF_PERMISSIONS } from '../types'
 
 // ─── Menu Items ────────────────────────────────────────────────
@@ -505,4 +505,44 @@ export async function setMessageMask(messageId: string, masked: boolean, maskNot
 
 export async function setReplyMask(messageId: string, replyId: string, masked: boolean, maskNote?: string): Promise<void> {
   await updateDoc(doc(db, 'messages', messageId, 'replies', replyId), { masked, maskNote: maskNote ?? '' })
+}
+
+// ─── 頁面內容：本店歷史 / 交通指引 ─────────────────────────────
+
+const EMPTY_STORY_SECTION: StorySection = { title: '', text: '', imageUrl: undefined }
+
+export function mapStoryData(data: Record<string, unknown> | undefined): StoryContent {
+  const rawSections = (data?.sections ?? []) as Partial<StorySection>[]
+  const sections = [0, 1, 2].map(i => ({
+    title: rawSections[i]?.title ?? EMPTY_STORY_SECTION.title,
+    text: rawSections[i]?.text ?? EMPTY_STORY_SECTION.text,
+    imageUrl: rawSections[i]?.imageUrl,
+  })) as [StorySection, StorySection, StorySection]
+  return { sections }
+}
+
+export async function getStoryContent(): Promise<StoryContent> {
+  const docSnap = await getDoc(doc(db, 'settings', 'story'))
+  return mapStoryData(docSnap.exists() ? docSnap.data() : undefined)
+}
+
+export async function updateStoryContent(data: StoryContent): Promise<void> {
+  await setDoc(doc(db, 'settings', 'story'), data)
+}
+
+export function mapDirectionsData(data: Record<string, unknown> | undefined): DirectionsContent {
+  return {
+    title: (data?.title as string) ?? '',
+    text: (data?.text as string) ?? '',
+    mapImageUrl: data?.mapImageUrl as string | undefined,
+  }
+}
+
+export async function getDirectionsContent(): Promise<DirectionsContent> {
+  const docSnap = await getDoc(doc(db, 'settings', 'directions'))
+  return mapDirectionsData(docSnap.exists() ? docSnap.data() : undefined)
+}
+
+export async function updateDirectionsContent(data: DirectionsContent): Promise<void> {
+  await setDoc(doc(db, 'settings', 'directions'), data)
 }

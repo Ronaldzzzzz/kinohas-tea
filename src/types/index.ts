@@ -77,7 +77,7 @@ export interface Message {
 
 // ─── Admin Permissions ─────────────────────────────────────────
 
-export type TabKey = 'menu' | 'inventory' | 'orders' | 'messages' | 'notice' | 'popups'
+export type TabKey = 'menu' | 'inventory' | 'orders' | 'messages' | 'notice' | 'popups' | 'pages'
 
 export interface TabPermission {
   write: boolean
@@ -93,6 +93,7 @@ export const DEFAULT_STAFF_PERMISSIONS: StaffPermissions = {
   messages:  { write: true,  delete: true  },
   notice:    { write: false, delete: false },
   popups:    { write: false, delete: false },
+  pages:     { write: false, delete: false },
 }
 
 export interface AdminSession {
@@ -162,4 +163,22 @@ export interface Popup {
   enabled: boolean
   order: number
   createdAt: Timestamp
+}
+
+// 頁面內容：本店歷史
+export interface StorySection {
+  title: string
+  text: string
+  imageUrl?: string   // section[0] 由後台表單強制必填，型別上仍設 optional
+}
+
+export interface StoryContent {
+  sections: [StorySection, StorySection, StorySection]
+}
+
+// 頁面內容：交通指引
+export interface DirectionsContent {
+  title: string
+  text: string
+  mapImageUrl?: string   // 遊戲內地圖截圖
 }
