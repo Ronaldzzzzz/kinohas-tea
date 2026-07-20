@@ -12,8 +12,9 @@ import NoticeManager from '../components/admin/NoticeManager'
 import OrderManager from '../components/admin/OrderManager'
 import GlobalSettingsManager from '../components/admin/GlobalSettingsManager'
 import PopupManager from '../components/admin/PopupManager'
+import PageContentManager from '../components/admin/PageContentManager'
 
-type AdminTab = 'menu' | 'inventory' | 'messages' | 'admins' | 'notice' | 'orders' | 'settings' | 'popups'
+type AdminTab = 'menu' | 'inventory' | 'messages' | 'admins' | 'notice' | 'orders' | 'settings' | 'popups' | 'pages'
 
 export default function AdminPage() {
   const [session, setSession] = useState<AdminSession | null>(getAdminSession)
@@ -78,13 +79,14 @@ export default function AdminPage() {
     { key: 'messages', label: '留言管理' },
     { key: 'notice', label: '文字設定' },
     { key: 'popups', label: '彈窗管理' },
+    { key: 'pages', label: '頁面內容' },
     { key: 'settings', label: '系統設定', ownerOnly: true },
     { key: 'admins', label: '帳號管理', ownerOnly: true },
   ]
 
   const visibleTabs = tabs.filter(t => {
     if (t.ownerOnly) return session.role === 'owner'
-    const permTab = t.key as 'menu' | 'inventory' | 'orders' | 'messages' | 'notice' | 'popups'
+    const permTab = t.key as 'menu' | 'inventory' | 'orders' | 'messages' | 'notice' | 'popups' | 'pages'
     return canWrite(session, permTab)
   })
 
@@ -129,7 +131,7 @@ export default function AdminPage() {
       </div>
 
       {/* 分頁頁籤 */}
-      <div className="flex gap-1 mb-6">
+      <div className="flex flex-wrap gap-1 mb-6">
         {visibleTabs.map(({ key, label }) => (
           <button
             key={key}
@@ -176,6 +178,9 @@ export default function AdminPage() {
           canWrite={canWrite(session, 'popups')}
           canDelete={canDelete(session, 'popups')}
         />
+      )}
+      {tab === 'pages' && (
+        <PageContentManager canWrite={canWrite(session, 'pages')} />
       )}
       {tab === 'settings' && session.role === 'owner' && <GlobalSettingsManager />}
       {tab === 'admins' && session.role === 'owner' && <AdminManager />}
