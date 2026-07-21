@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { onAuthChange, getAdminSession, signOutAdmin } from '../lib/auth'
-import { getGlobalSettings, getMenuItems, subscribeAdminAccount } from '../lib/firestore'
+import { getGlobalSettings, subscribeMenuItems, subscribeAdminAccount } from '../lib/firestore'
 import { canWrite, canDelete } from '../lib/permissions'
 import type { AdminSession, MenuItem } from '../types'
 import PasswordGate from '../components/admin/PasswordGate'
@@ -28,13 +28,11 @@ export default function AdminPage() {
     getGlobalSettings().then(s => setRealModeEnabled(s.realModeEnabled ?? false)).catch(() => {})
   }, [])
 
-  // 菜品庫存快速預覽：切換分頁時刷新(菜品/訂單/製作操作後回來能看到最新數字)
+  // 菜品庫存快速預覽：即時訂閱，任何人改動庫存都會立刻反映在此
   useEffect(() => {
     if (!session) return
-    getMenuItems()
-      .then(items => setStockPreview(items.filter(i => !i.unlimited)))
-      .catch(() => {})
-  }, [session, tab])
+    return subscribeMenuItems(items => setStockPreview(items.filter(i => !i.unlimited)))
+  }, [session])
 
   useEffect(() => {
     const unsub = onAuthChange((user) => {

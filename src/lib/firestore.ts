@@ -29,6 +29,15 @@ export async function getMenuItems(): Promise<MenuItem[]> {
   return snap.docs.map((d) => ({ id: d.id, ...d.data() } as MenuItem))
 }
 
+export function subscribeMenuItems(
+  onChange: (items: MenuItem[]) => void
+): () => void {
+  const q = query(collection(db, 'menuItems'), orderBy('order'))
+  return onSnapshot(q, (snap) =>
+    onChange(snap.docs.map((d) => ({ id: d.id, ...d.data() } as MenuItem)))
+  )
+}
+
 export async function addMenuItem(
   data: Omit<MenuItem, 'id'>
 ): Promise<string> {
