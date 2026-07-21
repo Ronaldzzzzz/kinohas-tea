@@ -382,8 +382,11 @@ export async function addOrderWithStockDeduction(
       const item = data.items[i]
       const snapData = snaps[i].data()
       if (snapData?.unlimited) continue
+      // 規則需比較新舊 stock 數值，但安全規則讀不到 increment() transform 的運算結果，
+      // 未登入使用者的扣庫存分支會永遠判斷失敗，因此改寫入交易中已讀到的明確新數值
+      const currentStock = (snapData?.stock ?? 0) as number
       tx.update(doc(db, 'menuItems', item.menuItemId), {
-        stock: increment(-item.quantity),
+        stock: currentStock - item.quantity,
       })
     }
     tx.set(orderRef, {
