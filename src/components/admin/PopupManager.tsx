@@ -49,6 +49,7 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
   const [entryPopupCountInput, setEntryPopupCountInput] = useState('1')
   const [countSaving, setCountSaving] = useState(false)
   const [countSaved, setCountSaved] = useState(false)
+  const [hasLoadedCount, setHasLoadedCount] = useState(false)
 
   // 編輯現有彈窗
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -69,10 +70,12 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
       const v = s.entryPopupCount ?? 1
       setEntryPopupCount(v)
       setEntryPopupCountInput(String(v))
+      setHasLoadedCount(true)
     }).catch(() => {})
   }, [])
 
   async function handleSaveCount() {
+    if (!hasLoadedCount || countSaving) return
     setCountSaving(true)
     try {
       await updateGlobalSettings({ entryPopupCount })
@@ -211,7 +214,7 @@ export default function PopupManager({ canWrite, canDelete }: Props) {
                          focus:outline-none focus:border-[var(--color-gold-primary)] transition-colors"
             />
             <span className="text-[var(--color-text-muted)] text-xs">-1 ~ 6</span>
-            <button onClick={handleSaveCount} disabled={countSaving}
+            <button onClick={handleSaveCount} disabled={countSaving || !hasLoadedCount}
               className="text-sm px-4 py-1.5 rounded border border-[var(--color-gold-primary)] text-[var(--color-gold-primary)] hover:bg-[var(--color-gold-primary)] hover:text-[var(--color-bg-primary)] disabled:opacity-50 transition-colors">
               {countSaving ? '儲存中…' : '儲存'}
             </button>

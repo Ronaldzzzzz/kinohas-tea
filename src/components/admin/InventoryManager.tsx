@@ -45,7 +45,8 @@ export default function InventoryManager({ canWrite, canDelete }: Props) {
   const [viewMode, setViewMode] = useState<'tree' | 'list'>('tree')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const { toast, showToast } = useToast()
-  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // 依食材 id 各自持有計時器，避免快速調整多樣食材時，後一筆的 clearTimeout 把前一筆還沒觸發的儲存吃掉
+  const debounceTimersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
 
   async function load() {
     setLoading(true)
@@ -145,17 +146,20 @@ export default function InventoryManager({ canWrite, canDelete }: Props) {
     if (newStock < 0) return;
     const diff = newStock - item.stock;
     const docIds = item.docIds || [item.id];
-    setItems(prev => prev.map(i => i.id === docIds[0] ? { ...i, stock: i.stock + diff } : i));
-    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    debounceTimerRef.current = setTimeout(async () => {
+    const targetId = docIds[0];
+    setItems(prev => prev.map(i => i.id === targetId ? { ...i, stock: i.stock + diff } : i));
+    const existingTimer = debounceTimersRef.current.get(targetId);
+    if (existingTimer) clearTimeout(existingTimer);
+    debounceTimersRef.current.set(targetId, setTimeout(async () => {
+      debounceTimersRef.current.delete(targetId);
       try {
-        await updateInventoryItem(docIds[0], { stock: item.stock + diff });
+        await updateInventoryItem(targetId, { stock: item.stock + diff });
         showToast('庫存同步成功');
       } catch (err) {
         showToast('同步失敗', 'error');
         await load();
       }
-    }, 1000);
+    }, 1000));
   }
 
   const handleToggleSelect = (id: string) => {

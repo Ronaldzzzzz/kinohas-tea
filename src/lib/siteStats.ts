@@ -1,4 +1,4 @@
-import { doc, runTransaction } from 'firebase/firestore'
+import { doc, onSnapshot, runTransaction } from 'firebase/firestore'
 import { db } from './firebase'
 
 const COUNTER_REF_PATH = ['siteStats', 'hitCounter'] as const
@@ -17,5 +17,13 @@ export async function incrementHitCounter(): Promise<number> {
     const next = current + 1
     tx.set(ref, { count: next })
     return next
+  })
+}
+
+/** 即時訂閱全站訪客總數，讓所有分頁看到的是同一個持續增長的數字 */
+export function subscribeHitCounter(onChange: (count: number) => void): () => void {
+  const ref = doc(db, ...COUNTER_REF_PATH)
+  return onSnapshot(ref, (snap) => {
+    onChange((snap.data()?.count as number | undefined) ?? 0)
   })
 }
