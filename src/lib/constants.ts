@@ -14,3 +14,14 @@ export function isOutOfStock(
 ): boolean {
   return realModeEnabled && !item.unlimited && (item.stock ?? 0) <= 0
 }
+
+export const STOCK_LEVEL_HIGH = 600
+export const STOCK_LEVEL_LOW = 300
+
+export type StockLevel = 'high' | 'mid' | 'low'
+
+export function getStockLevel(stock: number): StockLevel {
+  if (stock >= STOCK_LEVEL_HIGH) return 'high'
+  if (stock > STOCK_LEVEL_LOW) return 'mid'
+  return 'low'
+}

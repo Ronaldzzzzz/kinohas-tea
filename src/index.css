@@ -31,6 +31,9 @@
   --color-success-bg: #e4efdf;
   --color-success-border: #a9c79c;
   --color-success-text: #3f7a4a;
+  --color-warning-bg: #f7efd8;
+  --color-warning-border: #dcbf7a;
+  --color-warning-text: #8a6a1f;
   --font-serif: "Noto Serif TC", serif;
   --font-sans: "Noto Sans TC", sans-serif;
 }

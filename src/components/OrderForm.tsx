@@ -1,7 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { MenuItem } from '../types'
-import { addOrder, addOrderWithStockDeduction, getGlobalSettings } from '../lib/firestore'
-import { isOutOfStock } from '../lib/constants'
+import { addOrder, addOrderWithStockDeduction, getGlobalSettings, subscribeGlobalSettings } from '../lib/firestore'
+import { isOutOfStock, getStockLevel } from '../lib/constants'
+
+const STOCK_BADGE: Record<'high' | 'mid' | 'low', { label: string; className: string }> = {
+  high: { label: '庫存充足', className: 'bg-[var(--color-success-bg)] text-[var(--color-success-text)]' },
+  mid: { label: '尚有庫存', className: 'bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]' },
+  low: { label: '', className: 'bg-[var(--color-danger-bg)] text-[var(--color-danger-text)]' },
+}
 
 const LS_KEY = 'lastOrderTime'
 
@@ -19,6 +25,7 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
   const [remainingMs, setRemainingMs] = useState(0)
   const [loadingSettings, setLoadingSettings] = useState(true)
   const [realModeEnabled, setRealModeEnabled] = useState(false)
+  const [businessOpen, setBusinessOpen] = useState(true)
 
   // 計算剩餘冷卻時間（毫秒）
   const calcRemaining = useCallback((cooldownMs: number): number => {
@@ -42,6 +49,11 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
       })
       .finally(() => setLoadingSettings(false))
   }, [calcRemaining])
+
+  // 訂閱營業狀態，後台切換休息中時即時停用點餐介面
+  useEffect(() => {
+    return subscribeGlobalSettings(settings => setBusinessOpen(settings.businessOpen ?? true))
+  }, [])
 
   // 每秒更新倒數
   useEffect(() => {
@@ -82,7 +94,7 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (remainingMs > 0 || submitting) return
+    if (remainingMs > 0 || submitting || !businessOpen) return
     if (!customerName.trim() || selected.size === 0) return
 
     setSubmitError(null)
@@ -123,8 +135,17 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] rounded p-3 sm:p-5 flex flex-col gap-3 sm:gap-4"
+        className={`bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] rounded p-3 sm:p-5 flex flex-col gap-3 sm:gap-4 transition-[filter,opacity] ${
+          !businessOpen ? 'grayscale opacity-60' : ''
+        }`}
       >
+        {!businessOpen && (
+          <p className="text-[var(--color-text-muted)] text-sm text-center py-1 tracking-wide">
+            🌙 目前休息中，暫停接受點餐
+          </p>
+        )}
+
+        <fieldset disabled={!businessOpen} className="contents">
         {/* 客人名稱 */}
         <div className="flex flex-col gap-1">
           <label className="text-xs text-[var(--color-text-muted)] tracking-wide">角色 ID（必填）</label>
@@ -133,7 +154,7 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
             onChange={e => setCustomerName(e.target.value)}
             placeholder="輸入你的角色 ID…"
             required
-            className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)]"
+            className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)] disabled:cursor-not-allowed"
           />
         </div>
 
@@ -185,7 +206,18 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
                         缺貨
                       </span>
                     ) : (
-                      <span className="text-xs text-[var(--color-text-muted)]">{item.price} gil</span>
+                      <>
+                        {realModeEnabled && !item.unlimited && item.stock != null && (() => {
+                          const level = getStockLevel(item.stock)
+                          const badge = STOCK_BADGE[level]
+                          return (
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${badge.className}`}>
+                              {level === 'low' ? `庫存 ${item.stock}` : badge.label}
+                            </span>
+                          )
+                        })()}
+                        <span className="text-xs text-[var(--color-text-muted)]">{item.price} gil</span>
+                      </>
                     )}
                   </label>
                 )
@@ -225,6 +257,7 @@ export default function OrderForm({ menuItems }: OrderFormProps) {
               ? `冷卻中 (剩 ${remainingMin} 分鐘)`
               : '送出點餐'}
         </button>
+        </fieldset>
       </form>
     </section>
   )
