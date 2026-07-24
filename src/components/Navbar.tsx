@@ -58,7 +58,7 @@ export default function Navbar() {
             </span>
           </span>
           <span
-            className={`hidden sm:inline-flex items-center gap-1.5 self-start mt-0.5 px-2 py-0.5 rounded-full text-[11px] font-bold tracking-wide leading-tight border ${
+            className={`inline-flex items-center gap-1.5 self-start mt-0.5 px-2 py-0.5 rounded-full text-[11px] font-bold tracking-wide leading-tight border ${
               businessOpen
                 ? 'text-green-500 border-green-500/40 bg-green-500/10'
                 : 'text-red-500 border-red-500/40 bg-red-500/10'
