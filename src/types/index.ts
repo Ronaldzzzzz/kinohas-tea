@@ -143,7 +143,7 @@ export interface PhotoUrl {
 // 首頁跑馬燈單則設定
 export interface MarqueeItem {
   text: string
-  speed: 'slow' | 'medium' | 'fast'
+  speed: 'slow' | 'medium' | 'fast' | 'ultraFast'
 }
 
 // 全局設定

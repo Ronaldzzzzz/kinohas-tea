@@ -197,6 +197,7 @@ export default function GlobalSettingsManager() {
                 <option value="slow">慢</option>
                 <option value="medium">中</option>
                 <option value="fast">快</option>
+                <option value="ultraFast">超快</option>
               </select>
             </div>
           ))}

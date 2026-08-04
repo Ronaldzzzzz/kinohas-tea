@@ -2,14 +2,15 @@ import { useState } from 'react'
 
 interface Props {
   text: string
-  speed?: 'slow' | 'medium' | 'fast'
+  speed?: 'slow' | 'medium' | 'fast' | 'ultraFast'
   onFinished?: () => void
 }
 
-const SPEED_DURATION_SEC: Record<'slow' | 'medium' | 'fast', number> = {
+const SPEED_DURATION_SEC: Record<'slow' | 'medium' | 'fast' | 'ultraFast', number> = {
   slow: 20,
   medium: 14,
   fast: 8,
+  ultraFast: 4,
 }
 
 /**
