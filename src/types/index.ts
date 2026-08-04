@@ -176,6 +176,7 @@ export interface StorySection {
   title: string
   text: string
   imageUrl?: string   // section[0] 由後台表單強制必填，型別上仍設 optional
+  imageCaption?: string   // 圖片說明文字，置中顯示於圖片下方，例如「店長的大頭照」
 }
 
 export interface StoryContent {

@@ -14,12 +14,14 @@ interface SectionForm {
   text: string
   file: File | null
   imageUrl?: string
+  imageCaption: string
+  origImageUrl?: string // 載入時的原始圖片網址，用來判斷儲存時是否要清掉舊檔（換圖或移除都算）
 }
 
 const SECTION_LABELS = ['段落 1（照片必填）', '段落 2（照片選填）', '段落 3（照片選填）']
 
 function toSectionForm(s: StorySection): SectionForm {
-  return { title: s.title, text: s.text, file: null, imageUrl: s.imageUrl }
+  return { title: s.title, text: s.text, file: null, imageUrl: s.imageUrl, imageCaption: s.imageCaption ?? '', origImageUrl: s.imageUrl }
 }
 
 export default function StoryContentForm({ canWrite }: Props) {
@@ -55,22 +57,21 @@ export default function StoryContentForm({ canWrite }: Props) {
             const blob = await compressImage(s.file)
             const storageRef = ref(storage, `story-images/${Date.now()}-${i}.webp`)
             await uploadBytes(storageRef, blob, { contentType: 'image/webp' })
-            const newUrl = await getDownloadURL(storageRef)
-            // 換圖成功後才清舊檔，避免上傳失敗時舊圖也被清掉
-            if (s.imageUrl) {
-              try {
-                await deleteObject(ref(storage, s.imageUrl))
-              } catch {
-                /* 檔案可能已不存在，忽略 */
-              }
-            }
-            imageUrl = newUrl
+            imageUrl = await getDownloadURL(storageRef)
           }
-          return { title: s.title.trim(), text: s.text.trim(), imageUrl }
+          // 換圖成功或按下移除照片後才清舊檔，避免上傳失敗時舊圖也被清掉
+          if (s.origImageUrl && s.origImageUrl !== imageUrl) {
+            try {
+              await deleteObject(ref(storage, s.origImageUrl))
+            } catch {
+              /* 檔案可能已不存在，忽略 */
+            }
+          }
+          return { title: s.title.trim(), text: s.text.trim(), imageUrl, imageCaption: s.imageCaption.trim() || undefined }
         })
       )
       await updateStoryContent({ sections: uploaded as [StorySection, StorySection, StorySection] })
-      setSections(uploaded.map(s => ({ ...s, file: null })))
+      setSections(uploaded.map(s => ({ ...s, file: null, imageCaption: s.imageCaption ?? '', origImageUrl: s.imageUrl })))
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
     } catch {
@@ -119,16 +120,41 @@ export default function StoryContentForm({ canWrite }: Props) {
               <img src={section.imageUrl} alt="" className="w-16 h-16 object-cover rounded" />
             )}
             {canWrite && (
-              <label className="cursor-pointer bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] text-sm px-4 py-1.5 rounded hover:border-[var(--color-gold-primary)] transition-colors max-w-52 truncate inline-block">
-                {section.file ? `已選擇: ${section.file.name}` : section.imageUrl ? '更換照片' : '上傳照片'}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={e => updateSection(idx, { file: e.target.files?.[0] ?? null })}
-                  className="hidden"
-                />
-              </label>
+              <>
+                <label className="cursor-pointer bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] text-sm px-4 py-1.5 rounded hover:border-[var(--color-gold-primary)] transition-colors max-w-52 truncate inline-block">
+                  {section.file ? `已選擇: ${section.file.name}` : section.imageUrl ? '更換照片' : '上傳照片'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={e => updateSection(idx, { file: e.target.files?.[0] ?? null })}
+                    className="hidden"
+                  />
+                </label>
+                {(section.imageUrl || section.file) && (
+                  <button
+                    type="button"
+                    onClick={() => updateSection(idx, { file: null, imageUrl: undefined })}
+                    className="text-[var(--color-danger-border)] hover:text-[var(--color-danger-text)] text-sm transition-colors"
+                  >
+                    移除照片
+                  </button>
+                )}
+              </>
             )}
+          </div>
+
+          {/* 圖片下方的說明文字，前台會置中顯示在圖片底下 */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[var(--color-text-muted)] text-xs">圖片說明文字（顯示於圖片下方，例：店長的大頭照）</label>
+            <input
+              type="text"
+              value={section.imageCaption}
+              onChange={e => updateSection(idx, { imageCaption: e.target.value })}
+              readOnly={!canWrite}
+              placeholder="例：店長的大頭照"
+              className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-2 text-sm
+                         placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)] transition-colors"
+            />
           </div>
         </div>
       ))}

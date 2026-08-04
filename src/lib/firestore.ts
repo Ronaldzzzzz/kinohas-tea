@@ -529,7 +529,7 @@ export async function setReplyMask(messageId: string, replyId: string, masked: b
 
 // ─── 頁面內容：本店歷史 / 交通指引 ─────────────────────────────
 
-const EMPTY_STORY_SECTION: StorySection = { title: '', text: '', imageUrl: undefined }
+const EMPTY_STORY_SECTION: StorySection = { title: '', text: '', imageUrl: undefined, imageCaption: undefined }
 
 export function mapStoryData(data: Record<string, unknown> | undefined): StoryContent {
   const rawSections = (data?.sections ?? []) as Partial<StorySection>[]
@@ -537,6 +537,7 @@ export function mapStoryData(data: Record<string, unknown> | undefined): StoryCo
     title: rawSections[i]?.title ?? EMPTY_STORY_SECTION.title,
     text: rawSections[i]?.text ?? EMPTY_STORY_SECTION.text,
     imageUrl: rawSections[i]?.imageUrl,
+    imageCaption: rawSections[i]?.imageCaption,
   })) as [StorySection, StorySection, StorySection]
   return { sections }
 }
