@@ -3,20 +3,31 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage
 import { storage } from '../../lib/firebase'
 import { getDirectionsContent, updateDirectionsContent, getGlobalSettings } from '../../lib/firestore'
 import { compressImage } from '../../utils/imageCompress'
+import type { DirectionsContent } from '../../types'
 
 interface Props {
   canWrite: boolean
 }
+
+type MapImageSize = NonNullable<DirectionsContent['mapImageSize']>
+
+const SIZE_OPTIONS: { value: MapImageSize; label: string }[] = [
+  { value: 'small', label: '小' },
+  { value: 'medium', label: '中' },
+  { value: 'large', label: '大' },
+  { value: 'xlarge', label: '特大' },
+]
 
 interface DirectionsForm {
   title: string
   text: string
   file: File | null
   mapImageUrl?: string
+  mapImageSize: MapImageSize
 }
 
 export default function DirectionsContentForm({ canWrite }: Props) {
-  const [form, setForm] = useState<DirectionsForm>({ title: '', text: '', file: null, mapImageUrl: undefined })
+  const [form, setForm] = useState<DirectionsForm>({ title: '', text: '', file: null, mapImageUrl: undefined, mapImageSize: 'medium' })
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -26,7 +37,7 @@ export default function DirectionsContentForm({ canWrite }: Props) {
   useEffect(() => {
     Promise.all([getDirectionsContent(), getGlobalSettings()])
       .then(([content, settings]) => {
-        setForm({ title: content.title, text: content.text, file: null, mapImageUrl: content.mapImageUrl })
+        setForm({ title: content.title, text: content.text, file: null, mapImageUrl: content.mapImageUrl, mapImageSize: content.mapImageSize ?? 'medium' })
         setAddress(settings.address ?? '')
       })
       .catch(() => setError('載入失敗'))
@@ -53,7 +64,7 @@ export default function DirectionsContentForm({ canWrite }: Props) {
         }
         mapImageUrl = newUrl
       }
-      await updateDirectionsContent({ title: form.title.trim(), text: form.text.trim(), mapImageUrl })
+      await updateDirectionsContent({ title: form.title.trim(), text: form.text.trim(), mapImageUrl, mapImageSize: form.mapImageSize })
       setForm(f => ({ ...f, file: null, mapImageUrl }))
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
@@ -111,6 +122,21 @@ export default function DirectionsContentForm({ canWrite }: Props) {
               />
             </label>
           )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[var(--color-text-muted)] text-xs">地圖圖片顯示尺寸</label>
+          <select
+            value={form.mapImageSize}
+            onChange={e => setForm(f => ({ ...f, mapImageSize: e.target.value as MapImageSize }))}
+            disabled={!canWrite}
+            className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-2 text-sm w-32
+                       focus:outline-none focus:border-[var(--color-gold-primary)] transition-colors"
+          >
+            {SIZE_OPTIONS.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
         </div>
 
         <p className="text-[var(--color-text-muted)] text-[11px]">

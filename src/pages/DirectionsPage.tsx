@@ -2,6 +2,13 @@ import { useEffect, useState } from 'react'
 import type { DirectionsContent } from '../types'
 import { getDirectionsContent, getGlobalSettings } from '../lib/firestore'
 
+const MAP_IMAGE_SIZE_CLASS: Record<NonNullable<DirectionsContent['mapImageSize']>, string> = {
+  small: 'max-w-xs',
+  medium: 'max-w-md',
+  large: 'max-w-2xl',
+  xlarge: 'max-w-full',
+}
+
 export default function DirectionsPage() {
   const [content, setContent] = useState<DirectionsContent | null>(null)
   const [address, setAddress] = useState('')
@@ -32,13 +39,17 @@ export default function DirectionsPage() {
             <h3 className="text-[var(--color-gold-primary)] font-serif text-lg tracking-wide text-center">{content.title}</h3>
           )}
           {content?.mapImageUrl && (
-            <img src={content.mapImageUrl} alt="交通地圖" className="w-full rounded shadow-lg object-contain" />
+            <img
+              src={content.mapImageUrl}
+              alt="交通地圖"
+              className={`w-full mx-auto rounded shadow-lg object-contain ${MAP_IMAGE_SIZE_CLASS[content.mapImageSize ?? 'medium']}`}
+            />
           )}
           {content?.text && (
-            <p className="text-[var(--color-text-primary)] text-sm leading-relaxed whitespace-pre-wrap">{content.text}</p>
+            <p className="text-[var(--color-text-primary)] text-base leading-relaxed whitespace-pre-wrap">{content.text}</p>
           )}
           {address && (
-            <p className="text-[var(--color-text-muted)] text-sm text-center border-t border-[var(--color-border-primary)] pt-4">
+            <p className="text-[var(--color-text-muted)] text-base text-center border-t border-[var(--color-border-primary)] pt-4">
               📍 {address}
             </p>
           )}

@@ -188,4 +188,5 @@ export interface DirectionsContent {
   title: string
   text: string
   mapImageUrl?: string   // 遊戲內地圖截圖
+  mapImageSize?: 'small' | 'medium' | 'large' | 'xlarge'   // 地圖圖片顯示尺寸，預設 medium
 }

@@ -34,11 +34,11 @@ describe('mapStoryData', () => {
 
 describe('mapDirectionsData', () => {
   it('無資料時回傳空白預設值', () => {
-    expect(mapDirectionsData(undefined)).toEqual({ title: '', text: '', mapImageUrl: undefined })
+    expect(mapDirectionsData(undefined)).toEqual({ title: '', text: '', mapImageUrl: undefined, mapImageSize: 'medium' })
   })
 
   it('保留既有資料', () => {
-    const result = mapDirectionsData({ title: '怎麼來', text: '搭傳送', mapImageUrl: 'map-url' })
-    expect(result).toEqual({ title: '怎麼來', text: '搭傳送', mapImageUrl: 'map-url' })
+    const result = mapDirectionsData({ title: '怎麼來', text: '搭傳送', mapImageUrl: 'map-url', mapImageSize: 'large' })
+    expect(result).toEqual({ title: '怎麼來', text: '搭傳送', mapImageUrl: 'map-url', mapImageSize: 'large' })
   })
 })

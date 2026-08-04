@@ -556,6 +556,7 @@ export function mapDirectionsData(data: Record<string, unknown> | undefined): Di
     title: (data?.title as string) ?? '',
     text: (data?.text as string) ?? '',
     mapImageUrl: data?.mapImageUrl as string | undefined,
+    mapImageSize: (data?.mapImageSize as DirectionsContent['mapImageSize']) ?? 'medium',
   }
 }
 
