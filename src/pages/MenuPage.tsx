@@ -49,10 +49,10 @@ export default function MenuPage() {
           茶
         </span>
         <div className="relative z-10 px-4 text-center max-w-3xl mx-auto">
-          <p className="font-serif text-xs sm:text-sm tracking-[0.4em] text-[var(--color-on-deep)] opacity-70 mb-6">台式茶莊 · FF14</p>
+          <p className="font-serif text-sm sm:text-base tracking-[0.4em] text-[var(--color-on-deep)] opacity-70 mb-6">台式茶莊 · FF14</p>
           <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest text-[var(--color-on-deep)] mb-4">木葉茗茶坊</h1>
-          <p className="text-xs sm:text-sm tracking-[0.35em] text-[var(--color-on-deep)] opacity-60 mb-10">KINOHA'S TEA</p>
-          <p className="text-sm sm:text-base text-[var(--color-on-deep)] opacity-80">
+          <p className="text-sm sm:text-base tracking-[0.35em] text-[var(--color-on-deep)] opacity-60 mb-10">KINOHA'S TEA</p>
+          <p className="text-base sm:text-lg text-[var(--color-on-deep)] opacity-80">
             一杯好茶，一段江湖故事
           </p>
         </div>
@@ -77,9 +77,9 @@ export default function MenuPage() {
 
       {introText.trim() && (
         <div className="text-center py-6 sm:py-8 max-w-2xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl text-[var(--color-gold-primary)] tracking-[0.3em] mb-1">關於茶坊</h2>
-          <p className="text-[10px] tracking-[0.3em] text-[var(--color-text-muted)] uppercase mb-5">About Us</p>
-          <p className="text-[var(--color-text-primary)] text-sm sm:text-base leading-loose whitespace-pre-wrap">
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--color-gold-primary)] tracking-[0.3em] mb-1">關於茶坊</h2>
+          <p className="text-xs tracking-[0.3em] text-[var(--color-text-muted)] uppercase mb-5">About Us</p>
+          <p className="text-[var(--color-text-primary)] text-base sm:text-lg leading-loose whitespace-pre-wrap">
             {introText}
           </p>
         </div>
@@ -90,15 +90,15 @@ export default function MenuPage() {
       {/* 品項清單 (分組顯示，卡片網格排列) */}
       <div className="flex flex-col gap-8 sm:gap-10 md:gap-12">
         {loading ? (
-          <p className="text-[var(--color-text-muted)] text-sm text-center py-8">載入中…</p>
+          <p className="text-[var(--color-text-muted)] text-base text-center py-8">載入中…</p>
         ) : items.length === 0 ? (
-          <p className="text-[var(--color-text-muted)] text-sm text-center py-8">目前無菜單品項</p>
+          <p className="text-[var(--color-text-muted)] text-base text-center py-8">目前無菜單品項</p>
         ) : (
           CATEGORY_ORDER.map(cat => (
             grouped[cat].length > 0 && (
               <section key={cat} id={`cat-${cat}`} className="scroll-mt-24">
                 <div className="text-center mb-6 sm:mb-8">
-                  <h2 className="text-[var(--color-text-primary)] font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.3em]">
+                  <h2 className="text-[var(--color-text-primary)] font-serif text-2xl sm:text-3xl md:text-4xl tracking-[0.3em]">
                     {CATEGORY_LABELS[cat]}
                   </h2>
                   <div className="mx-auto mt-3 h-px w-10 bg-[var(--color-gold-primary)]" />

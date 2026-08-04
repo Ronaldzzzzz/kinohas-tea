@@ -38,13 +38,13 @@ export default function MenuItemRow({ item, realModeEnabled = false }: Props) {
 
       {/* 名稱 + 描述 + 價格：置中排版，仿參考站商品卡 */}
       <div className="flex flex-col items-center gap-1 p-3 text-center">
-        <div className="text-[var(--color-text-primary)] text-sm sm:text-base content-text tracking-wide truncate w-full">
+        <div className="text-[var(--color-text-primary)] text-base sm:text-lg content-text tracking-wide truncate w-full">
           {item.alias || item.name}
         </div>
         {item.description && (
-          <div className="text-[var(--color-text-muted)] text-xs line-clamp-2 opacity-70 leading-relaxed">{item.description}</div>
+          <div className="text-[var(--color-text-muted)] text-sm line-clamp-2 opacity-70 leading-relaxed">{item.description}</div>
         )}
-        <div className="text-[var(--color-gold-primary)] text-sm sm:text-base font-semibold content-text mt-1">{item.price} gil</div>
+        <div className="text-[var(--color-gold-primary)] text-base sm:text-lg font-semibold content-text mt-1">{item.price} gil</div>
       </div>
     </li>
   )
