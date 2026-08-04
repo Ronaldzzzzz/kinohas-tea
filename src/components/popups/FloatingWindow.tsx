@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Popup } from '../../types'
 
 interface Props {
@@ -9,11 +9,37 @@ interface Props {
   onClose: () => void
 }
 
+// 右邊界額外留白，避免視窗貼齊螢幕最右側
+const RIGHT_MARGIN = 16
+
 /** zutomayo 式可拖動視窗：標題列拖曳(pointer events)，點擊置頂 */
 export default function FloatingWindow({ popup, initial, zIndex, onFocus, onClose }: Props) {
   const [pos, setPos] = useState(initial)
   const drag = useRef<{ dx: number; dy: number; w: number; h: number } | null>(null)
   const rootRef = useRef<HTMLDivElement>(null)
+
+  // randomPos() 算初始座標時不知道視窗實際寬高(尤其圖片載入後高度會變)，
+  // 只在拖曳時夾範圍是不夠的：一開場就可能半個跑到畫面外。掛載後及尺寸變動時(如圖片載入完成)重新夾一次。
+  useEffect(() => {
+    const el = rootRef.current
+    if (!el) return
+    const clamp = () => {
+      const w = el.offsetWidth
+      const h = el.offsetHeight
+      setPos(p => ({
+        x: Math.max(0, Math.min(Math.max(0, window.innerWidth - w - RIGHT_MARGIN), p.x)),
+        y: Math.max(0, Math.min(Math.max(0, window.innerHeight - h), p.y)),
+      }))
+    }
+    clamp()
+    const ro = new ResizeObserver(clamp)
+    ro.observe(el)
+    window.addEventListener('resize', clamp)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', clamp)
+    }
+  }, [])
 
   function onPointerDown(e: React.PointerEvent) {
     const el = rootRef.current
@@ -30,7 +56,7 @@ export default function FloatingWindow({ popup, initial, zIndex, onFocus, onClos
     if (!drag.current) return
     const { dx, dy, w, h } = drag.current
     setPos({
-      x: Math.max(0, Math.min(Math.max(0, window.innerWidth - w), e.clientX - dx)),
+      x: Math.max(0, Math.min(Math.max(0, window.innerWidth - w - RIGHT_MARGIN), e.clientX - dx)),
       y: Math.max(0, Math.min(Math.max(0, window.innerHeight - h), e.clientY - dy)),
     })
   }
