@@ -1,13 +1,20 @@
 // src/components/admin/GlobalSettingsManager.tsx
 import { useEffect, useState } from 'react'
 import { getGlobalSettings, updateGlobalSettings } from '../../lib/firestore'
+import type { MarqueeItem } from '../../types'
 import PhotoManager from './PhotoManager'
+
+const EMPTY_MARQUEE_ITEMS: MarqueeItem[] = [
+  { text: '', speed: 'medium' },
+  { text: '', speed: 'medium' },
+  { text: '', speed: 'medium' },
+]
 
 export default function GlobalSettingsManager() {
   const [address, setAddress] = useState('')
   const [cooldown, setCooldown] = useState(30)
   const [realModeEnabled, setRealModeEnabled] = useState(false)
-  const [marqueeText, setMarqueeText] = useState('')
+  const [marqueeItems, setMarqueeItems] = useState<MarqueeItem[]>(EMPTY_MARQUEE_ITEMS)
   const [businessOpen, setBusinessOpen] = useState(true)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -21,7 +28,8 @@ export default function GlobalSettingsManager() {
         setAddress(s.address ?? '')
         setCooldown(s.orderCooldownMinutes ?? 30)
         setRealModeEnabled(s.realModeEnabled ?? false)
-        setMarqueeText(s.marqueeText ?? '')
+        const loaded = s.marqueeItems ?? []
+        setMarqueeItems([0, 1, 2].map(i => loaded[i] ?? { text: '', speed: 'medium' }))
         setBusinessOpen(s.businessOpen ?? true)
         setHasLoadedSettings(true)
       })
@@ -35,7 +43,15 @@ export default function GlobalSettingsManager() {
     setError(null)
     setSaved(false)
     try {
-      await updateGlobalSettings({ address, orderCooldownMinutes: cooldown, realModeEnabled, marqueeText, businessOpen })
+      await updateGlobalSettings({
+        address,
+        orderCooldownMinutes: cooldown,
+        realModeEnabled,
+        marqueeItems: marqueeItems
+          .map(item => ({ text: item.text.trim(), speed: item.speed }))
+          .filter(item => item.text),
+        businessOpen,
+      })
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
     } catch {
@@ -148,42 +164,66 @@ export default function GlobalSettingsManager() {
           </p>
         </div>
 
-        {/* 跑馬燈文字 */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-[var(--color-text-muted)] text-xs tracking-wide">
-            首頁跑馬燈文字
-          </label>
-          <input
-            type="text"
-            value={marqueeText}
-            onChange={e => setMarqueeText(e.target.value)}
-            placeholder="例：本週特調上市！內用低消 100 元"
-            className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-2 text-sm
-                       placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)]
-                       transition-colors"
-          />
-          <p className="text-[var(--color-text-muted)] text-[11px]">顯示於首頁 Hero 下方的跑馬燈。留空則不顯示。</p>
-        </div>
+      </div>
 
-        {/* 儲存按鈕 */}
-        <div className="flex items-center gap-3 pt-1">
-          <button
-            onClick={handleSave}
-            disabled={saving || !hasLoadedSettings}
-            className={`px-5 py-1.5 text-sm rounded border transition-colors
-                         border-[var(--color-gold-primary)] text-[var(--color-gold-primary)]
-                         hover:bg-[var(--color-gold-primary)] hover:text-[var(--color-bg-primary)]
-                        disabled:opacity-50 disabled:cursor-not-allowed font-semibold`}
-          >
-            {saving ? '儲存中…' : '儲存設定'}
-          </button>
-          {saved && (
-            <span className="text-green-400 text-xs">✓ 已儲存</span>
-          )}
-          {error && (
-            <span className="text-red-400 text-xs">{error}</span>
-          )}
+      {/* 跑馬燈設定區塊 */}
+      <div className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded p-5 flex flex-col gap-5">
+        <h3 className="text-[var(--color-gold-primary)] text-sm font-semibold tracking-wide">
+          跑馬燈設定
+        </h3>
+
+        {/* 跑馬燈（最多三則，各自一行、各自速度） */}
+        <div className="flex flex-col gap-3">
+          <label className="text-[var(--color-text-muted)] text-xs tracking-wide">
+            首頁跑馬燈（最多 3 則，同一位置依序輪播）
+          </label>
+          {marqueeItems.map((item, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <input
+                type="text"
+                value={item.text}
+                onChange={e => setMarqueeItems(prev => prev.map((it, idx) => idx === i ? { ...it, text: e.target.value } : it))}
+                placeholder={`第 ${i + 1} 則，例：本週特調上市！內用低消 100 元`}
+                className="flex-1 bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-2 text-sm
+                           placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-gold-primary)]
+                           transition-colors"
+              />
+              <select
+                value={item.speed}
+                onChange={e => setMarqueeItems(prev => prev.map((it, idx) => idx === i ? { ...it, speed: e.target.value as MarqueeItem['speed'] } : it))}
+                className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] text-[var(--color-text-primary)] rounded px-3 py-2 text-sm w-20 flex-shrink-0
+                           focus:outline-none focus:border-[var(--color-gold-primary)] transition-colors"
+              >
+                <option value="slow">慢</option>
+                <option value="medium">中</option>
+                <option value="fast">快</option>
+              </select>
+            </div>
+          ))}
+          <p className="text-[var(--color-text-muted)] text-[11px]">
+            顯示於首頁下方，同一位置依序輪播每則的內容，播完自動換下一則。留空的則不顯示。滑鼠移到跑馬燈上會暫停捲動。
+          </p>
         </div>
+      </div>
+
+      {/* 儲存按鈕 */}
+      <div className="flex items-center gap-3 -mt-3">
+        <button
+          onClick={handleSave}
+          disabled={saving || !hasLoadedSettings}
+          className={`px-5 py-1.5 text-sm rounded border transition-colors
+                       border-[var(--color-gold-primary)] text-[var(--color-gold-primary)]
+                       hover:bg-[var(--color-gold-primary)] hover:text-[var(--color-bg-primary)]
+                      disabled:opacity-50 disabled:cursor-not-allowed font-semibold`}
+        >
+          {saving ? '儲存中…' : '儲存設定'}
+        </button>
+        {saved && (
+          <span className="text-green-400 text-xs">✓ 已儲存</span>
+        )}
+        {error && (
+          <span className="text-red-400 text-xs">{error}</span>
+        )}
       </div>
 
       {/* 宣傳照管理（直接嵌入 PhotoManager） */}

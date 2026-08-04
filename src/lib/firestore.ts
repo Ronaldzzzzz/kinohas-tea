@@ -18,7 +18,7 @@ import {
   type UpdateData,
 } from 'firebase/firestore'
 import { db } from './firebase'
-import type { MenuItem, InventoryItem, Message, Reply, NoticeConfig, Order, GlobalSettings, PhotoUrl, StaffPermissions, Popup, StoryContent, StorySection, DirectionsContent } from '../types'
+import type { MenuItem, InventoryItem, Message, Reply, NoticeConfig, Order, GlobalSettings, PhotoUrl, StaffPermissions, Popup, StoryContent, StorySection, DirectionsContent, MarqueeItem } from '../types'
 import { DEFAULT_STAFF_PERMISSIONS } from '../types'
 
 // ─── Menu Items ────────────────────────────────────────────────
@@ -454,7 +454,15 @@ function mapSettingsData(data: Record<string, unknown> | undefined): GlobalSetti
     photoUrls: ((data?.photoUrls ?? []) as (string | PhotoUrl)[])
       .map(entry => typeof entry === 'string' ? { url: entry } : entry),
     realModeEnabled: (data?.realModeEnabled as boolean) ?? false,
-    marqueeText: (data?.marqueeText as string) ?? '',
+    marqueeItems: (data?.marqueeItems as MarqueeItem[] | undefined)
+      // 舊版單一速度 + 文字陣列格式相容
+      ?? (data?.marqueeTexts as string[] | undefined)?.map(text => ({
+        text,
+        speed: (data?.marqueeSpeed as MarqueeItem['speed']) ?? 'medium',
+      }))
+      // 更舊版單一字串格式相容
+      ?? (data?.marqueeText ? [{ text: data.marqueeText as string, speed: 'medium' as const }] : [])
+      ?? [],
     entryPopupCount: (data?.entryPopupCount as number) ?? 1,
     businessOpen: (data?.businessOpen as boolean) ?? true,
   }

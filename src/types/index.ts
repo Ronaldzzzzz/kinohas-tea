@@ -140,6 +140,12 @@ export interface PhotoUrl {
   cropData?: CropData
 }
 
+// 首頁跑馬燈單則設定
+export interface MarqueeItem {
+  text: string
+  speed: 'slow' | 'medium' | 'fast'
+}
+
 // 全局設定
 export interface GlobalSettings {
   address: string             // 餐廳地址（顯示於 Navbar）
@@ -147,7 +153,7 @@ export interface GlobalSettings {
   orderCooldownMinutes: number // 點餐冷卻分鐘數（預設 30）
   photoUrls: PhotoUrl[]       // 宣傳全身照（含可選裁切資料）
   realModeEnabled?: boolean   // true = 真實庫存連動模式
-  marqueeText?: string         // 首頁跑馬燈文字，留空則不顯示
+  marqueeItems?: MarqueeItem[] // 首頁跑馬燈，最多 3 則，各自獨立一行、各自速度
   entryPopupCount?: number     // 進版彈窗同時顯示數量：-1=全部隨機不重疊，0=不顯示，1-6=固定排列，預設 1
   businessOpen?: boolean       // 營業狀態：true=營業中，false=休息中（顯示於 Navbar，取代原地址顯示），預設 true
 }
