@@ -14,12 +14,15 @@ export default function MenuItemRow({ item, realModeEnabled = false }: Props) {
   return (
     <li
       role="listitem"
-      className={`group flex items-start gap-3 bg-[var(--color-bg-card)] rounded overflow-hidden transition-shadow hover:shadow-md ${
+      className={`group flex items-stretch gap-3 bg-[var(--color-bg-card)] rounded overflow-hidden transition-shadow hover:shadow-md ${
         unavailable ? 'opacity-50' : ''
       }`}
     >
-      {/* 圖片 */}
-      <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 self-start bg-[var(--color-bg-card-hover)] overflow-hidden">
+      {/* 圖片：跟隨列高伸展，object-cover 裁切不變形；自身補圓角避免 hover 縮放時裁切失效露出直角 */}
+      <div
+        className="relative w-20 sm:w-24 min-h-20 sm:min-h-24 flex-shrink-0 rounded overflow-hidden bg-[var(--color-bg-card-hover)] isolate"
+        style={{ transform: 'translateZ(0)' }}
+      >
         {item.imageUrl ? (
           <img
             src={item.imageUrl}
