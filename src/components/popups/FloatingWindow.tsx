@@ -79,8 +79,17 @@ export default function FloatingWindow({ popup, initial, zIndex, onFocus, onClos
         <span className="text-xs tracking-wider">📢 木葉茗茶坊</span>
         <button onClick={onClose} onPointerDown={e => e.stopPropagation()} aria-label="關閉視窗" className="text-xs px-1 hover:opacity-70">✕</button>
       </div>
-      {popup.imageUrl && <img src={popup.imageUrl} alt="" className="w-full" draggable={false} />}
-      {popup.text && <p className="p-3 text-xs text-[var(--color-text-primary)] leading-relaxed">{popup.text}</p>}
+      {popup.linkUrl ? (
+        <a href={popup.linkUrl} target="_blank" rel="noopener noreferrer">
+          {popup.imageUrl && <img src={popup.imageUrl} alt="" className="w-full" draggable={false} />}
+          {popup.text && <p className="p-3 text-xs text-[var(--color-text-primary)] leading-relaxed hover:underline">{popup.text}</p>}
+        </a>
+      ) : (
+        <>
+          {popup.imageUrl && <img src={popup.imageUrl} alt="" className="w-full" draggable={false} />}
+          {popup.text && <p className="p-3 text-xs text-[var(--color-text-primary)] leading-relaxed">{popup.text}</p>}
+        </>
+      )}
     </div>
   )
 }
