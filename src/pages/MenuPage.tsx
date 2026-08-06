@@ -1,6 +1,5 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import type { MenuItem, PhotoUrl, MarqueeItem } from '../types'
-import { CATEGORY_LABELS, CATEGORY_ORDER } from '../types'
 import { getMenuItems, getGlobalSettings } from '../lib/firestore'
 import MenuItemRow from '../components/menu/MenuItemRow'
 import ShopHighlights from '../components/menu/ShopHighlights'
@@ -30,11 +29,6 @@ export default function MenuPage() {
       })
       .catch(() => {})
   }, [])
-
-  const grouped = useMemo(() => CATEGORY_ORDER.reduce((acc, cat) => {
-    acc[cat] = items.filter(i => i.category === cat)
-    return acc
-  }, {} as Record<string, MenuItem[]>), [items])
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 pb-12">
@@ -94,23 +88,19 @@ export default function MenuPage() {
         ) : items.length === 0 ? (
           <p className="text-[var(--color-text-muted)] text-base text-center py-8">目前無菜單品項</p>
         ) : (
-          CATEGORY_ORDER.map(cat => (
-            grouped[cat].length > 0 && (
-              <section key={cat} id={`cat-${cat}`} className="scroll-mt-24">
-                <div className="text-center mb-6 sm:mb-8">
-                  <h2 className="text-[var(--color-text-primary)] font-serif text-2xl sm:text-3xl md:text-4xl tracking-[0.3em]">
-                    {CATEGORY_LABELS[cat]}
-                  </h2>
-                  <div className="mx-auto mt-3 h-px w-10 bg-[var(--color-gold-primary)]" />
-                </div>
-                <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-                  {grouped[cat].map((item) => (
-                    <MenuItemRow key={item.id} item={item} realModeEnabled={realModeEnabled} />
-                  ))}
-                </ul>
-              </section>
-            )
-          ))
+          <section id="menu-items" className="scroll-mt-24">
+            <div className="text-center mb-6 sm:mb-8">
+              <h2 className="text-[var(--color-text-primary)] font-serif text-2xl sm:text-3xl md:text-4xl tracking-[0.3em]">
+                品項
+              </h2>
+              <div className="mx-auto mt-3 h-px w-10 bg-[var(--color-gold-primary)]" />
+            </div>
+            <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+              {items.map((item) => (
+                <MenuItemRow key={item.id} item={item} realModeEnabled={realModeEnabled} />
+              ))}
+            </ul>
+          </section>
         )}
       </div>
 

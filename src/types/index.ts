@@ -1,20 +1,7 @@
 import { Timestamp } from 'firebase/firestore'
 
-export type MenuCategory = 'appetizer' | 'main' | 'dessert' | 'drink' | 'set'
-
-export const CATEGORY_LABELS: Record<MenuCategory, string> = {
-  appetizer: '開胃菜',
-  main: '主食',
-  dessert: '甜品',
-  drink: '飲品',
-  set: '套餐',
-}
-
-export const CATEGORY_ORDER: MenuCategory[] = ['appetizer', 'main', 'dessert', 'drink', 'set']
-
 export interface MenuItem {
   id: string
-  category: MenuCategory
   name: string
   alias?: string
   description: string

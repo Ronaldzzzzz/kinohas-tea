@@ -6,8 +6,7 @@ import {
   deleteMenuItem,
   getInventoryItems,
 } from '../../lib/firestore'
-import type { MenuItem, MenuCategory, InventoryItem } from '../../types'
-import { CATEGORY_LABELS, CATEGORY_ORDER } from '../../types'
+import type { MenuItem, InventoryItem } from '../../types'
 import SalesStats from './SalesStats'
 import ItemSearchBox from './ItemSearchBox'
 import RecipeTreeSelector from './RecipeTreeSelector'
@@ -20,7 +19,6 @@ const EMPTY_FORM = {
   alias: '',
   description: '',
   price: 0,
-  category: 'drink' as MenuCategory,
   imageUrl: '',
   available: true,
   unlimited: false,
@@ -90,7 +88,6 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
       alias: item.alias || '',
       description: item.description,
       price: item.price,
-      category: item.category,
       imageUrl: item.imageUrl,
       available: item.available,
       unlimited: item.unlimited ?? false,
@@ -145,7 +142,6 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
       ...form,
       name: item.n,
       imageUrl: `https://xivapi.com${item.i}`,
-      category: 'drink',
       recipeId: id,
       ingredients: []
     })
@@ -202,11 +198,6 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
     await deleteMenuItem(id)
     await load()
   }
-
-  const grouped = CATEGORY_ORDER.reduce<Record<MenuCategory, MenuItem[]>>(
-    (acc, cat) => ({ ...acc, [cat]: items.filter((i) => i.category === cat) }),
-    {} as Record<MenuCategory, MenuItem[]>
-  )
 
   return (
     <div>
@@ -272,15 +263,6 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
             <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)] resize-none" />
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-xs text-[var(--color-text-muted)]">分類</label>
-            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as MenuCategory })} className="bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-gold-primary)]">
-              {CATEGORY_ORDER.map((cat) => (
-                <option key={cat} value={cat}>{CATEGORY_LABELS[cat]}</option>
-              ))}
-            </select>
-          </div>
-
           {/* 配方樹狀勾選 */}
           {recipeTree && (
             <div className="mt-2 border border-[var(--color-border-gold)] rounded p-3 bg-[var(--color-bg-card)]/50">
@@ -323,12 +305,8 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
       {loading ? (
         <p className="text-[var(--color-text-muted)] text-sm">載入中…</p>
       ) : (
-        CATEGORY_ORDER.map((cat) =>
-          grouped[cat].length > 0 ? (
-            <div key={cat} className="mb-6">
-              <h4 className="text-[var(--color-gold-primary)] text-xs tracking-widest mb-2 border-b border-[var(--color-border-gold)] pb-1 uppercase">{CATEGORY_LABELS[cat]}</h4>
-              <div className="flex flex-col gap-2">
-                {grouped[cat].map((item) => (
+        <div className="flex flex-col gap-2">
+          {items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3 bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] rounded p-2.5">
                     <div className="w-10 h-10 rounded bg-[var(--color-bg-card-hover)] flex-shrink-0 overflow-hidden">
                       <img 
@@ -390,11 +368,8 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
                       )}
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          ) : null
-        )
+          ))}
+        </div>
       )}
 
       {craftTarget && masterData && (
