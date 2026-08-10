@@ -40,9 +40,21 @@ export default function Footer() {
       </div>
       {/* pb-12：預留底部跑馬燈(fixed bottom-0)高度，避免版權列被蓋住 */}
       <div className="border-t border-[var(--color-on-deep)]/10">
-        <p className="max-w-4xl mx-auto px-4 pt-4 pb-12 text-center text-[11px] opacity-50 tracking-wider">
-          © 木葉茗茶坊 Kinoha's Tea — Final Fantasy XIV
-        </p>
+        <div className="max-w-4xl mx-auto px-4 pt-4 pb-12 text-center text-[11px] opacity-50 tracking-wider flex flex-col gap-1.5">
+          <p>© 木葉茗茶坊 Kinoha's Tea — Final Fantasy XIV</p>
+          <p>
+            意見回饋 / 聯繫作者：
+            <a
+              href="https://forms.gle/QEryuQEcQMYYMS8b6"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 hover:opacity-80"
+            >
+              填寫表單
+            </a>
+          </p>
+          <p>🎉 本站開站紀念日：2026/08/07，感謝每一位曾造訪的旅人</p>
+        </div>
       </div>
     </footer>
   )
