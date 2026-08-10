@@ -84,6 +84,16 @@ body {
   animation: marquee-scroll 10s linear infinite;
 }
 
+/* 遮蔽留言解除迷霧時的粒子飛散效果，方向/距離由行內 CSS 變數 --pdx/--pdy 各自決定 */
+@keyframes particle-burst {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+  100% { transform: translate(var(--pdx), var(--pdy)) scale(0); opacity: 0; }
+}
+
+.animate-particle {
+  animation: particle-burst 0.6s ease-out forwards;
+}
+
 @layer utilities {
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
