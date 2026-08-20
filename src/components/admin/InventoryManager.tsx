@@ -195,48 +195,50 @@ export default function InventoryManager({ canWrite, canDelete }: Props) {
 
     return (
       <div key={node.id} className="flex flex-col">
-        <div 
+        <div
           onClick={() => handleToggleSelect(node.id)}
-          className={`flex items-center gap-3 bg-[var(--color-bg-card-hover)] border rounded p-3 hover:border-[var(--color-text-muted)] transition-all cursor-pointer ${
+          className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 bg-[var(--color-bg-card-hover)] border rounded p-3 hover:border-[var(--color-text-muted)] transition-all cursor-pointer ${
             isSelected ? 'border-[var(--color-gold-primary)] shadow-[var(--shadow-glow-warm)]' : 'border-[var(--color-border-gold)]'
           }`}
           style={{ marginLeft: `${level * 1.5}rem` }}
         >
-          {level > 0 && <span className="text-[var(--color-text-muted)] opacity-50">└─</span>}
-          {canDelete && (
-            <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
-              <input type="checkbox" checked={isSelected} onChange={() => {}} className="accent-[var(--color-gold-primary)] w-4 h-4" />
+          <div className="flex items-center gap-3 min-w-0">
+            {level > 0 && <span className="text-[var(--color-text-muted)] opacity-50 flex-shrink-0">└─</span>}
+            {canDelete && (
+              <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
+                <input type="checkbox" checked={isSelected} onChange={() => {}} className="accent-[var(--color-gold-primary)] w-4 h-4" />
+              </div>
+            )}
+            <div className="w-8 h-8 rounded bg-black/20 flex-shrink-0 flex items-center justify-center overflow-hidden border border-[var(--color-border-gold)]">
+              {node.icon ? <img src={`https://xivapi.com${node.icon}`} alt="" className="w-full h-full object-contain" /> : <span className="text-lg">📦</span>}
             </div>
-          )}
-          <div className="w-8 h-8 rounded bg-black/20 flex-shrink-0 flex items-center justify-center overflow-hidden border border-[var(--color-border-gold)]">
-            {node.icon ? <img src={`https://xivapi.com${node.icon}`} alt="" className="w-full h-full object-contain" /> : <span className="text-lg">📦</span>}
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-baseline gap-2">
-              <span className="text-[var(--color-text-primary)] text-base font-bold truncate">{node.name}</span>
-              {demand > 0 && (
-                <span className={`text-[10px] px-1.5 rounded-full border ${isUnderstocked ? 'text-[var(--color-danger-text)] border-[var(--color-danger-text)]/30 bg-[var(--color-danger-text)]/10' : 'text-[var(--color-success-text)] border-[var(--color-success-text)]/30 bg-[var(--color-success-text)]/10'}`}>
-                  需求: {demand}
-                </span>
-              )}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-baseline gap-2 flex-wrap">
+                <span className="text-[var(--color-text-primary)] text-base font-bold truncate">{node.name}</span>
+                {demand > 0 && (
+                  <span className={`text-[10px] px-1.5 rounded-full border ${isUnderstocked ? 'text-[var(--color-danger-text)] border-[var(--color-danger-text)]/30 bg-[var(--color-danger-text)]/10' : 'text-[var(--color-success-text)] border-[var(--color-success-text)]/30 bg-[var(--color-success-text)]/10'}`}>
+                    需求: {demand}
+                  </span>
+                )}
+              </div>
+              {node.note && <div className="text-[var(--color-text-muted)] text-sm truncate mt-0.5 opacity-80">{node.note}</div>}
             </div>
-            {node.note && <div className="text-[var(--color-text-muted)] text-sm truncate mt-0.5 opacity-80">{node.note}</div>}
           </div>
-          <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => handleQuickStockUpdate(node, node.stock - 1)} className="w-6 h-6 flex items-center justify-center bg-[var(--color-bg-card-hover)] text-[var(--color-gold-primary)] rounded hover:bg-[var(--color-border-gold)] transition-colors text-lg font-bold">-</button>
-            <input type="number" value={node.stock} onChange={(e) => handleQuickStockUpdate(node, parseInt(e.target.value) || 0)} className="w-20 bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-2 py-0.5 text-center text-sm text-[var(--color-gold-light)] focus:outline-none focus:border-[var(--color-gold-primary)]" />
-            <button onClick={() => handleQuickStockUpdate(node, node.stock + 1)} className="w-6 h-6 flex items-center justify-center bg-[var(--color-bg-card-hover)] text-[var(--color-gold-primary)] rounded hover:bg-[var(--color-border-gold)] transition-colors text-lg font-bold">+</button>
+          <div className="flex items-center gap-2 flex-wrap sm:ml-auto sm:flex-nowrap" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => handleQuickStockUpdate(node, node.stock - 1)} className="w-6 h-6 flex items-center justify-center bg-[var(--color-bg-card-hover)] text-[var(--color-gold-primary)] rounded hover:bg-[var(--color-border-gold)] transition-colors text-lg font-bold flex-shrink-0">-</button>
+            <input type="number" value={node.stock} onChange={(e) => handleQuickStockUpdate(node, parseInt(e.target.value) || 0)} className="w-20 bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded px-2 py-0.5 text-center text-sm text-[var(--color-gold-light)] focus:outline-none focus:border-[var(--color-gold-primary)] flex-shrink-0" />
+            <button onClick={() => handleQuickStockUpdate(node, node.stock + 1)} className="w-6 h-6 flex items-center justify-center bg-[var(--color-bg-card-hover)] text-[var(--color-gold-primary)] rounded hover:bg-[var(--color-border-gold)] transition-colors text-lg font-bold flex-shrink-0">+</button>
+            {(canWrite || canDelete) && (
+              <div className="flex gap-1 ml-2 flex-shrink-0">
+                {canWrite && (
+                  <button onClick={() => { setEditing(node); setForm({ name: node.name, stock: node.stock, note: node.note }); setShowForm(true); }} className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] p-1">⚙</button>
+                )}
+                {canDelete && (
+                  <button onClick={() => handleDelete(node.id)} className="text-xs text-[var(--color-danger-border)] hover:text-[var(--color-danger-text)] p-1">✕</button>
+                )}
+              </div>
+            )}
           </div>
-          {(canWrite || canDelete) && (
-            <div className="flex gap-1 ml-2" onClick={(e) => e.stopPropagation()}>
-              {canWrite && (
-                <button onClick={() => { setEditing(node); setForm({ name: node.name, stock: node.stock, note: node.note }); setShowForm(true); }} className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] p-1">⚙</button>
-              )}
-              {canDelete && (
-                <button onClick={() => handleDelete(node.id)} className="text-xs text-[var(--color-danger-border)] hover:text-[var(--color-danger-text)] p-1">✕</button>
-              )}
-            </div>
-          )}
         </div>
         {node.children && node.children.length > 0 && (
           <div className="flex flex-col mt-1">
@@ -268,22 +270,22 @@ export default function InventoryManager({ canWrite, canDelete }: Props) {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-4">
-          <span className="text-[var(--color-text-muted)] text-sm">{items.length} 樣食材</span>
-          <div className="flex bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded p-0.5">
-            <button onClick={() => setViewMode('tree')} className={`px-3 py-1 text-[10px] rounded transition-colors ${viewMode === 'tree' ? 'bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] font-bold' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-muted)]'}`}>樹狀</button>
-            <button onClick={() => setViewMode('list')} className={`px-3 py-1 text-[10px] rounded transition-colors ${viewMode === 'list' ? 'bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] font-bold' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-muted)]'}`}>清單</button>
+      <div className="flex flex-wrap justify-between items-center gap-2 mb-4">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+          <span className="text-[var(--color-text-muted)] text-sm whitespace-nowrap">{items.length} 樣食材</span>
+          <div className="flex bg-[var(--color-bg-card)] border border-[var(--color-border-gold)] rounded p-0.5 flex-shrink-0">
+            <button onClick={() => setViewMode('tree')} className={`px-3 py-1 text-[10px] rounded transition-colors whitespace-nowrap ${viewMode === 'tree' ? 'bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] font-bold' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-muted)]'}`}>樹狀</button>
+            <button onClick={() => setViewMode('list')} className={`px-3 py-1 text-[10px] rounded transition-colors whitespace-nowrap ${viewMode === 'list' ? 'bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] font-bold' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-muted)]'}`}>清單</button>
           </div>
           {canDelete && items.length > 0 && (
-            <button onClick={handleSelectAll} className="text-[var(--color-gold-primary)] text-xs hover:underline">{selectedIds.size === items.length ? '取消全選' : '全選'}</button>
+            <button onClick={handleSelectAll} className="text-[var(--color-gold-primary)] text-xs hover:underline whitespace-nowrap flex-shrink-0">{selectedIds.size === items.length ? '取消全選' : '全選'}</button>
           )}
           {canDelete && selectedIds.size > 0 && (
-            <button onClick={handleBulkDelete} disabled={saving} className="bg-[var(--color-danger-bg)] text-[var(--color-danger-text)] text-xs px-3 py-1 rounded hover:bg-[var(--color-danger-bg)] transition-colors disabled:opacity-50">刪除選中 ({selectedIds.size})</button>
+            <button onClick={handleBulkDelete} disabled={saving} className="bg-[var(--color-danger-bg)] text-[var(--color-danger-text)] text-xs px-3 py-1 rounded hover:bg-[var(--color-danger-bg)] transition-colors disabled:opacity-50 whitespace-nowrap flex-shrink-0">刪除選中 ({selectedIds.size})</button>
           )}
         </div>
         {canWrite && (
-          <button onClick={() => { setEditing(null); setForm(EMPTY_FORM); setShowForm(true); }} className="bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] text-sm font-semibold px-4 py-1.5 rounded hover:bg-[var(--color-gold-light)] transition-colors">＋ 手動新增食材</button>
+          <button onClick={() => { setEditing(null); setForm(EMPTY_FORM); setShowForm(true); }} className="bg-[var(--color-gold-primary)] text-[var(--color-bg-card)] text-sm font-semibold px-4 py-1.5 rounded hover:bg-[var(--color-gold-light)] transition-colors whitespace-nowrap flex-shrink-0">＋ 手動新增食材</button>
         )}
       </div>
 
