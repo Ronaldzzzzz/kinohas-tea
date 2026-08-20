@@ -307,44 +307,46 @@ export default function MenuManager({ canWrite, canDelete }: Props) {
       ) : (
         <div className="flex flex-col gap-2">
           {items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3 bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] rounded p-2.5">
-                    <div className="w-10 h-10 rounded bg-[var(--color-bg-card-hover)] flex-shrink-0 overflow-hidden">
-                      <img 
-                        src={item.imageUrl || `https://xivapi.com/i/066000/066313_hr1.png`} 
-                        alt={item.name} 
-                        className="w-full h-full object-cover" 
-                        onError={(e) => (e.currentTarget.src = 'https://xivapi.com/i/066000/066313_hr1.png')}
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[var(--color-text-primary)] text-lg font-bold truncate">
-                        {item.alias ? (
-                          <span className="text-[var(--color-gold-light)]">
-                            {item.alias}
-                            <small className="text-[var(--color-text-muted)] ml-2 font-normal opacity-70 text-sm">
-                              ({item.name})
-                            </small>
-                          </span>
-                        ) : (
-                          item.name
-                        )}
+                  <div key={item.id} className="flex flex-col sm:flex-row sm:items-center gap-3 bg-[var(--color-bg-card-hover)] border border-[var(--color-border-gold)] rounded p-2.5">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded bg-[var(--color-bg-card-hover)] flex-shrink-0 overflow-hidden">
+                        <img
+                          src={item.imageUrl || `https://xivapi.com/i/066000/066313_hr1.png`}
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => (e.currentTarget.src = 'https://xivapi.com/i/066000/066313_hr1.png')}
+                        />
                       </div>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-[var(--color-gold-primary)] text-sm font-medium">{item.price} gil</span>
-                        {item.unlimited ? (
-                          <span className="text-xs px-1.5 py-0.5 rounded border text-[var(--color-gold-primary)] border-[var(--color-text-muted)]">∞ 無限量</span>
-                        ) : (
-                          <span className={`text-xs px-1.5 py-0.5 rounded border ${
-                            (item.stock ?? 0) > 0
-                              ? 'text-[var(--color-success-text)] border-[var(--color-success-border)]'
-                              : 'text-[var(--color-danger-text)] border-[var(--color-danger-border)]'
-                          }`}>
-                            庫存 {item.stock ?? 0}
-                          </span>
-                        )}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[var(--color-text-primary)] text-lg font-bold truncate">
+                          {item.alias ? (
+                            <span className="text-[var(--color-gold-light)]">
+                              {item.alias}
+                              <small className="text-[var(--color-text-muted)] ml-2 font-normal opacity-70 text-sm">
+                                ({item.name})
+                              </small>
+                            </span>
+                          ) : (
+                            item.name
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                          <span className="text-[var(--color-gold-primary)] text-sm font-medium">{item.price} gil</span>
+                          {item.unlimited ? (
+                            <span className="text-xs px-1.5 py-0.5 rounded border text-[var(--color-gold-primary)] border-[var(--color-text-muted)]">∞ 無限量</span>
+                          ) : (
+                            <span className={`text-xs px-1.5 py-0.5 rounded border ${
+                              (item.stock ?? 0) > 0
+                                ? 'text-[var(--color-success-text)] border-[var(--color-success-border)]'
+                                : 'text-[var(--color-danger-text)] border-[var(--color-danger-border)]'
+                            }`}>
+                              庫存 {item.stock ?? 0}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 flex-wrap justify-end">
+                    <div className="flex items-center gap-2 flex-wrap sm:justify-end">
                       {(item.ingredients?.length ?? 0) > 0 && (
                         <button
                           onClick={() => setCraftTarget(item)}
